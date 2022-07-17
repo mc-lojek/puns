@@ -8,12 +8,22 @@
         android:layout_height="match_parent"
         tools:context=".presentation.fragment.EntryFragment">
 
-        <!-- TODO: Update blank fragment layout -->
         <Button
-            android:id="@+id/login_btn"
+            android:id="@+id/QuickGame_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login"
+            android:text="@string/quickGame"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.3" />
+
+        <Button
+            android:id="@+id/CreateLobby_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/createLobby"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -21,25 +31,37 @@
             app:layout_constraintVertical_bias="0.4" />
 
         <Button
-            android:id="@+id/register_btn"
+            android:id="@+id/Options_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/register"
+            android:text="@string/options"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5" />
 
         <Button
-            android:id="@+id/guest_btn"
+            android:id="@+id/Creators_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/playGuest"
+            android:text="@string/creators"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.6" />
+
+        <Button
+            android:id="@+id/Statistics_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/statistics"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.7" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

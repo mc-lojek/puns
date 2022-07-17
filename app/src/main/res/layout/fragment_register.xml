@@ -8,6 +8,22 @@
         android:layout_height="match_parent"
         tools:context=".presentation.fragment.EntryFragment">
 
+
+        <EditText
+            android:id="@+id/nick_input"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:inputType="text"
+            android:hint="@string/nick"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.3"
+
+            android:background="@drawable/edit_text_border"/>
+
         <EditText
             android:id="@+id/email_input"
             android:layout_width="250dp"
@@ -19,7 +35,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.3"
+            app:layout_constraintVertical_bias="0.4"
 
             android:background="@drawable/edit_text_border"/>
 
@@ -34,26 +50,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.4"
+            app:layout_constraintVertical_bias="0.5"
 
             android:background="@drawable/edit_text_border"/>
 
         <Button
-            android:id="@+id/LoginFunction_btn"
+            android:id="@+id/RegisterFunction_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5" />
-
-        <Button
-            android:id="@+id/ForgotPass_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/forgotPass"
+            android:text="@string/register"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

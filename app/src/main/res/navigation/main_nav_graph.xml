@@ -13,11 +13,47 @@
         <action
             android:id="@+id/action_entryFragment_to_LoginFragment"
             app:destination="@id/LoginFragment" />
+        <action
+            android:id="@+id/action_entryFragment_to_RegisterFragment"
+            app:destination="@id/RegisterFragment" />
     </fragment>
     <fragment
         android:id="@+id/LoginFragment"
         android:name="pl.edu.pg.eti.presentation.fragment.LoginFragment"
         android:label="fragment_complaint_list"
         tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_LoginFragment_to_forgotPassFragment"
+            app:destination="@id/forgotPassFragment" />
+        <action
+            android:id="@+id/action_LoginFragment_to_mainMenuFragment"
+            app:destination="@id/mainMenuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/RegisterFragment"
+        android:name="pl.edu.pg.eti.presentation.fragment.RegisterFragment"
+        android:label="RegisterFragment"
+        tools:layout="@layout/fragment_register">
+    </fragment>
+    <fragment
+        android:id="@+id/forgotPassFragment"
+        android:name="pl.edu.pg.eti.presentation.fragment.ForgotPassFragment"
+        android:label="ForgotPassFragment"
+        tools:layout="@layout/fragment_forgot_pass">
+    </fragment>
+    <fragment
+        android:id="@+id/mainMenuFragment"
+        android:name="pl.edu.pg.eti.presentation.fragment.MainMenuFragment"
+        android:label="MainMenuFragment"
+        tools:layout="@layout/fragment_main_menu">
+        <action
+            android:id="@+id/action_mainMenuFragment_to_createLobbyFragment"
+            app:destination="@id/createLobbyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createLobbyFragment"
+        android:name="pl.edu.pg.eti.presentation.fragment.CreateLobbyFragment"
+        android:label="CreateLobbyFragment"
+        tools:layout="@layout/fragment_create_lobby">
     </fragment>
 </navigation>

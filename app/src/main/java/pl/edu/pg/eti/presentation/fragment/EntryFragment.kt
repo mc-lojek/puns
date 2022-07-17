@@ -40,5 +40,8 @@ class EntryFragment : Fragment() {
         binding.loginBtn.setOnClickListener {
             findNavController().navigate(R.id.action_entryFragment_to_LoginFragment)
         }
+        binding.registerBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_entryFragment_to_RegisterFragment)
+        }
     }
 }

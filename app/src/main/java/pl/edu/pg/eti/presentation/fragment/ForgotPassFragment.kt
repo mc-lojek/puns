@@ -9,19 +9,21 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_forgot_pass.*
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.databinding.FragmentEntryBinding
+import pl.edu.pg.eti.databinding.FragmentForgotPassBinding
 import pl.edu.pg.eti.databinding.FragmentLoginBinding
+import pl.edu.pg.eti.presentation.viewmodel.ForgotPassViewModel
 import pl.edu.pg.eti.presentation.viewmodel.LoginViewModel
 import timber.log.Timber
 
 @AndroidEntryPoint
-class LoginFragment : Fragment() {
+class ForgotPassFragment : Fragment() {
 
-    private lateinit var binding: FragmentLoginBinding
+    private lateinit var binding: FragmentForgotPassBinding
 
-    private val viewModel: LoginViewModel by viewModels()
+    private val viewModel: ForgotPassViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,7 +32,7 @@ class LoginFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.fragment_login,
+            R.layout.fragment_forgot_pass,
             container,
             false
         )
@@ -44,14 +46,8 @@ class LoginFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        binding.LoginFunctionBtn.setOnClickListener {
+        binding.ForgotPassFunctionBtn.setOnClickListener {
             Timber.d(email_input.text.toString())
-            Timber.d(password_input.text.toString())
-            findNavController().navigate(R.id.action_LoginFragment_to_mainMenuFragment)
-        }
-
-        binding.ForgotPassBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_LoginFragment_to_forgotPassFragment)
         }
     }
 }

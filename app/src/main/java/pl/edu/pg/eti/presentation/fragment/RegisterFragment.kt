@@ -7,21 +7,21 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_login.*
 import pl.edu.pg.eti.R
-import pl.edu.pg.eti.databinding.FragmentEntryBinding
-import pl.edu.pg.eti.databinding.FragmentLoginBinding
-import pl.edu.pg.eti.presentation.viewmodel.LoginViewModel
+import pl.edu.pg.eti.databinding.FragmentRegisterBinding
+import pl.edu.pg.eti.presentation.viewmodel.RegisterViewModel
 import timber.log.Timber
+import kotlinx.android.synthetic.main.fragment_register.*;
+
+
 
 @AndroidEntryPoint
-class LoginFragment : Fragment() {
+class RegisterFragment : Fragment() {
 
-    private lateinit var binding: FragmentLoginBinding
+    private lateinit var binding: FragmentRegisterBinding
 
-    private val viewModel: LoginViewModel by viewModels()
+    private val viewModel: RegisterViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,7 +30,7 @@ class LoginFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.fragment_login,
+            R.layout.fragment_register,
             container,
             false
         )
@@ -44,14 +44,10 @@ class LoginFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        binding.LoginFunctionBtn.setOnClickListener {
+        binding.RegisterFunctionBtn.setOnClickListener {
+            Timber.d(nick_input.text.toString())
             Timber.d(email_input.text.toString())
             Timber.d(password_input.text.toString())
-            findNavController().navigate(R.id.action_LoginFragment_to_mainMenuFragment)
-        }
-
-        binding.ForgotPassBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_LoginFragment_to_forgotPassFragment)
         }
     }
 }

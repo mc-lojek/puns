@@ -1,7 +1,32 @@
 <resources>
-    <string name="app_name">puns</string>
+    <string name="app_name">Puns</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="login">ZALOGUJ</string>
+    <string name="register">ZAREJESTRUJ</string>
+    <string name="nick">nick</string>
+    <string name="password">hasło</string>
+    <string name="forgotPass">ZAPOMNIAŁEM HASŁA</string>
+    <string name="resetPass">ZRESETUJ HASŁO</string>
+    <string name="quickGame">SZYBKA GRA</string>
+    <string name="createLobby">ZAŁÓŻ POCZEKALNIE</string>
+    <string name="options">USTAWIENIA</string>
+    <string name="creators">TWÓRCY</string>
+    <string name="statistics">STATYSTYKI</string>
+    <string name="create">STWÓRZ</string>
+    <string name="numerOfPlayers">ILE GRACZY</string>
+    <string name="numerOfRounds">ILE RUND</string>
+    <string name="timePerRound">CZAS NA TURE</string>
+    <string name="playGuest">GRAJ JAKO GOŚĆ</string>
     <string name="placeholder">LOREM IPSUM</string>
     <string name="keyword">Hasło: </string>
+
+    <string-array name="timePerRound">
+        <item>45s</item>
+        <item>60s</item>
+        <item>90s</item>
+        <item>120s</item>
+        <item>150s</item>
+        <item>180s</item>
+    </string-array>
+
 </resources>
