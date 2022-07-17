@@ -54,11 +54,14 @@
 
             <TextView
                 android:id="@+id/tvKeyword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:padding="5dp"
                 android:text="Hasło: Okoń"
+                android:textAlignment="center"
                 android:textSize="30sp"
+                app:layout_constraintBottom_toTopOf="@+id/btnBlue"
+                app:layout_constraintEnd_toStartOf="@+id/chatRecyclerView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Hasło: Okoń" />
@@ -118,6 +121,18 @@
                 android:text="-"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/btnPlus" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/chatRecyclerView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btnBlack"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.505"
+                tools:itemCount="2"
+                tools:listitem="@layout/chat_recycler_view_message" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

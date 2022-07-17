@@ -12,8 +12,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.databinding.FragmentDrawingBinding
+import pl.edu.pg.eti.domain.model.MessageModel
+import pl.edu.pg.eti.presentation.adapter.MessageRecyclerViewAdapter
 import pl.edu.pg.eti.presentation.viewmodel.DrawingViewModel
 
 
@@ -29,6 +33,9 @@ class DrawingFragment : Fragment() {
     private lateinit var canvas: Canvas
     private lateinit var paint: Paint
     private var isSizeSet = false
+    private lateinit var adapter: MessageRecyclerViewAdapter
+    private lateinit var recycler: RecyclerView
+    private lateinit var linearLayoutManager: LinearLayoutManager
 
     companion object {
         fun newInstance() = DrawingFragment()
@@ -46,6 +53,7 @@ class DrawingFragment : Fragment() {
             container,
             false
         )
+        setupAdapter()
         return binding.root
     }
 
@@ -55,6 +63,14 @@ class DrawingFragment : Fragment() {
         imageView = binding.imageView
         paint = Paint()
         setupDrawingListener()
+    }
+
+    private fun setupAdapter(){
+        recycler = binding.chatRecyclerView
+        linearLayoutManager = LinearLayoutManager(this.activity)
+        recycler.layoutManager = linearLayoutManager
+        adapter= MessageRecyclerViewAdapter(arrayListOf())
+        recycler.adapter=adapter
     }
 
     private fun setStartingValues()
@@ -118,10 +134,12 @@ class DrawingFragment : Fragment() {
             setStartingValues()
             paint.setStrokeWidth(if(paint.strokeWidth+2f>20f) 20f else paint.strokeWidth+2f)
             //todo wrzucić do constów max i min szerokość pędzli, jeśli nie zmienimy sposobu zmiany rozmiaru tego pędzla
+
         }
         binding.btnMinus.setOnClickListener {
             setStartingValues()
             paint.setStrokeWidth(if(paint.strokeWidth-2f<6) 6f else paint.strokeWidth-2f)
+            adapter.addMessage(MessageModel("elo","content"))
             //todo wrzucić do constów max i min szerokość pędzli, jeśli nie zmienimy sposobu zmiany rozmiaru tego pędzla
         }
     }
