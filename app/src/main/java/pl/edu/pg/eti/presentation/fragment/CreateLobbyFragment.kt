@@ -19,11 +19,22 @@ import pl.edu.pg.eti.databinding.FragmentCreateLobbyBinding
 import pl.edu.pg.eti.presentation.viewmodel.CreateLobbyViewModel
 import timber.log.Timber
 
+
+// u Ciebie widze ze akurat string.xml stosujesz wiec jest spoko, natomiast musimy ujednolicic nazewnictwo plikow xml i id-ków żeby to było spójne
+// pozniej na discordzie wysle wam jakies zrodlo na ktorym bedziemy bazowac
+
+
+
 @AndroidEntryPoint
 class CreateLobbyFragment : Fragment() {
 
     private lateinit var binding: FragmentCreateLobbyBinding
+    // to do wyjebania, kazdy fragment ma w sobie pole context
+    // wiec wszedzie gdzie masz mContext to zmein po prostu na context
     private lateinit var mContext: Context
+
+    //adapter akurat warto trzymac tutaj bo pozniej w razie potrzeby mozna do niego dodac np listener
+    //private lateinit var adapter: ArrayAdapter<CharSequence>
 
     private val viewModel: CreateLobbyViewModel by viewModels()
 
@@ -41,13 +52,27 @@ class CreateLobbyFragment : Fragment() {
         return binding.root
     }
 
+    // do wyjebania
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
     }
 
+//    private fun setupAdapter() {
+//        adapter = ArrayAdapter.createFromResource(requireContext(), R.array.timePerRound, android.R.layout.simple_spinner_item)
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        binding.TimePerRoundSpinner.adapter = adapter
+//    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //tutaj uzywasz synthetic. to ogolnie dziala, ale nie jest juz wspierane i zalecane przez google, bo nie sprawdza typowania itp
+        // zeby sie dostac do elementow ui uzywamy binding
+        // czyli w 64 linijce bedzie binding.TimePreRound_spinner.adapter = adapter
+        // ale ogolnie ta konstrukcje bym przebudowal zeby byla bardziej czytelna i wydzielil do osobnej funkcji, przyklad powyzej
+        //i tu tylko wywoluje funkcje:
+        //setupAdapter()
+
         val spinner: Spinner = TimePerRound_spinner;
         ArrayAdapter.createFromResource(
             mContext,
@@ -58,6 +83,7 @@ class CreateLobbyFragment : Fragment() {
             spinner.adapter = adapter
         }
 
+        //tutaj to samo - synthetic na binding zmien i wydziel to do funkcji osobnych
         numberOfPlayersValue_textView.setText(numberOfPlayers_seekBar.getProgress().toString());
         val seek1 = numberOfPlayers_seekBar
         seek1?.setOnSeekBarChangeListener(object :
