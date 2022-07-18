@@ -24,6 +24,7 @@ import pl.edu.pg.eti.presentation.viewmodel.DrawingViewModel
 class DrawingFragment : Fragment() {
 
     private lateinit var binding: FragmentDrawingBinding
+    //to do wyjebania, wystarczy ze dasz binding.imageView zamiast imageView
     private lateinit var imageView: ImageView
     private var floatStartX = -1f
     private var floatStartY = -1f
@@ -31,12 +32,18 @@ class DrawingFragment : Fragment() {
     private var floatEndY = -1f
     private lateinit var bitmap: Bitmap
     private lateinit var canvas: Canvas
+    //to mozna od razu zainicjaizowac
+    //private val paint = Paint()
     private lateinit var paint: Paint
     private var isSizeSet = false
+    //adapter mozna zainicjalizowac od razu
+    //private val adapter = MessageRecyclerViewAdapter()
     private lateinit var adapter: MessageRecyclerViewAdapter
+    //to do wyjebania
     private lateinit var recycler: RecyclerView
     private lateinit var linearLayoutManager: LinearLayoutManager
 
+    //to do wyjebania
     companion object {
         fun newInstance() = DrawingFragment()
     }
@@ -53,6 +60,7 @@ class DrawingFragment : Fragment() {
             container,
             false
         )
+        //to lepiej dac do onViewCreated()
         setupAdapter()
         return binding.root
     }
@@ -60,12 +68,18 @@ class DrawingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //te dwie linijki do wyjebania
         imageView = binding.imageView
         paint = Paint()
         setupDrawingListener()
     }
 
     private fun setupAdapter(){
+
+        //tutaj po moich sugestiach z gory zostaloby tylko tyle:
+        //binding.chatRecyclerView.layoutManager = LinearLayoutManager(context) //i tutaj dawaj context zamiast activity
+        //binding.chatRecyclerView.adapter=adapter
+
         recycler = binding.chatRecyclerView
         linearLayoutManager = LinearLayoutManager(this.activity)
         recycler.layoutManager = linearLayoutManager
@@ -87,6 +101,10 @@ class DrawingFragment : Fragment() {
         }
     }
 
+    private fun onPaintButtonClick(view: View) {
+        setStartingValues()
+        paint.color = view.backgroundTintList!!.defaultColor
+    }
 
     private fun setupDrawingListener() {
         imageView.setOnTouchListener(object : View.OnTouchListener {
@@ -114,6 +132,14 @@ class DrawingFragment : Fragment() {
             }
         }
         )
+
+        //tutaj mozesz dac jeden listener wspolny dla wszyskich przyciskow
+//        binding.btnBlack.setOnClickListener(::onPaintButtonClick)
+//        binding.btnBlue.setOnClickListener(::onPaintButtonClick)
+//        binding.btnGreen.setOnClickListener(::onPaintButtonClick)
+//        binding.btnRed.setOnClickListener(::onPaintButtonClick)
+
+
         binding.btnBlack.setOnClickListener{
             setStartingValues()
             paint.setColor(Color.parseColor("#000000"))
@@ -123,6 +149,7 @@ class DrawingFragment : Fragment() {
             paint.setColor(Color.parseColor("#03A9F4"))
         }
         binding.btnGreen.setOnClickListener {
+            binding.btnGreen.backgroundTintList.defaultColor
             setStartingValues()
             paint.setColor(Color.parseColor("#4CAF50"))
         }
@@ -130,6 +157,9 @@ class DrawingFragment : Fragment() {
             setStartingValues()
             paint.setColor(Color.parseColor("#F44336"))
         }
+        // ogolnie w kotlinie zamiast setterow zazwyczaj jest property syntax
+        // wiec tak jak ide podpowiada mozesz sobie zrobic
+        // paint.strokeWidth = xxx zamiast paint.setStrokeWidth(xxx)
         binding.btnPlus.setOnClickListener {
             setStartingValues()
             paint.setStrokeWidth(if(paint.strokeWidth+2f>20f) 20f else paint.strokeWidth+2f)
@@ -147,6 +177,14 @@ class DrawingFragment : Fragment() {
     private fun setKeyWord(keyword:String){
         binding.tvKeyword.text="Hasło: "+keyword
         //todo dodać "Hasło" do constów jakbyśmy chcieli robić wersje językowe
+
+        // ^ tu ogolnie takie wartosci tekstowe to trzymamy w strings.xml
+        // i wtedy mozna dla kazdej wersji jezykowej inny plik przygotowac z tymi samymi slowami
+        // w xmlu sie ich uzywa jako @string/<key>
+        // a w kodzie tak:
+        // resources.getString(R.id.<key>)
+        // a zamiast sklejać stringi przez operator + to mozesz ten formatowany string robić
+        // binding.tvKeyword.text = "${resources.getString(R.id.keyword)}: ${keyword}"
     }
 
     private fun setTimeLeft(timeInSeconds:Int){
@@ -163,6 +201,9 @@ class DrawingFragment : Fragment() {
     }
 
 
-
+    // co do xml to musimy przyjac jakas konwencje co do nazywania plikow i nadawania id, zeby sie nie zrobil rozpierdol
+    // znajde jakas sensowna rozpiske na necie i podrzuce wam linka zebyscie sie nia tym wzorowali.
+    // no i stringi deklaruj w strings.xml a kolory w colors.xml i wtedy zamiast podawac bezposrednio
+    // np.#ff0000 to dajesz @color/red, bedzie mozna pozniej przyjemnie zmieniac odcienie itp
 
 }

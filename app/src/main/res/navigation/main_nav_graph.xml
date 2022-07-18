@@ -20,4 +20,8 @@
         android:label="fragment_complaint_list"
         tools:layout="@layout/fragment_login">
     </fragment>
+    <fragment
+        android:id="@+id/drawingFragment"
+        android:name="pl.edu.pg.eti.presentation.fragment.DrawingFragment"
+        android:label="DrawingFragment" />
 </navigation>
