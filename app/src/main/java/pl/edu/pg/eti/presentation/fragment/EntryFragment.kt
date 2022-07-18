@@ -38,7 +38,7 @@ class EntryFragment : Fragment() {
 
     private fun setupListeners() {
         binding.loginBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_entryFragment_to_LoginFragment)
+            findNavController().navigate(R.id.action_entryFragment_to_guessingFragment)
         }
     }
 }

@@ -11,8 +11,11 @@
         android:label="fragment_entry"
         tools:layout="@layout/fragment_entry" >
         <action
-            android:id="@+id/action_entryFragment_to_LoginFragment"
-            app:destination="@id/LoginFragment" />
+            android:id="@+id/action_entryFragment_to_drawingFragment"
+            app:destination="@id/drawingFragment" />
+        <action
+            android:id="@+id/action_entryFragment_to_guessingFragment"
+            app:destination="@id/guessingFragment" />
     </fragment>
     <fragment
         android:id="@+id/LoginFragment"
@@ -24,4 +27,8 @@
         android:id="@+id/drawingFragment"
         android:name="pl.edu.pg.eti.presentation.fragment.DrawingFragment"
         android:label="DrawingFragment" />
+    <fragment
+        android:id="@+id/guessingFragment"
+        android:name="pl.edu.pg.eti.presentation.fragment.GuessingFragment"
+        android:label="GuessingFragment" />
 </navigation>

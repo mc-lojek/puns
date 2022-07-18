@@ -3,5 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="login">ZALOGUJ</string>
     <string name="placeholder">LOREM IPSUM</string>
-    <string name="keyword">Hasło: </string>
+    <string name="keyword_prefix">Hasło</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
