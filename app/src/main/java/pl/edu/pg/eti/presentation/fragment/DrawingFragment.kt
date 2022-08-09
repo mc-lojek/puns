@@ -1,25 +1,25 @@
 package pl.edu.pg.eti.presentation.fragment
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.*
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.databinding.FragmentDrawingBinding
+import pl.edu.pg.eti.domain.manager.SessionManager
 import pl.edu.pg.eti.domain.model.MessageModel
 import pl.edu.pg.eti.presentation.adapter.MessageRecyclerViewAdapter
 import pl.edu.pg.eti.presentation.viewmodel.DrawingViewModel
+import timber.log.Timber
+import javax.inject.Inject
 
-
-class DrawingFragment : Fragment() {
+@AndroidEntryPoint
+class DrawingFragment @Inject constructor(val sessionManager: SessionManager) : Fragment() {
 
     private lateinit var binding: FragmentDrawingBinding
     private var floatStartX = -1f
@@ -29,11 +29,8 @@ class DrawingFragment : Fragment() {
     private lateinit var bitmap: Bitmap
     private lateinit var canvas: Canvas
     private var paint = Paint()
-    private var isSizeSet = false
     private var adapter = MessageRecyclerViewAdapter(arrayListOf())
-    private lateinit var linearLayoutManager: LinearLayoutManager
-
-    private lateinit var viewModel: DrawingViewModel
+    private val viewModel: DrawingViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,35 +45,53 @@ class DrawingFragment : Fragment() {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sessionManager.initSessionManager(
+            "sparrow-01.rmq.cloudamqp.com",
+            "ljgnrjzx",
+            5672,
+            "8_bkQrkcFCVHK0FpqEldQdu8sId5p7Xu",
+            "ljgnrjzx"
+        )
+
+
         setupDrawingListener()
         setupAdapter()
+        waitForImageView()
     }
 
-    private fun setupAdapter(){
-        binding.chatRecyclerView.layoutManager = LinearLayoutManager(context)
-        binding.chatRecyclerView.adapter=adapter
-    }
-
-    private fun setStartingValues()
-    {
-        if(!isSizeSet){
-            bitmap = Bitmap.createBitmap(binding.imageView.width, binding.imageView.width, Bitmap.Config.ARGB_8888)
-            canvas = Canvas(bitmap)
-            paint.setColor(Color.BLACK)
-            paint.setAntiAlias(true)
-            paint.setStyle(Paint.Style.STROKE)
-            paint.strokeCap=Paint.Cap.ROUND
-            paint.setStrokeWidth(10f)
-            isSizeSet=true
+    private fun waitForImageView() {
+        val viewTreeObserver = binding.imageView.viewTreeObserver
+        if (viewTreeObserver.isAlive) {
+            viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    view!!.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    bitmap = Bitmap.createBitmap(
+                        binding.imageView.measuredWidth,
+                        binding.imageView.measuredWidth,
+                        Bitmap.Config.RGB_565
+                    )
+                    setStartingValues()
+                }
+            })
         }
     }
 
-    private fun onPaintButtonClick(view: View) {
-        setStartingValues()
-        paint.color = view.backgroundTintList!!.defaultColor
+    private fun setupAdapter() {
+        binding.chatRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.chatRecyclerView.adapter = adapter
+    }
+
+    private fun setStartingValues() {
+        canvas = Canvas(bitmap)
+        canvas.drawColor(Color.parseColor("#FFFCE8"))
+        paint.color = Color.BLACK
+        paint.isAntiAlias = true
+        paint.style = Paint.Style.STROKE
+        paint.strokeCap = Paint.Cap.ROUND
+        paint.setStrokeWidth(10f)
+        viewModel.createServerConnection()
     }
 
     private fun setupDrawingListener() {
@@ -84,7 +99,6 @@ class DrawingFragment : Fragment() {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 when (event?.action) {
                     MotionEvent.ACTION_DOWN -> {
-                        setStartingValues()
                         floatStartX = event.x
                         floatStartY = event.y
                     }
@@ -108,7 +122,6 @@ class DrawingFragment : Fragment() {
 
 
         fun onPaintButtonClick(view: View) {
-            setStartingValues()
             paint.color = view.backgroundTintList!!.defaultColor
         }
 
@@ -118,34 +131,31 @@ class DrawingFragment : Fragment() {
         binding.btnRed.setOnClickListener(::onPaintButtonClick)
 
         binding.btnPlus.setOnClickListener {
-            setStartingValues()
-            paint.strokeWidth = if(paint.strokeWidth+2f>20f) 20f else paint.strokeWidth+2f
-            //todo wrzucić do constów max i min szerokość pędzli, jeśli nie zmienimy sposobu zmiany rozmiaru tego pędzla
+            paint.strokeWidth =
+                if (paint.strokeWidth + 2f > 20f) 20f else paint.strokeWidth + 2f
 
         }
         binding.btnMinus.setOnClickListener {
-            setStartingValues()
-            paint.strokeWidth = if(paint.strokeWidth-2f<6) 6f else paint.strokeWidth-2f
-            adapter.addMessage(MessageModel("elo","content"))
-            //todo wrzucić do constów max i min szerokość pędzli, jeśli nie zmienimy sposobu zmiany rozmiaru tego pędzla
+            paint.strokeWidth = if (paint.strokeWidth - 2f < 6) 6f else paint.strokeWidth - 2f
+            //adapter.addMessage(MessageModel("elo", "content"))
         }
     }
 
-
-    private fun setKeyWord(keyword:String){
+    private fun setKeyWord(keyword: String) {
         binding.tvKeyword.text = "${resources.getString(R.string.keyword_prefix)}: ${keyword}"
     }
 
-    private fun setTimeLeft(timeInSeconds:Int){
-        binding.tvTimeLeft.text=timeInSeconds.toString()+"s"
+    private fun setTimeLeft(timeInSeconds: Int) {
+        binding.tvTimeLeft.text = timeInSeconds.toString() + "s"
     }
 
-    private fun setRoundTV(now:Int,total:Int){
-        binding.tvRound.text=now.toString()+"/"+total.toString()
+    private fun setRoundTV(now: Int, total: Int) {
+        binding.tvRound.text = now.toString() + "/" + total.toString()
     }
 
     private fun drawPainting() {
-        canvas.drawLine(floatStartX,floatStartY,floatEndX,floatEndY,paint)
+        canvas.drawLine(floatStartX, floatStartY, floatEndX, floatEndY, paint)
         binding.imageView.setImageBitmap(bitmap)
+        viewModel.sendSingleLineModel(floatStartX, floatStartY, floatEndX, floatEndY, paint)
     }
 }
