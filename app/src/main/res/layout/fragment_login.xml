@@ -49,6 +49,19 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.5" />
 
+        <TextView
+            android:id="@+id/loginHint"
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:text=""
+            android:gravity="center_horizontal"
+            android:textColor="#ff0000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.55"/>
+
         <Button
             android:id="@+id/ForgotPass_btn"
             android:layout_width="wrap_content"

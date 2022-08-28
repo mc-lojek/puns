@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.presentation.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.databinding.FragmentEntryBinding
+import timber.log.Timber
 
 @AndroidEntryPoint
 class EntryFragment : Fragment() {
@@ -42,6 +44,14 @@ class EntryFragment : Fragment() {
         }
         binding.registerBtn.setOnClickListener {
             findNavController().navigate(R.id.action_entryFragment_to_RegisterFragment)
+        }
+        binding.guestBtn.setOnClickListener{
+
+
+            val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return@setOnClickListener
+            Timber.d(sharedPref.getString("access_token", "empty"))
+            Timber.d(sharedPref.getString("refresh_token", "empty"))
+
         }
     }
 }

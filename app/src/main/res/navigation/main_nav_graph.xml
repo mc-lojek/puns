@@ -34,6 +34,9 @@
         android:name="pl.edu.pg.eti.presentation.fragment.RegisterFragment"
         android:label="RegisterFragment"
         tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_RegisterFragment_to_entryFragment"
+            app:destination="@id/entryFragment" />
     </fragment>
     <fragment
         android:id="@+id/forgotPassFragment"
