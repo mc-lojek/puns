@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.email_input
@@ -45,7 +46,7 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupListeners()
-        setupObserver()
+        setupObserver(view)
     }
 
     private fun setupListeners() {
@@ -61,7 +62,7 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun setupObserver(){
+    private fun setupObserver(view: View){
         viewModel.loginLiveData.observe(viewLifecycleOwner){
             if(it.code() == 200) {
 
@@ -72,6 +73,7 @@ class LoginFragment : Fragment() {
                     apply()
                 }
 
+                Snackbar.make(view, "Login successful", Snackbar.LENGTH_SHORT).show()
                 findNavController().navigate(R.id.action_LoginFragment_to_mainMenuFragment)
             }
             else{

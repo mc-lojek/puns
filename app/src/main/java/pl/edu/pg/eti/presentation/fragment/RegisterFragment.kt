@@ -8,13 +8,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.databinding.FragmentRegisterBinding
 import pl.edu.pg.eti.presentation.viewmodel.RegisterViewModel
 import timber.log.Timber
 import kotlinx.android.synthetic.main.fragment_register.*;
-import retrofit2.HttpException
 
 
 @AndroidEntryPoint
@@ -42,7 +42,7 @@ class RegisterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupListeners()
-        setupObserver()
+        setupObserver(view)
     }
 
     private fun setupListeners() {
@@ -59,7 +59,7 @@ class RegisterFragment : Fragment() {
             val patternAtLeast1SmallLetter = "[a-z]".toRegex()
             val patternAtLeast1Number = "[0-9]".toRegex()
             val patternEmail = ".+[@].+[.].+".toRegex()
-/*
+
             //check nick
             if (!patternAtLeast3Letters.containsMatchIn (nick)) {
                 registerHint.text = "nick too short"
@@ -89,16 +89,16 @@ class RegisterFragment : Fragment() {
                 registerHint.text = "password need at least one number"
                 return@setOnClickListener
             }
-            */
 
             viewModel.registerUser(nick, email, password)
         }
     }
 
-    private fun setupObserver(){
+    private fun setupObserver(view: View){
         viewModel.registerLiveData.observe(viewLifecycleOwner){
             if(it.code() == 200) {
                 //Timber.d(it.body().toString())
+                Snackbar.make(view, "Register successful", Snackbar.LENGTH_SHORT).show()
                 findNavController().navigate(R.id.action_RegisterFragment_to_entryFragment)
             }
             else{
