@@ -7,7 +7,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class RegisterRepositoryImpl @Inject constructor(private val apiService : ApiService) : RegisterRepository{
-    override suspend fun registerUser(nick: String, pass: String, mail: String): Response<User> {
+    override suspend fun registerUser(nick: String, pass: String, mail: String): Response<Void> {
         return apiService.registerUser(user = User(nick, mail, pass))
     }
 }

@@ -5,5 +5,5 @@ import retrofit2.Response
 
 
 interface RegisterRepository {
-    suspend fun registerUser(nick: String, pass: String, mail: String): Response<User>
+    suspend fun registerUser(nick: String, pass: String, mail: String): Response<Void>
 }

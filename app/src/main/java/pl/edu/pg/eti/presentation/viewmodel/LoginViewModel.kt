@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
+import pl.edu.pg.eti.domain.model.Tokens
 import pl.edu.pg.eti.domain.model.User
 import pl.edu.pg.eti.domain.repository.LoginRepository
 import pl.edu.pg.eti.domain.repository.RegisterRepository
@@ -16,9 +17,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor( private val repository: LoginRepository): ViewModel() {
-    private val _loginLiveData: MutableLiveData<Response<Void>> =
+    private val _loginLiveData: MutableLiveData<Response<Tokens>> =
         MutableLiveData()
-    val loginLiveData: LiveData<Response<Void>> = _loginLiveData
+    val loginLiveData: LiveData<Response<Tokens>> = _loginLiveData
 
     fun loginUser(nick: String, pass: String) {
         viewModelScope.launch {

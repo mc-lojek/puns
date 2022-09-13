@@ -15,9 +15,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor( private val repository: RegisterRepository): ViewModel() {
-    private val _registerLiveData: MutableLiveData<Response<User>> =
+    private val _registerLiveData: MutableLiveData<Response<Void>> =
         MutableLiveData()
-    val registerLiveData: LiveData<Response<User>> = _registerLiveData
+    val registerLiveData: LiveData<Response<Void>> = _registerLiveData
 
     fun registerUser(nick: String, pass: String, mail: String) {
         viewModelScope.launch {

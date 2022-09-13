@@ -18,6 +18,8 @@ import kotlinx.android.synthetic.main.fragment_register.*
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.databinding.FragmentEntryBinding
 import pl.edu.pg.eti.databinding.FragmentLoginBinding
+import pl.edu.pg.eti.domain.model.User
+import pl.edu.pg.eti.domain.model.UserWithoutNick
 import pl.edu.pg.eti.presentation.viewmodel.LoginViewModel
 import timber.log.Timber
 
@@ -68,8 +70,15 @@ class LoginFragment : Fragment() {
 
                 val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return@observe
                 with (sharedPref.edit()) {
-                    putString("access_token", it.headers()["access_token"])
-                    putString("refresh_token", it.headers()["refresh_token"])
+                    val tokens = it.body()
+                    if(tokens?.access_token == null || tokens?.refresh_token == null){
+                        //SOMETHING IS KAPUTT
+                        return@observe
+                    }
+                    //Timber.d(tokens?.refresh_token)
+                    //Timber.d(tokens?.access_token)
+                    putString("access_token", tokens?.access_token)
+                    putString("refresh_token", tokens?.refresh_token)
                     apply()
                 }
 

@@ -1,6 +1,6 @@
 package pl.edu.pg.eti.data.service
 
-import okhttp3.RequestBody
+import pl.edu.pg.eti.domain.model.Tokens
 import pl.edu.pg.eti.domain.model.User
 import pl.edu.pg.eti.domain.model.UserWithoutNick
 import retrofit2.Response
@@ -12,13 +12,13 @@ interface ApiService {
     @GET("/api/users")
     suspend fun getAllUsers(): List<User>;
 
-    @POST("/api/register")
+    @POST("/api/users/register")
     suspend fun registerUser(
         @Body user: User
-        ): Response<User>
+        ): Response<Void>
 
-    @POST("/api/login")
+    @POST("/api/users/login")
     suspend fun  loginUser(
-        @Body requestBody: RequestBody
-        ):Response<Void>
+        @Body userWithoutNick: UserWithoutNick
+        ):Response<Tokens>
 }
