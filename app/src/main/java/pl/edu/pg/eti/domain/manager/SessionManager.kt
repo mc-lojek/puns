@@ -1,13 +1,17 @@
 package pl.edu.pg.eti.domain.manager
 
+import android.text.Spannable
+import com.rabbitmq.client.AMQP
 import com.rabbitmq.client.Channel
 import com.rabbitmq.client.Connection
 import com.rabbitmq.client.ConnectionFactory
+import kotlinx.coroutines.delay
 
 class SessionManager {
     private lateinit var factory: ConnectionFactory
     private lateinit var connection: Connection
-    private lateinit var channel: Channel
+
+    lateinit var channel: Channel
 
     fun initSessionManager(
         sHost: String,
@@ -16,6 +20,7 @@ class SessionManager {
         sPassword: String,
         sVirtualHost: String
     ) {
+        factory = ConnectionFactory()
         factory.apply {
             host = sHost                //"sparrow-01.rmq.cloudamqp.com"
             username = sUsername        //"ljgnrjzx"

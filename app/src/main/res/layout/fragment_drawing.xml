@@ -57,6 +57,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:padding="5dp"
+                android:text="Hasło: Okoń"
                 android:textAlignment="center"
                 android:textSize="30sp"
                 app:layout_constraintBottom_toTopOf="@+id/btnBlue"

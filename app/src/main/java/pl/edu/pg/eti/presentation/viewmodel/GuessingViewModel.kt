@@ -1,52 +1,76 @@
 package pl.edu.pg.eti.presentation.viewmodel
 
-import android.graphics.Paint
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.rabbitmq.client.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
-import pl.edu.pg.eti.data.util.RabbitConnectionParameters
-import pl.edu.pg.eti.domain.model.CanvaSingleLineMessageModel
+import pl.edu.pg.eti.domain.manager.SessionManager
+import pl.edu.pg.eti.domain.model.MessageModel
 import pl.edu.pg.eti.domain.repository.RabbitRepository
-import timber.log.Timber
 import java.io.IOException
-import java.nio.charset.StandardCharsets
-import java.util.concurrent.Flow
 import javax.inject.Inject
 
 @HiltViewModel
 class GuessingViewModel @Inject constructor(
     val repo: RabbitRepository
 ) : ViewModel() {
-    private lateinit var rabbitConnectionParameters: RabbitConnectionParameters
+    lateinit var sessionManager: SessionManager
     val consumerTag = "SimpleConsumer"
 
     val cancelCallback = CancelCallback { consumerTag: String? ->
         println("[$consumerTag] was canceled")
     }
 
-    fun createServerConnection(deliveryCallback: DeliverCallback) = viewModelScope.launch {
+    fun initializeSessionManager() = viewModelScope.launch {
         withContext(Dispatchers.IO) {
-            try {
-                rabbitConnectionParameters = repo.createServerConnection()
-                val message =
-                    rabbitConnectionParameters.channel.basicConsume(
-                        "test_queue",
-                        true,
-                        consumerTag,
-                        deliveryCallback,
-                        cancelCallback
-                    )
-            } catch (ex: IOException) {
-                print(ex.stackTrace)
-            }
+            sessionManager = SessionManager()
+            sessionManager.initSessionManager(
+                "sparrow-01.rmq.cloudamqp.com",
+                "ljgnrjzx",
+                5672,
+                "8_bkQrkcFCVHK0FpqEldQdu8sId5p7Xu",
+                "ljgnrjzx"
+            )
         }
     }
 
+    fun initializeAndConsume(queueName: String, deliveryCallback: DeliverCallback) =
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                sessionManager = SessionManager()
+                sessionManager.initSessionManager(
+                    "sparrow-01.rmq.cloudamqp.com",
+                    "ljgnrjzx",
+                    5672,
+                    "8_bkQrkcFCVHK0FpqEldQdu8sId5p7Xu",
+                    "ljgnrjzx"
+                )
+                delay(5000)
+                try {
+                    val message =
+                        sessionManager.channel.basicConsume(
+                            queueName,
+                            true,
+                            consumerTag,
+                            deliveryCallback,
+                            cancelCallback
+                        )
+                } catch (ex: IOException) {
+                    print(ex.stackTrace)
+                }
+            }
+        }
+
+    fun sendGuess(content: String) = viewModelScope.launch {
+        withContext(Dispatchers.IO) {
+            repo.sendGuess(
+                sessionManager,
+                MessageModel("guessingActor", content),
+                "test_mess"
+            )
+        }
+    }
 
 }
 

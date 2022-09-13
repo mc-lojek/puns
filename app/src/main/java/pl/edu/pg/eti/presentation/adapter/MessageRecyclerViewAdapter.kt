@@ -18,8 +18,8 @@ class MessageRecyclerViewAdapter(
 
     fun addMessage(message: MessageModel){
         Log.i("adapter",message.nickname+" "+message.content)
-        this.messageList.add(message)
-        notifyItemInserted(messageList.size - 1)
+        this.messageList.add(0,message)
+        notifyItemInserted(0)
     }
 
     override fun onCreateViewHolder(

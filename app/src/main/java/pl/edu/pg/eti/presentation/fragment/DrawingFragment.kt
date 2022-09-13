@@ -8,7 +8,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.rabbitmq.client.DeliverCallback
+import com.rabbitmq.client.Delivery
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.databinding.FragmentDrawingBinding
 import pl.edu.pg.eti.domain.manager.SessionManager
@@ -16,11 +19,11 @@ import pl.edu.pg.eti.domain.model.MessageModel
 import pl.edu.pg.eti.presentation.adapter.MessageRecyclerViewAdapter
 import pl.edu.pg.eti.presentation.viewmodel.DrawingViewModel
 import timber.log.Timber
+import java.nio.charset.StandardCharsets
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class DrawingFragment @Inject constructor(val sessionManager: SessionManager) : Fragment() {
-
+class DrawingFragment : Fragment() {
     private lateinit var binding: FragmentDrawingBinding
     private var floatStartX = -1f
     private var floatStartY = -1f
@@ -32,6 +35,8 @@ class DrawingFragment @Inject constructor(val sessionManager: SessionManager) : 
     private var adapter = MessageRecyclerViewAdapter(arrayListOf())
     private val viewModel: DrawingViewModel by viewModels()
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,20 +47,13 @@ class DrawingFragment @Inject constructor(val sessionManager: SessionManager) : 
             container,
             false
         )
+        viewModel.initializeAndConsume("test_mess",deliverCallback)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sessionManager.initSessionManager(
-            "sparrow-01.rmq.cloudamqp.com",
-            "ljgnrjzx",
-            5672,
-            "8_bkQrkcFCVHK0FpqEldQdu8sId5p7Xu",
-            "ljgnrjzx"
-        )
-
-
+        //viewModel.sessionManager.declareNewQueue("queue123")
         setupDrawingListener()
         setupAdapter()
         waitForImageView()
@@ -91,7 +89,6 @@ class DrawingFragment @Inject constructor(val sessionManager: SessionManager) : 
         paint.style = Paint.Style.STROKE
         paint.strokeCap = Paint.Cap.ROUND
         paint.setStrokeWidth(10f)
-        viewModel.createServerConnection()
     }
 
     private fun setupDrawingListener() {
@@ -156,6 +153,32 @@ class DrawingFragment @Inject constructor(val sessionManager: SessionManager) : 
     private fun drawPainting() {
         canvas.drawLine(floatStartX, floatStartY, floatEndX, floatEndY, paint)
         binding.imageView.setImageBitmap(bitmap)
-        viewModel.sendSingleLineModel(floatStartX, floatStartY, floatEndX, floatEndY, paint)
+        viewModel.sendSingleLineModel(
+            floatStartX,
+            floatStartY,
+            floatEndX,
+            floatEndY,
+            paint.color,
+            paint.strokeWidth,
+            "test_queue"//todo queue name
+        )
     }
+
+    val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
+        requireActivity().runOnUiThread {
+            val message = String(delivery.body, StandardCharsets.UTF_8)
+            val array = message.split(",")
+            if (array[0] == "draw") {
+
+            }
+            if (array[0] == "mess") {
+                adapter.addMessage(MessageModel(array[1],array[2]))
+                binding.chatRecyclerView.smoothScrollToPosition(0)
+            }
+            println("[$consumerTag] Received: '$message'")
+        }
+
+
+    }
+
 }

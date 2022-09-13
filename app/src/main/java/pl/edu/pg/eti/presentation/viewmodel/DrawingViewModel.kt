@@ -1,49 +1,81 @@
 package pl.edu.pg.eti.presentation.viewmodel
 
-import android.graphics.Paint
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rabbitmq.client.Channel
-import com.rabbitmq.client.Connection
-import com.rabbitmq.client.ConnectionFactory
+import com.rabbitmq.client.CancelCallback
+import com.rabbitmq.client.DeliverCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import pl.edu.pg.eti.data.util.RabbitConnectionParameters
+import pl.edu.pg.eti.domain.manager.SessionManager
 import pl.edu.pg.eti.domain.model.CanvaSingleLineMessageModel
-import pl.edu.pg.eti.domain.repository.LoginRepository
 import pl.edu.pg.eti.domain.repository.RabbitRepository
-import pl.edu.pg.eti.presentation.adapter.MessageRecyclerViewAdapter
 import java.io.IOException
-import java.nio.charset.StandardCharsets
-import java.util.concurrent.TimeoutException
 import javax.inject.Inject
 
 @HiltViewModel
 class DrawingViewModel @Inject constructor(
     val repo: RabbitRepository
 ) : ViewModel() {
-    private lateinit var rabbitConnectionParameters: RabbitConnectionParameters
+    lateinit var sessionManager: SessionManager
+    val consumerTag = "SimpleConsumer"
 
-    fun createServerConnection() = viewModelScope.launch {
+    val cancelCallback = CancelCallback { consumerTag: String? ->
+        println("[$consumerTag] was canceled")
+    }
+
+    fun initializeSessionManager() = viewModelScope.launch {
         withContext(Dispatchers.IO) {
-            try {
-                rabbitConnectionParameters = repo.createServerConnection()
-            } catch (ex: IOException) {
-                print(ex.stackTrace)
-            }
-
+            sessionManager = SessionManager()
+            sessionManager.initSessionManager(
+                "sparrow-01.rmq.cloudamqp.com",
+                "ljgnrjzx",
+                5672,
+                "8_bkQrkcFCVHK0FpqEldQdu8sId5p7Xu",
+                "ljgnrjzx"
+            )
         }
     }
+
+    fun initializeAndConsume(queueName: String, deliveryCallback: DeliverCallback) =
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                sessionManager = SessionManager()
+                sessionManager.initSessionManager(
+                    "sparrow-01.rmq.cloudamqp.com",
+                    "ljgnrjzx",
+                    5672,
+                    "8_bkQrkcFCVHK0FpqEldQdu8sId5p7Xu",
+                    "ljgnrjzx"
+                )
+                delay(5000)
+                try {
+                    val message =
+                        sessionManager.channel.basicConsume(
+                            queueName,
+                            true,
+                            consumerTag,
+                            deliveryCallback,
+                            cancelCallback
+                        )
+                } catch (ex: IOException) {
+                    print(ex.stackTrace)
+                }
+            }
+        }
+
+
 
     fun sendSingleLineModel(
         floatStartX: Float,
         floatStartY: Float,
         floatEndX: Float,
         floatEndY: Float,
-        paint: Paint
+        paintColor: Int,
+        paintSize: Float,
+        queueName: String
     ) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
             repo.sendDrawLine(
@@ -52,8 +84,9 @@ class DrawingViewModel @Inject constructor(
                     floatStartY,
                     floatEndX,
                     floatEndY,
-                    paint
-                ), rabbitConnectionParameters
+                    paintColor,
+                    paintSize
+                ), sessionManager, queueName
             )
         }
     }

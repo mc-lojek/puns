@@ -12,15 +12,20 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.rabbitmq.client.DeliverCallback
 import com.rabbitmq.client.Delivery
 import dagger.hilt.android.AndroidEntryPoint
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.databinding.FragmentGuessingBinding
+import pl.edu.pg.eti.domain.manager.SessionManager
 import pl.edu.pg.eti.domain.model.CanvaSingleLineMessageModel
+import pl.edu.pg.eti.domain.model.MessageModel
+import pl.edu.pg.eti.presentation.adapter.MessageRecyclerViewAdapter
 import pl.edu.pg.eti.presentation.viewmodel.DrawingViewModel
 import pl.edu.pg.eti.presentation.viewmodel.GuessingViewModel
 import java.nio.charset.StandardCharsets
+import javax.inject.Inject
 import kotlin.math.sin
 
 @AndroidEntryPoint
@@ -31,6 +36,7 @@ class GuessingFragment : Fragment() {
     private lateinit var canvas: Canvas
     private var paint = Paint()
     private val viewModel: GuessingViewModel by viewModels()
+    private var adapter = MessageRecyclerViewAdapter(arrayListOf())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,12 +48,21 @@ class GuessingFragment : Fragment() {
             container,
             false
         )
+        viewModel.initializeAndConsume("test_queue", deliverCallback)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         waitForImageView()
+        binding.btnSend.setOnClickListener {
+            viewModel.sendGuess(binding.textGuess.text.toString())
+            adapter.addMessage(MessageModel("me",binding.textGuess.text.toString()))
+            binding.textGuess.text.clear()
+            binding.chatRecyclerView.smoothScrollToPosition(0)
+        }
+        setupAdapter()
     }
 
     private fun waitForImageView() {
@@ -69,31 +84,37 @@ class GuessingFragment : Fragment() {
 
     private fun setStartingValues() {
         canvas = Canvas(bitmap)
-        paint.setColor(Color.BLACK)
-        paint.setAntiAlias(true)
-        paint.setStyle(Paint.Style.STROKE)
+        canvas.drawColor(Color.parseColor("#FFFCE8"))
+        paint.color = Color.BLACK
+        paint.isAntiAlias = true
+        paint.style = Paint.Style.STROKE
         paint.strokeCap = Paint.Cap.ROUND
         paint.setStrokeWidth(10f)
-        viewModel.createServerConnection(deliverCallback)
+
     }
 
+    private fun setupAdapter() {
+        binding.chatRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.chatRecyclerView.adapter = adapter
+    }
 
     private fun drawPainting(
         floatStartX: Float,
         floatStartY: Float,
         floatEndX: Float,
         floatEndY: Float,
-        paint: Paint
+        paintColor: Int,
+        paintSize: Float
     ) {
-        val paintttt = Paint()
-        paintttt.apply {
-            color = Color.RED
+        val paint1 = Paint()
+        paint1.apply {
+            color = paintColor
             isAntiAlias = true
             style = Paint.Style.STROKE
             strokeCap = Paint.Cap.ROUND
-            setStrokeWidth(10f)
+            setStrokeWidth(paintSize)
         }
-        canvas.drawLine(floatStartX, floatStartY, floatEndX, floatEndY, paintttt)
+        canvas.drawLine(floatStartX, floatStartY, floatEndX, floatEndY, paint1)
         binding.imageView.setImageBitmap(bitmap)
     }
 
@@ -101,24 +122,34 @@ class GuessingFragment : Fragment() {
         val array = message.split(",")
 
         return CanvaSingleLineMessageModel(
-            array[0].toFloat(), array[1].toFloat(), array[2].toFloat(), array[3].toFloat(),
-            Paint()
+            array[1].toFloat(),
+            array[2].toFloat(),
+            array[3].toFloat(),
+            array[4].toFloat(),
+            array[5].toInt(),
+            array[6].toFloat()
         )
     }
 
     val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
         requireActivity().runOnUiThread {
             val message = String(delivery.body, StandardCharsets.UTF_8)
-            val singleLineMessageModel = menageMessage(message)
-            paint = Paint()
-            drawPainting(
-                singleLineMessageModel.startX,
-                singleLineMessageModel.startY,
-                singleLineMessageModel.endX,
-                singleLineMessageModel.endY,
-                paint
-            )
+            val array = message.split(",")
+            if (array[0] == "draw") {
+                val singleLineMessageModel = menageMessage(message)
+                paint = Paint()
+                drawPainting(
+                    singleLineMessageModel.startX,
+                    singleLineMessageModel.startY,
+                    singleLineMessageModel.endX,
+                    singleLineMessageModel.endY,
+                    singleLineMessageModel.paintColor,
+                    singleLineMessageModel.paintSize
+                )
+            }
+            if (array[0] == "mess") {
 
+            }
             println("[$consumerTag] Received: '$message'")
         }
 

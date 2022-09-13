@@ -4,16 +4,20 @@ import android.graphics.Paint
 import com.rabbitmq.client.Channel
 import com.rabbitmq.client.Connection
 import com.rabbitmq.client.ConnectionFactory
-import pl.edu.pg.eti.data.util.RabbitConnectionParameters
+import pl.edu.pg.eti.domain.manager.SessionManager
 import pl.edu.pg.eti.domain.model.CanvaSingleLineMessageModel
+import pl.edu.pg.eti.domain.model.MessageModel
 
 interface RabbitRepository {
-    //fun createServerConnection():RabbitConnectionParameters
-
     fun sendDrawLine(
         canvaSingleLine: CanvaSingleLineMessageModel,
-        //rabbitConnectionParameters: RabbitConnectionParameters
-        channel: Channel,
+        sessionManager: SessionManager,
+        queueName: String
+    )
+
+    fun sendGuess(
+        sessionManager: SessionManager,
+        messageModel: MessageModel,
         queueName: String
     )
 }

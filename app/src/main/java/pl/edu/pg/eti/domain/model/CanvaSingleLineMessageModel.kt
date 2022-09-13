@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.domain.model
 
+import android.graphics.Color
 import android.graphics.Paint
 import java.io.Serializable
 
@@ -8,14 +9,11 @@ data class CanvaSingleLineMessageModel(
     val startY: Float,
     val endX: Float,
     val endY: Float,
-    val paint: Paint
+    val paintColor: Int,
+    val paintSize: Float
 ): Serializable {
-    override fun toString(): String {
-        return "CanvaSingleLineMessageModel(startX=$startX, startY=$startY, endX=$endX, endY=$endY, paint=$paint)"
-    }
-
     fun toCSV():String{
-        val output = "${startX.toInt()},${startY.toInt()},${endX.toInt()},${endY.toInt()}"//,${paint.color},${paint.strokeWidth}"
+        val output = "draw,${startX.toInt()},${startY.toInt()},${endX.toInt()},${endY.toInt()},${paintColor},${paintSize}"
         return output
     }
 
