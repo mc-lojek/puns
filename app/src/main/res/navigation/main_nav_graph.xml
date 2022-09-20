@@ -11,11 +11,8 @@
         android:label="fragment_entry"
         tools:layout="@layout/fragment_entry" >
         <action
-            android:id="@+id/action_entryFragment_to_drawingFragment"
-            app:destination="@id/drawingFragment" />
-        <action
-            android:id="@+id/action_entryFragment_to_guessingFragment"
-            app:destination="@id/guessingFragment" />
+            android:id="@+id/action_entryFragment_to_game_nav_graph"
+            app:destination="@id/game_nav_graph" />
     </fragment>
     <fragment
         android:id="@+id/LoginFragment"
@@ -23,12 +20,42 @@
         android:label="fragment_complaint_list"
         tools:layout="@layout/fragment_login">
     </fragment>
-    <fragment
-        android:id="@+id/drawingFragment"
-        android:name="pl.edu.pg.eti.presentation.fragment.DrawingFragment"
-        android:label="DrawingFragment" />
-    <fragment
-        android:id="@+id/guessingFragment"
-        android:name="pl.edu.pg.eti.presentation.fragment.GuessingFragment"
-        android:label="GuessingFragment" />
+    <navigation android:id="@+id/game_nav_graph"
+        app:startDestination="@id/lobbyFragment">
+        <fragment
+            android:id="@+id/scoreboardFragment"
+            android:name="pl.edu.pg.eti.presentation.fragment.ScoreboardFragment"
+            android:label="ScoreboardFragment" >
+            <action
+                android:id="@+id/action_scoreboardFragment_to_lobbyFragment"
+                app:destination="@id/lobbyFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/lobbyFragment"
+            android:name="pl.edu.pg.eti.presentation.fragment.LobbyFragment"
+            android:label="LobbyFragment" >
+            <action
+                android:id="@+id/action_lobbyFragment_to_guessingFragment"
+                app:destination="@id/guessingFragment" />
+            <action
+                android:id="@+id/action_lobbyFragment_to_drawingFragment"
+                app:destination="@id/drawingFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/drawingFragment"
+            android:name="pl.edu.pg.eti.presentation.fragment.DrawingFragment"
+            android:label="DrawingFragment" >
+            <action
+                android:id="@+id/action_drawingFragment_to_scoreboardFragment"
+                app:destination="@id/scoreboardFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/guessingFragment"
+            android:name="pl.edu.pg.eti.presentation.fragment.GuessingFragment"
+            android:label="GuessingFragment" >
+            <action
+                android:id="@+id/action_guessingFragment_to_scoreboardFragment"
+                app:destination="@id/scoreboardFragment" />
+        </fragment>
+    </navigation>
 </navigation>

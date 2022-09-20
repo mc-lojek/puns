@@ -7,17 +7,21 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rabbitmq.client.DeliverCallback
 import com.rabbitmq.client.Delivery
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.databinding.FragmentDrawingBinding
 import pl.edu.pg.eti.domain.manager.SessionManager
 import pl.edu.pg.eti.domain.model.MessageModel
 import pl.edu.pg.eti.presentation.adapter.MessageRecyclerViewAdapter
 import pl.edu.pg.eti.presentation.viewmodel.DrawingViewModel
+import pl.edu.pg.eti.presentation.viewmodel.GameViewModel
 import timber.log.Timber
 import java.nio.charset.StandardCharsets
 import javax.inject.Inject
@@ -33,8 +37,7 @@ class DrawingFragment : Fragment() {
     private lateinit var canvas: Canvas
     private var paint = Paint()
     private var adapter = MessageRecyclerViewAdapter(arrayListOf())
-    private val viewModel: DrawingViewModel by viewModels()
-
+    private val viewModel: GameViewModel by navGraphViewModels(R.id.game_nav_graph) { defaultViewModelProviderFactory }
 
 
     override fun onCreateView(
@@ -47,7 +50,7 @@ class DrawingFragment : Fragment() {
             container,
             false
         )
-        viewModel.initializeAndConsume("test_mess",deliverCallback)
+        //viewModel.initializeAndConsume("room-11-12",deliverCallback)//todo queue name
         return binding.root
     }
 
@@ -57,7 +60,27 @@ class DrawingFragment : Fragment() {
         setupDrawingListener()
         setupAdapter()
         waitForImageView()
+
+        consumeMessages()
+
     }
+
+    fun consumeMessages() {
+        viewModel.callback = {
+            val array = it.split(",")
+            if (array[0] == "draw") {
+
+            } else if (array[0] == "mess") {
+                requireActivity().runOnUiThread {
+                    adapter.addMessage(MessageModel(array[1], array[2]))
+                    binding.chatRecyclerView.smoothScrollToPosition(0)
+                }
+            }
+            Timber.d(it)
+
+        }
+    }
+
 
     private fun waitForImageView() {
         val viewTreeObserver = binding.imageView.viewTreeObserver
@@ -127,6 +150,7 @@ class DrawingFragment : Fragment() {
         binding.btnGreen.setOnClickListener(::onPaintButtonClick)
         binding.btnRed.setOnClickListener(::onPaintButtonClick)
 
+
         binding.btnPlus.setOnClickListener {
             paint.strokeWidth =
                 if (paint.strokeWidth + 2f > 20f) 20f else paint.strokeWidth + 2f
@@ -159,8 +183,7 @@ class DrawingFragment : Fragment() {
             floatEndX,
             floatEndY,
             paint.color,
-            paint.strokeWidth,
-            "test_queue"//todo queue name
+            paint.strokeWidth
         )
     }
 
@@ -172,7 +195,7 @@ class DrawingFragment : Fragment() {
 
             }
             if (array[0] == "mess") {
-                adapter.addMessage(MessageModel(array[1],array[2]))
+                adapter.addMessage(MessageModel(array[1], array[2]))
                 binding.chatRecyclerView.smoothScrollToPosition(0)
             }
             println("[$consumerTag] Received: '$message'")

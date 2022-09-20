@@ -19,29 +19,24 @@ class RabbitRepositoryImpl : RabbitRepository {
     override fun sendDrawLine(
         canvaSingleLine: CanvaSingleLineMessageModel,
         sessionManager: SessionManager,
-        queueName: String
+        exchangeName: String
     ) {
-
         sessionManager.channel.basicPublish(
+            exchangeName,
             "",
-            queueName,
             null,
             canvaSingleLine.toCSV().toByteArray()
         )
-        Timber.i(
-            canvaSingleLine.toCSV()
-        )
-
     }
 
     override fun sendGuess(
         sessionManager: SessionManager,
         messageModel: MessageModel,
-        queueName: String
+        exchangeName: String
     ) {
         sessionManager.channel.basicPublish(
+            exchangeName,
             "",
-            queueName,
             null,
             messageModel.toCSV().toByteArray()
         )

@@ -12,12 +12,12 @@ interface RabbitRepository {
     fun sendDrawLine(
         canvaSingleLine: CanvaSingleLineMessageModel,
         sessionManager: SessionManager,
-        queueName: String
+        exchangeName: String
     )
 
     fun sendGuess(
         sessionManager: SessionManager,
         messageModel: MessageModel,
-        queueName: String
+        exchangeName: String
     )
 }

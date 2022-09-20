@@ -44,11 +44,11 @@ class DrawingViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 sessionManager = SessionManager()
                 sessionManager.initSessionManager(
-                    "sparrow-01.rmq.cloudamqp.com",
-                    "ljgnrjzx",
+                    "51.83.130.165",
+                    "admin",
                     5672,
-                    "8_bkQrkcFCVHK0FpqEldQdu8sId5p7Xu",
-                    "ljgnrjzx"
+                    "lamper123",
+                    "/puns"
                 )
                 delay(5000)
                 try {

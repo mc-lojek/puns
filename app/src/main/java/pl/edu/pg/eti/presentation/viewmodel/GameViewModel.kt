@@ -1,18 +1,27 @@
 package pl.edu.pg.eti.presentation.viewmodel
 
+import android.graphics.Paint
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rabbitmq.client.*
+import com.rabbitmq.client.CancelCallback
+import com.rabbitmq.client.DeliverCallback
+import com.rabbitmq.client.Delivery
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import pl.edu.pg.eti.domain.manager.SessionManager
+import pl.edu.pg.eti.domain.model.CanvaSingleLineMessageModel
 import pl.edu.pg.eti.domain.model.MessageModel
 import pl.edu.pg.eti.domain.repository.RabbitRepository
+import timber.log.Timber
 import java.io.IOException
+import java.nio.charset.StandardCharsets
 import javax.inject.Inject
 
 @HiltViewModel
-class GuessingViewModel @Inject constructor(
+class GameViewModel @Inject constructor(
     val repo: RabbitRepository
 ) : ViewModel() {
     lateinit var sessionManager: SessionManager
@@ -21,21 +30,17 @@ class GuessingViewModel @Inject constructor(
     val cancelCallback = CancelCallback { consumerTag: String? ->
         println("[$consumerTag] was canceled")
     }
-
-    fun initializeSessionManager() = viewModelScope.launch {
-        withContext(Dispatchers.IO) {
-            sessionManager = SessionManager()
-            sessionManager.initSessionManager(
-                "sparrow-01.rmq.cloudamqp.com",
-                "ljgnrjzx",
-                5672,
-                "8_bkQrkcFCVHK0FpqEldQdu8sId5p7Xu",
-                "ljgnrjzx"
-            )
-        }
+    val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
+        val message = String(delivery.body, StandardCharsets.UTF_8)
+        callback?.let { it(message) }
+        println("[$consumerTag] Received: '$message'")
     }
 
-    fun initializeAndConsume(queueName: String, deliveryCallback: DeliverCallback) =
+    var callback : ((String)->Unit)?=null
+
+
+
+    fun initializeAndConsume(queueName: String) =//, deliveryCallback: DeliverCallback) =
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 sessionManager = SessionManager()
@@ -46,14 +51,13 @@ class GuessingViewModel @Inject constructor(
                     "lamper123",
                     "/puns"
                 )
-                delay(5000)
                 try {
                     val message =
                         sessionManager.channel.basicConsume(
                             queueName,
                             true,
                             consumerTag,
-                            deliveryCallback,
+                            deliverCallback,
                             cancelCallback
                         )
                 } catch (ex: IOException) {
@@ -62,16 +66,40 @@ class GuessingViewModel @Inject constructor(
             }
         }
 
+
+    fun sendSingleLineModel(
+        floatStartX: Float,
+        floatStartY: Float,
+        floatEndX: Float,
+        floatEndY: Float,
+        paintColor: Int,
+        paintSize: Float
+    ) = viewModelScope.launch {
+        withContext(Dispatchers.IO) {
+
+            val tempCanvaMessage = CanvaSingleLineMessageModel(
+                floatStartX,
+                floatStartY,
+                floatEndX,
+                floatEndY,
+                paintColor,
+                paintSize
+            )
+
+            repo.sendDrawLine(
+                tempCanvaMessage, sessionManager, "room-11"//todo exchange name
+            )
+        }
+    }
+
     fun sendGuess(content: String) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
             repo.sendGuess(
                 sessionManager,
                 MessageModel("guessingActor", content),
-                "dupa"
+                "room-11"//todo exchange name
             )
         }
     }
 
 }
-
-
