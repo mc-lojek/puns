@@ -1,6 +1,5 @@
 package pl.edu.pg.eti.presentation.viewmodel
 
-import android.graphics.Paint
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rabbitmq.client.CancelCallback
@@ -8,23 +7,19 @@ import com.rabbitmq.client.DeliverCallback
 import com.rabbitmq.client.Delivery
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pl.edu.pg.eti.domain.manager.SessionManager
-import pl.edu.pg.eti.domain.model.CanvaSingleLineMessageModel
-import pl.edu.pg.eti.domain.model.MessageModel
-import pl.edu.pg.eti.domain.repository.RabbitRepository
-import timber.log.Timber
+import pl.edu.pg.eti.domain.model.DrawLineEvent
+import pl.edu.pg.eti.domain.model.PlayerGuessEvent
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 import javax.inject.Inject
 
 @HiltViewModel
 class GameViewModel @Inject constructor(
-    val repo: RabbitRepository
+    val sessionManager: SessionManager
 ) : ViewModel() {
-    lateinit var sessionManager: SessionManager
     val consumerTag = "SimpleConsumer"
 
     val cancelCallback = CancelCallback { consumerTag: String? ->
@@ -36,38 +31,27 @@ class GameViewModel @Inject constructor(
         println("[$consumerTag] Received: '$message'")
     }
 
-    var callback : ((String)->Unit)?=null
+    var callback: ((String) -> Unit)? = null
 
 
-
-    fun initializeAndConsume(queueName: String) =//, deliveryCallback: DeliverCallback) =
+    fun initializeAndConsume(queueName: String, exchangeName: String) =
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                sessionManager = SessionManager()
-                sessionManager.initSessionManager(
-                    "51.83.130.165",
-                    "admin",
-                    5672,
-                    "lamper123",
-                    "/puns"
-                )
+                sessionManager.exchangeName=exchangeName
+                sessionManager.queueName=queueName
                 try {
-                    val message =
-                        sessionManager.channel.basicConsume(
-                            queueName,
-                            true,
-                            consumerTag,
-                            deliverCallback,
-                            cancelCallback
-                        )
+                    sessionManager.initSessionManager()
+                    sessionManager.consume(deliverCallback,cancelCallback)
+
                 } catch (ex: IOException) {
                     print(ex.stackTrace)
                 }
+
             }
         }
 
 
-    fun sendSingleLineModel(
+    fun sendDrawLineEvent(
         floatStartX: Float,
         floatStartY: Float,
         floatEndX: Float,
@@ -77,7 +61,7 @@ class GameViewModel @Inject constructor(
     ) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
 
-            val tempCanvaMessage = CanvaSingleLineMessageModel(
+            val tempCanvaMessage = DrawLineEvent(
                 floatStartX,
                 floatStartY,
                 floatEndX,
@@ -86,19 +70,13 @@ class GameViewModel @Inject constructor(
                 paintSize
             )
 
-            repo.sendDrawLine(
-                tempCanvaMessage, sessionManager, "room-11"//todo exchange name
-            )
+            sessionManager.publish(tempCanvaMessage.toCSV())
         }
     }
 
     fun sendGuess(content: String) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
-            repo.sendGuess(
-                sessionManager,
-                MessageModel("guessingActor", content),
-                "room-11"//todo exchange name
-            )
+            sessionManager.publish(PlayerGuessEvent("guessing person nick", content).toCSV())//todo nickname gracza
         }
     }
 

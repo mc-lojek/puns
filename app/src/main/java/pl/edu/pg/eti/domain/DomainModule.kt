@@ -4,33 +4,31 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import pl.edu.pg.eti.data.repository.LoginRepositoryImpl
-import pl.edu.pg.eti.data.repository.RabbitRepositoryImpl
+import pl.edu.pg.eti.data.network.ApiService
+import pl.edu.pg.eti.data.repository.GameRepositoryImpl
 import pl.edu.pg.eti.domain.manager.SessionManager
-import pl.edu.pg.eti.domain.repository.LoginRepository
-import pl.edu.pg.eti.domain.repository.RabbitRepository
-import javax.inject.Singleton
+import pl.edu.pg.eti.domain.repository.GameRepository
 
 @InstallIn(SingletonComponent::class)
 @Module
 class DomainModule {
 
-    @Singleton
-    @Provides
-    fun provideLoginRepository(): LoginRepository {
-        return LoginRepositoryImpl()
-    }
-
-    @Singleton
-    @Provides
-    fun provideRabbitRepository(): RabbitRepository {
-        return RabbitRepositoryImpl()
-    }
-
-    @Singleton
     @Provides
     fun provideSessionManager(): SessionManager {
-        return SessionManager()
+        val sm = SessionManager(
+            "51.83.130.165",
+            "admin",
+            5672,
+            "lamper123",
+            "/puns"
+        )
+        return sm
     }
+
+    @Provides
+    fun provideGameRepository(service: ApiService): GameRepository {
+        return GameRepositoryImpl(service)
+    }
+
 
 }

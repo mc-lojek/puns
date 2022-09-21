@@ -1,22 +1,20 @@
 package pl.edu.pg.eti.presentation.adapter
 
-import android.os.Message
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.textclassifier.ConversationActions
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import pl.edu.pg.eti.R
-import pl.edu.pg.eti.domain.model.MessageModel
+import pl.edu.pg.eti.domain.model.PlayerGuessEvent
 
 class MessageRecyclerViewAdapter(
-    private var messageList: MutableList<MessageModel>
+    private var messageList: MutableList<PlayerGuessEvent>
 ):RecyclerView.Adapter<MessageRecyclerViewAdapter.ViewHolder>(){
 
 
-    fun addMessage(message: MessageModel){
+    fun addMessage(message: PlayerGuessEvent){
         Log.i("adapter",message.nickname+" "+message.content)
         this.messageList.add(0,message)
         notifyItemInserted(0)
@@ -41,7 +39,7 @@ class MessageRecyclerViewAdapter(
 
 
     class ViewHolder(val v: View):RecyclerView.ViewHolder(v){
-        fun bind(message: MessageModel){
+        fun bind(message: PlayerGuessEvent){
             v.findViewById<TextView>(R.id.tvNickname).text=message.nickname
             v.findViewById<TextView>(R.id.tvContent).text=message.content
         }

@@ -6,25 +6,18 @@ import android.view.*
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rabbitmq.client.DeliverCallback
 import com.rabbitmq.client.Delivery
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.databinding.FragmentDrawingBinding
-import pl.edu.pg.eti.domain.manager.SessionManager
-import pl.edu.pg.eti.domain.model.MessageModel
+import pl.edu.pg.eti.domain.model.PlayerGuessEvent
 import pl.edu.pg.eti.presentation.adapter.MessageRecyclerViewAdapter
-import pl.edu.pg.eti.presentation.viewmodel.DrawingViewModel
 import pl.edu.pg.eti.presentation.viewmodel.GameViewModel
 import timber.log.Timber
 import java.nio.charset.StandardCharsets
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class DrawingFragment : Fragment() {
@@ -50,7 +43,6 @@ class DrawingFragment : Fragment() {
             container,
             false
         )
-        //viewModel.initializeAndConsume("room-11-12",deliverCallback)//todo queue name
         return binding.root
     }
 
@@ -68,11 +60,11 @@ class DrawingFragment : Fragment() {
     fun consumeMessages() {
         viewModel.callback = {
             val array = it.split(",")
-            if (array[0] == "draw") {
+            if (array[0] == "drw") {
 
             } else if (array[0] == "mess") {
                 requireActivity().runOnUiThread {
-                    adapter.addMessage(MessageModel(array[1], array[2]))
+                    adapter.addMessage(PlayerGuessEvent(array[1], array[2]))
                     binding.chatRecyclerView.smoothScrollToPosition(0)
                 }
             }
@@ -177,7 +169,7 @@ class DrawingFragment : Fragment() {
     private fun drawPainting() {
         canvas.drawLine(floatStartX, floatStartY, floatEndX, floatEndY, paint)
         binding.imageView.setImageBitmap(bitmap)
-        viewModel.sendSingleLineModel(
+        viewModel.sendDrawLineEvent(
             floatStartX,
             floatStartY,
             floatEndX,
@@ -191,11 +183,11 @@ class DrawingFragment : Fragment() {
         requireActivity().runOnUiThread {
             val message = String(delivery.body, StandardCharsets.UTF_8)
             val array = message.split(",")
-            if (array[0] == "draw") {
+            if (array[0] == "DRW") {
 
             }
-            if (array[0] == "mess") {
-                adapter.addMessage(MessageModel(array[1], array[2]))
+            if (array[0] == "CMS") {
+                adapter.addMessage(PlayerGuessEvent(array[1], array[2]))
                 binding.chatRecyclerView.smoothScrollToPosition(0)
             }
             println("[$consumerTag] Received: '$message'")
