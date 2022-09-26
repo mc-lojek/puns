@@ -2,6 +2,7 @@ package pl.edu.pg.eti.domain.manager
 
 import com.rabbitmq.client.*
 import pl.edu.pg.eti.domain.model.events.RabbitEvent
+import timber.log.Timber
 
 class SessionManager(
     val sHost: String,
@@ -37,6 +38,7 @@ class SessionManager(
             null,
             message.toCSV().toByteArray()
         )
+        Timber.d("Published: ${message.toCSV()}")
     }
 
     fun consume(deliverCallback: DeliverCallback, cancelCallback: CancelCallback) {

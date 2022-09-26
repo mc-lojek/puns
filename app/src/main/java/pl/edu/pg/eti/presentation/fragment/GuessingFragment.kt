@@ -65,7 +65,7 @@ class GuessingFragment : Fragment() {
     fun consumeMessages() {
         viewModel.callback = {
             val array = it.split(",")
-            if (array[0] == "DRW") {
+            if (array[0] == "DLE") {
                 val singleLineMessageModel = menageCanvaMessage(it)
                 paint = Paint()
                 drawPainting(
@@ -76,7 +76,7 @@ class GuessingFragment : Fragment() {
                     singleLineMessageModel.paintColor,
                     singleLineMessageModel.paintSize
                 )
-            } else if (array[0] == "CMS") {
+            } else if (array[0] == "CME") {
 
             }
             Timber.d(it)

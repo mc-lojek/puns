@@ -12,6 +12,7 @@ import kotlinx.coroutines.withContext
 import pl.edu.pg.eti.domain.manager.SessionManager
 import pl.edu.pg.eti.domain.model.events.DrawLineEvent
 import pl.edu.pg.eti.domain.model.events.PlayerGuessEvent
+import pl.edu.pg.eti.domain.model.events.PlayerReadyEvent
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 import javax.inject.Inject
@@ -20,15 +21,13 @@ import javax.inject.Inject
 class GameViewModel @Inject constructor(
     val sessionManager: SessionManager
 ) : ViewModel() {
-    val consumerTag = "SimpleConsumer"
-
     val cancelCallback = CancelCallback { consumerTag: String? ->
         println("[$consumerTag] was canceled")
     }
     val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
         val message = String(delivery.body, StandardCharsets.UTF_8)
         callback?.let { it(message) }
-        println("[$consumerTag] Received: '$message'")
+        println("Received: '$message'")
     }
 
     var callback: ((String) -> Unit)? = null
@@ -46,7 +45,7 @@ class GameViewModel @Inject constructor(
                 } catch (ex: IOException) {
                     print(ex.stackTrace)
                 }
-
+                sessionManager.publish(PlayerReadyEvent(queueName.substringAfterLast("-").toLong()))//todo id gracza
             }
         }
 
