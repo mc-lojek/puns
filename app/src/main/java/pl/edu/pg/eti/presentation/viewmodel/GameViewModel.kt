@@ -37,11 +37,11 @@ class GameViewModel @Inject constructor(
     fun initializeAndConsume(queueName: String, exchangeName: String) =
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                sessionManager.exchangeName=exchangeName
-                sessionManager.queueName=queueName
+                sessionManager.exchangeName = exchangeName
+                sessionManager.queueName = queueName
                 try {
                     sessionManager.initSessionManager()
-                    sessionManager.consume(deliverCallback,cancelCallback)
+                    sessionManager.consume(deliverCallback, cancelCallback)
 
                 } catch (ex: IOException) {
                     print(ex.stackTrace)
@@ -60,23 +60,27 @@ class GameViewModel @Inject constructor(
         paintSize: Float
     ) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
-
-            val tempCanvaMessage = DrawLineEvent(
-                floatStartX,
-                floatStartY,
-                floatEndX,
-                floatEndY,
-                paintColor,
-                paintSize
+            sessionManager.publish(
+                DrawLineEvent(
+                    floatStartX,
+                    floatStartY,
+                    floatEndX,
+                    floatEndY,
+                    paintColor,
+                    paintSize
+                )
             )
-
-            sessionManager.publish(tempCanvaMessage.toCSV())
         }
     }
 
     fun sendGuess(content: String) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
-            sessionManager.publish(PlayerGuessEvent("guessing person nick", content).toCSV())//todo nickname gracza
+            sessionManager.publish(
+                PlayerGuessEvent(
+                    "guessing person nick",//todo nickname gracza
+                    content
+                )
+            )
         }
     }
 

@@ -1,8 +1,7 @@
 package pl.edu.pg.eti.domain.manager
 
-import android.text.Spannable
 import com.rabbitmq.client.*
-import kotlinx.coroutines.*
+import pl.edu.pg.eti.domain.model.RabbitEvent
 
 class SessionManager(
     val sHost: String,
@@ -31,12 +30,12 @@ class SessionManager(
 
     }
 
-    fun publish(message: String) {
+    fun publish(message: RabbitEvent) {
         channel.basicPublish(
             exchangeName,
-            "s",
+            message.routingKey.key,
             null,
-            message.toByteArray()
+            message.toCSV().toByteArray()
         )
     }
 

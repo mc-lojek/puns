@@ -1,18 +1,17 @@
 package pl.edu.pg.eti.domain.model
 
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import pl.edu.pg.eti.domain.model.enums.RoutingKey
 import java.io.Serializable
 
 class DrawLineEvent : RabbitEvent, Serializable {
     constructor(csv: String) {
-        this.startX = 1F
-        this.startY = 1F
-        this.endX = 1F
-        this.endY = 1F
-        this.paintColor = 1
-        this.paintSize = 1F
+        val arr = csv.split(",")
+        this.startX = arr[1].toFloat()
+        this.startY = arr[2].toFloat()
+        this.endX = arr[3].toFloat()
+        this.endY = arr[4].toFloat()
+        this.paintColor = arr[5].toInt()
+        this.paintSize = arr[6].toFloat()
     }
 
     constructor(
@@ -30,7 +29,7 @@ class DrawLineEvent : RabbitEvent, Serializable {
         this.paintColor = paintColor
         this.paintSize = paintSize
     }
-    override val routingKey = "X.C"//todo wrzucić do enuma
+    override val routingKey = RoutingKey.TO_CLIENT
     val startX: Float
     val startY: Float
     val endX: Float
@@ -40,7 +39,7 @@ class DrawLineEvent : RabbitEvent, Serializable {
 
     override fun toCSV(): String {
         val output =
-            "DRW,${startX.toInt()},${startY.toInt()},${endX.toInt()},${endY.toInt()},${paintColor},${paintSize}"
+            "DLE,${startX.toInt()},${startY.toInt()},${endX.toInt()},${endY.toInt()},${paintColor},${paintSize}"
         return output
     }
 
