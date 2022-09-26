@@ -13,7 +13,7 @@ import com.rabbitmq.client.Delivery
 import dagger.hilt.android.AndroidEntryPoint
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.databinding.FragmentDrawingBinding
-import pl.edu.pg.eti.domain.model.PlayerGuessEvent
+import pl.edu.pg.eti.domain.model.events.PlayerGuessEvent
 import pl.edu.pg.eti.presentation.adapter.MessageRecyclerViewAdapter
 import pl.edu.pg.eti.presentation.viewmodel.GameViewModel
 import timber.log.Timber

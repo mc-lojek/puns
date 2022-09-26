@@ -1,4 +1,4 @@
-package pl.edu.pg.eti.domain.model
+package pl.edu.pg.eti.domain.model.events
 
 import pl.edu.pg.eti.domain.model.enums.RoutingKey
 
@@ -18,11 +18,7 @@ class ScoreboardEvent : RabbitEvent {
     val scoreboard: MutableList<ScoreboardRow>
 
     override fun toCSV(): String {
-        var output = "SBE"
-        scoreboard.forEach {
-            output += ",${it.nickname},${it.score}"
-        }
-        return output
+        return "SBE," + scoreboard.joinToString { "," }
     }
 
     override val routingKey: RoutingKey = RoutingKey.TO_CLIENT

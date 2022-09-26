@@ -1,4 +1,4 @@
-package pl.edu.pg.eti.domain.model
+package pl.edu.pg.eti.domain.model.events
 
 import pl.edu.pg.eti.domain.model.enums.RoutingKey
 

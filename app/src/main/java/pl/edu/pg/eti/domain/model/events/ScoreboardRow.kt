@@ -1,4 +1,4 @@
-package pl.edu.pg.eti.domain.model
+package pl.edu.pg.eti.domain.model.events
 
 class ScoreboardRow {
     constructor(nickname: String, score: Int){

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import pl.edu.pg.eti.R
-import pl.edu.pg.eti.domain.model.PlayerGuessEvent
+import pl.edu.pg.eti.domain.model.events.PlayerGuessEvent
 
 class MessageRecyclerViewAdapter(
     private var messageList: MutableList<PlayerGuessEvent>

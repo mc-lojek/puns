@@ -10,8 +10,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pl.edu.pg.eti.domain.manager.SessionManager
-import pl.edu.pg.eti.domain.model.DrawLineEvent
-import pl.edu.pg.eti.domain.model.PlayerGuessEvent
+import pl.edu.pg.eti.domain.model.events.DrawLineEvent
+import pl.edu.pg.eti.domain.model.events.PlayerGuessEvent
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 import javax.inject.Inject

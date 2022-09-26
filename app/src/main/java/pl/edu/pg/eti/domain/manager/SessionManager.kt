@@ -1,7 +1,7 @@
 package pl.edu.pg.eti.domain.manager
 
 import com.rabbitmq.client.*
-import pl.edu.pg.eti.domain.model.RabbitEvent
+import pl.edu.pg.eti.domain.model.events.RabbitEvent
 
 class SessionManager(
     val sHost: String,

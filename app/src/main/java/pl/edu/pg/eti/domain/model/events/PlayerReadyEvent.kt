@@ -1,21 +1,21 @@
-package pl.edu.pg.eti.domain.model
+package pl.edu.pg.eti.domain.model.events
 
 import pl.edu.pg.eti.domain.model.enums.RoutingKey
 
-class PlayerHitEvent : RabbitEvent {
+class PlayerReadyEvent : RabbitEvent {
     constructor(csv: String) {
         val arr = csv.split(",")
-        this.nickname = arr[1]
+        this.playerId = arr[1].toLong()
     }
 
-    constructor(nickname: String, notCsv: Boolean) {
-        this.nickname = nickname
+    constructor(playerId: Long) {
+        this.playerId = playerId
     }
 
-    val nickname: String
+    val playerId: Long
 
     override fun toCSV(): String {
-        val output = "PHE,${nickname}"
+        val output = "PRE,${playerId}"
         return output
     }
 
