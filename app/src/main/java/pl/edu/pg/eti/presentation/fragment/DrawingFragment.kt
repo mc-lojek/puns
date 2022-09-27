@@ -6,14 +6,21 @@ import android.view.*
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rabbitmq.client.DeliverCallback
 import com.rabbitmq.client.Delivery
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.databinding.FragmentDrawingBinding
+import pl.edu.pg.eti.domain.model.events.ChatMessageEvent
 import pl.edu.pg.eti.domain.model.events.PlayerGuessEvent
+import pl.edu.pg.eti.domain.model.events.TimeSyncEvent
 import pl.edu.pg.eti.presentation.adapter.MessageRecyclerViewAdapter
 import pl.edu.pg.eti.presentation.viewmodel.GameViewModel
 import timber.log.Timber
@@ -31,7 +38,8 @@ class DrawingFragment : Fragment() {
     private var paint = Paint()
     private var adapter = MessageRecyclerViewAdapter(arrayListOf())
     private val viewModel: GameViewModel by navGraphViewModels(R.id.game_nav_graph) { defaultViewModelProviderFactory }
-
+    private var timeLeft = 60_000L
+    private var timeSyncJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,14 +68,26 @@ class DrawingFragment : Fragment() {
     fun consumeMessages() {
         viewModel.callback = {
             val array = it.split(",")
-            if (array[0] == "drw") {
-
-            } else if (array[0] == "mess") {
+            if (array[0] == "CME") {
+                val message = ChatMessageEvent(it)
                 requireActivity().runOnUiThread {
-                    adapter.addMessage(PlayerGuessEvent(array[1], array[2]))
+                    adapter.addMessage(message)
                     binding.chatRecyclerView.smoothScrollToPosition(0)
                 }
+            } else if (array[0] == "TSE") {
+                val message = TimeSyncEvent(it)
+                timeSyncJob?.cancel()
+                timeSyncJob = lifecycleScope.launch(Dispatchers.Main) {
+                    timeLeft = message.timeLeft
+                    while (timeLeft > 0) {
+                        binding.tvTimeLeft.text = timeLeft.toString()
+                        delay(250)
+                        timeLeft -= 250
+                    }
+                    binding.tvTimeLeft.text = "0"
+                }
             }
+
             Timber.d(it)
 
         }
@@ -178,22 +198,4 @@ class DrawingFragment : Fragment() {
             paint.strokeWidth
         )
     }
-
-    val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
-        requireActivity().runOnUiThread {
-            val message = String(delivery.body, StandardCharsets.UTF_8)
-            val array = message.split(",")
-            if (array[0] == "DRW") {
-
-            }
-            if (array[0] == "CMS") {
-                adapter.addMessage(PlayerGuessEvent(array[1], array[2]))
-                binding.chatRecyclerView.smoothScrollToPosition(0)
-            }
-            println("[$consumerTag] Received: '$message'")
-        }
-
-
-    }
-
 }

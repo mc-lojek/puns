@@ -11,15 +11,22 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rabbitmq.client.DeliverCallback
 import com.rabbitmq.client.Delivery
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.databinding.FragmentGuessingBinding
+import pl.edu.pg.eti.domain.model.events.ChatMessageEvent
 import pl.edu.pg.eti.domain.model.events.DrawLineEvent
 import pl.edu.pg.eti.domain.model.events.PlayerGuessEvent
+import pl.edu.pg.eti.domain.model.events.TimeSyncEvent
 import pl.edu.pg.eti.presentation.adapter.MessageRecyclerViewAdapter
 import pl.edu.pg.eti.presentation.viewmodel.GameViewModel
 import timber.log.Timber
@@ -34,6 +41,8 @@ class GuessingFragment : Fragment() {
     private var paint = Paint()
     private val viewModel: GameViewModel by navGraphViewModels(R.id.game_nav_graph) { defaultViewModelProviderFactory }
     private var adapter = MessageRecyclerViewAdapter(arrayListOf())
+    private var timeLeft = 60_000L
+    private var timeSyncJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,9 +63,7 @@ class GuessingFragment : Fragment() {
         waitForImageView()
         binding.btnSend.setOnClickListener {
             viewModel.sendGuess(binding.textGuess.text.toString())
-            adapter.addMessage(PlayerGuessEvent("me", binding.textGuess.text.toString()))
             binding.textGuess.text.clear()
-            binding.chatRecyclerView.smoothScrollToPosition(0)
         }
         setupAdapter()
         consumeMessages()
@@ -65,7 +72,7 @@ class GuessingFragment : Fragment() {
     fun consumeMessages() {
         viewModel.callback = {
             val array = it.split(",")
-            if (array[0] == "DLE") {
+            if (array[0] == "DLE") { //todo przerobic na subsequence + when
                 val singleLineMessageModel = menageCanvaMessage(it)
                 paint = Paint()
                 drawPainting(
@@ -77,10 +84,26 @@ class GuessingFragment : Fragment() {
                     singleLineMessageModel.paintSize
                 )
             } else if (array[0] == "CME") {
-
+                val message = ChatMessageEvent(it)
+                requireActivity().runOnUiThread {
+                    adapter.addMessage(message)
+                    binding.chatRecyclerView.smoothScrollToPosition(0)
+                }
+            } else if (array[0] == "TSE") {
+                val message = TimeSyncEvent(it)
+                timeSyncJob?.cancel()
+                timeSyncJob = lifecycleScope.launch(Dispatchers.Main) {
+                    timeLeft = message.timeLeft
+                    while (timeLeft > 0) {
+                        binding.tvTimeLeft.text = timeLeft.toString()
+                        delay(250)
+                        timeLeft -= 250
+                    }
+                    binding.tvTimeLeft.text = "0"
+                }
             }
-            Timber.d(it)
 
+            Timber.d(it)
         }
     }
 

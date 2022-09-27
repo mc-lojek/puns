@@ -7,15 +7,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import pl.edu.pg.eti.R
+import pl.edu.pg.eti.domain.model.events.ChatMessageEvent
 import pl.edu.pg.eti.domain.model.events.PlayerGuessEvent
+import timber.log.Timber
 
 class MessageRecyclerViewAdapter(
-    private var messageList: MutableList<PlayerGuessEvent>
+    private var messageList: MutableList<ChatMessageEvent>
 ):RecyclerView.Adapter<MessageRecyclerViewAdapter.ViewHolder>(){
 
 
-    fun addMessage(message: PlayerGuessEvent){
-        Log.i("adapter",message.nickname+" "+message.content)
+    fun addMessage(message: ChatMessageEvent){
+        Timber.d("${message.nickname} ${message.content}")
         this.messageList.add(0,message)
         notifyItemInserted(0)
     }
@@ -39,9 +41,10 @@ class MessageRecyclerViewAdapter(
 
 
     class ViewHolder(val v: View):RecyclerView.ViewHolder(v){
-        fun bind(message: PlayerGuessEvent){
+        fun bind(message: ChatMessageEvent){
             v.findViewById<TextView>(R.id.tvNickname).text=message.nickname
             v.findViewById<TextView>(R.id.tvContent).text=message.content
+            //todo message.level obsługiwanie
         }
     }
 }

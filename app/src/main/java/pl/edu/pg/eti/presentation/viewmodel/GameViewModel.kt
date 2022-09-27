@@ -1,5 +1,7 @@
 package pl.edu.pg.eti.presentation.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rabbitmq.client.CancelCallback
@@ -9,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.domain.manager.SessionManager
 import pl.edu.pg.eti.domain.model.events.DrawLineEvent
 import pl.edu.pg.eti.domain.model.events.PlayerGuessEvent
@@ -32,6 +35,8 @@ class GameViewModel @Inject constructor(
 
     var callback: ((String) -> Unit)? = null
 
+    private val _timeLeftLiveData: MutableLiveData<Long> = MutableLiveData()
+    val timeLeftLiveData: LiveData<Long> = _timeLeftLiveData
 
     fun initializeAndConsume(queueName: String, exchangeName: String) =
         viewModelScope.launch {
@@ -45,7 +50,11 @@ class GameViewModel @Inject constructor(
                 } catch (ex: IOException) {
                     print(ex.stackTrace)
                 }
-                sessionManager.publish(PlayerReadyEvent(queueName.substringAfterLast("-").toLong()))//todo id gracza
+                sessionManager.publish(
+                    PlayerReadyEvent(
+                        queueName.substringAfterLast("-").toLong()
+                    )
+                )//todo id gracza
             }
         }
 
@@ -76,7 +85,7 @@ class GameViewModel @Inject constructor(
         withContext(Dispatchers.IO) {
             sessionManager.publish(
                 PlayerGuessEvent(
-                    "guessing person nick",//todo nickname gracza
+                    "nick",//todo nickname gracza
                     content
                 )
             )
