@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.presentation.viewmodel
 
+import PlayerGuessEvent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,11 +12,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.domain.manager.SessionManager
+import pl.edu.pg.eti.domain.model.ScoreboardItemModel
+import pl.edu.pg.eti.domain.model.events.ClearCanvasEvent
 import pl.edu.pg.eti.domain.model.events.DrawLineEvent
-import pl.edu.pg.eti.domain.model.events.PlayerGuessEvent
 import pl.edu.pg.eti.domain.model.events.PlayerReadyEvent
+import timber.log.Timber
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 import javax.inject.Inject
@@ -33,7 +35,13 @@ class GameViewModel @Inject constructor(
         println("Received: '$message'")
     }
 
+    var isInitialized = false
     var callback: ((String) -> Unit)? = null
+    var keyword = ""
+    var roundsPassed = 0
+    var roundsLeft = 0
+    var scoreboardList = listOf<ScoreboardItemModel>()
+
 
     private val _timeLeftLiveData: MutableLiveData<Long> = MutableLiveData()
     val timeLeftLiveData: LiveData<Long> = _timeLeftLiveData
@@ -50,11 +58,8 @@ class GameViewModel @Inject constructor(
                 } catch (ex: IOException) {
                     print(ex.stackTrace)
                 }
-                sessionManager.publish(
-                    PlayerReadyEvent(
-                        queueName.substringAfterLast("-").toLong()
-                    )
-                )//todo id gracza
+                isInitialized = true
+                sendPlayerReady()
             }
         }
 
@@ -85,10 +90,30 @@ class GameViewModel @Inject constructor(
         withContext(Dispatchers.IO) {
             sessionManager.publish(
                 PlayerGuessEvent(
+                    sessionManager.queueName.substringAfterLast("-").toLong(),//todo id gracza
                     "nick",//todo nickname gracza
                     content
                 )
             )
+        }
+    }
+
+    fun sendClearCanvas() = viewModelScope.launch {
+        withContext(Dispatchers.IO) {
+            sessionManager.publish(ClearCanvasEvent())
+        }
+    }
+
+    fun sendPlayerReady() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                Timber.d("Player ready event")
+                sessionManager.publish(
+                    PlayerReadyEvent(
+                        sessionManager.queueName.substringAfterLast("-").toLong()
+                    )
+                )//todo id gracza
+            }
         }
     }
 

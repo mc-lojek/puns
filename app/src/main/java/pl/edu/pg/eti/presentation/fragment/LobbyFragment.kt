@@ -15,6 +15,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.databinding.FragmentLobbyBinding
+import pl.edu.pg.eti.domain.model.events.PlayerReadyEvent
 import pl.edu.pg.eti.domain.model.events.StartRoundEvent
 import pl.edu.pg.eti.presentation.viewmodel.GameViewModel
 import timber.log.Timber
@@ -45,11 +46,14 @@ class LobbyFragment : Fragment() {
                 "SRE" -> {
                     val startRoundEvent = StartRoundEvent(it)
                     lifecycleScope.launch{
-                        delay(2000)
+                        viewModel.roundsPassed=startRoundEvent.roundsPassed
+                        viewModel.roundsLeft=startRoundEvent.roundsLeft
+                        delay(1000)
                         if (startRoundEvent.drawingId == viewModel.sessionManager.queueName.substringAfterLast(
                                 "-"
                             ).toLong()
                         ) {
+                            viewModel.keyword=startRoundEvent.keyword
                             findNavController().navigate(R.id.action_lobbyFragment_to_drawingFragment)
                         } else {
                             findNavController().navigate(R.id.action_lobbyFragment_to_guessingFragment)
@@ -65,10 +69,15 @@ class LobbyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val queueName = requireArguments().getString("queue_name")
-        val exchangeName = requireArguments().getString("exchange_name")!!
-        Timber.d("queue ${queueName} exchange: ${exchangeName}")
-        viewModel.initializeAndConsume(queueName!!, exchangeName)
+        if(!viewModel.isInitialized){
+            val queueName = requireArguments().getString("queue_name")
+            val exchangeName = requireArguments().getString("exchange_name")!!
+            Timber.d("queue ${queueName} exchange: ${exchangeName}")
+            viewModel.initializeAndConsume(queueName!!, exchangeName)
+        }
+        else{
+            viewModel.sendPlayerReady()
+        }
         consumeMessages()
 
 

@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_entryFragment_to_game_nav_graph"
             app:destination="@id/game_nav_graph" />
+        <action
+            android:id="@+id/action_entryFragment_to_scoreboardFragment2"
+            app:destination="@id/scoreboardFragment2" />
     </fragment>
     <fragment
         android:id="@+id/LoginFragment"
@@ -58,4 +61,8 @@
                 app:destination="@id/scoreboardFragment" />
         </fragment>
     </navigation>
+    <fragment
+        android:id="@+id/scoreboardFragment2"
+        android:name="pl.edu.pg.eti.presentation.fragment.ScoreboardFragment"
+        android:label="ScoreboardFragment" />
 </navigation>

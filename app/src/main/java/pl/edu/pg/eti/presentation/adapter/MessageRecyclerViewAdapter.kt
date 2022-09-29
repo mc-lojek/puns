@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.domain.model.events.ChatMessageEvent
-import pl.edu.pg.eti.domain.model.events.PlayerGuessEvent
+import pl.edu.pg.eti.domain.model.events.PlayerHitEvent
 import timber.log.Timber
 
 class MessageRecyclerViewAdapter(
@@ -19,6 +19,12 @@ class MessageRecyclerViewAdapter(
     fun addMessage(message: ChatMessageEvent){
         Timber.d("${message.nickname} ${message.content}")
         this.messageList.add(0,message)
+        notifyItemInserted(0)
+    }
+
+    fun addMessage(message: PlayerHitEvent){
+        Timber.d("Odgadniete haslo przez ${message.nickname}")
+        this.messageList.add(0,ChatMessageEvent(message.nickname,"${message.nickname} guessed right!",3))
         notifyItemInserted(0)
     }
 

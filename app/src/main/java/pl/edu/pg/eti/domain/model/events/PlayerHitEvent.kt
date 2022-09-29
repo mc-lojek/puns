@@ -19,5 +19,5 @@ class PlayerHitEvent : RabbitEvent {
         return output
     }
 
-    override val routingKey: RoutingKey = RoutingKey.TO_SERVER
+    override val routingKey: RoutingKey = RoutingKey.TO_CLIENT
 }

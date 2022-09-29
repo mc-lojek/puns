@@ -11,14 +11,14 @@ class FinalScoreboardEvent : RabbitEvent {
         }
     }
 
-    constructor(array: ArrayList<ScoreboardRow>) {
+    constructor(array: List<ScoreboardRow>) {
         this.scoreboard = array
     }
 
-    val scoreboard: MutableList<ScoreboardRow>
+    val scoreboard: List<ScoreboardRow>
 
     override fun toCSV(): String {
-        return "FSE," + scoreboard.joinToString { "," }
+        return "FSE," + scoreboard.joinToString (",")
     }
 
     override val routingKey: RoutingKey = RoutingKey.TO_CLIENT

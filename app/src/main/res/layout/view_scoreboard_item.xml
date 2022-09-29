@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="scoreboard_row"
+            type="pl.edu.pg.eti.domain.model.ScoreboardItemModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#8A2323">
+
+        <ImageView
+            android:id="@+id/ivPlace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/presence_audio_online" />
+
+        <TextView
+            android:id="@+id/tvPlace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{scoreboard_row.place}" />
+
+        <TextView
+            android:id="@+id/tvNick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{scoreboard_row.nickname}" />
+
+        <TextView
+            android:id="@+id/tvPts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{scoreboard_row.points}" />
+
+    </LinearLayout>
+</layout>

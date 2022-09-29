@@ -12,6 +12,7 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rabbitmq.client.DeliverCallback
@@ -23,10 +24,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.databinding.FragmentGuessingBinding
-import pl.edu.pg.eti.domain.model.events.ChatMessageEvent
-import pl.edu.pg.eti.domain.model.events.DrawLineEvent
-import pl.edu.pg.eti.domain.model.events.PlayerGuessEvent
-import pl.edu.pg.eti.domain.model.events.TimeSyncEvent
+import pl.edu.pg.eti.domain.model.ScoreboardItemModel
+import pl.edu.pg.eti.domain.model.events.*
 import pl.edu.pg.eti.presentation.adapter.MessageRecyclerViewAdapter
 import pl.edu.pg.eti.presentation.viewmodel.GameViewModel
 import timber.log.Timber
@@ -67,39 +66,83 @@ class GuessingFragment : Fragment() {
         }
         setupAdapter()
         consumeMessages()
+        binding.tvRound.text =
+            "${viewModel.roundsPassed}/${viewModel.roundsLeft + viewModel.roundsPassed}"
     }
 
     fun consumeMessages() {
         viewModel.callback = {
-            val array = it.split(",")
-            if (array[0] == "DLE") { //todo przerobic na subsequence + when
-                val singleLineMessageModel = menageCanvaMessage(it)
-                paint = Paint()
-                drawPainting(
-                    singleLineMessageModel.startX,
-                    singleLineMessageModel.startY,
-                    singleLineMessageModel.endX,
-                    singleLineMessageModel.endY,
-                    singleLineMessageModel.paintColor,
-                    singleLineMessageModel.paintSize
-                )
-            } else if (array[0] == "CME") {
-                val message = ChatMessageEvent(it)
-                requireActivity().runOnUiThread {
-                    adapter.addMessage(message)
-                    binding.chatRecyclerView.smoothScrollToPosition(0)
+            when (it.subSequence(0, 3)) {
+                "DLE" -> {
+                    val singleLineMessageModel = menageCanvaMessage(it)
+                    paint = Paint()
+                    drawPainting(
+                        singleLineMessageModel.startX,
+                        singleLineMessageModel.startY,
+                        singleLineMessageModel.endX,
+                        singleLineMessageModel.endY,
+                        singleLineMessageModel.paintColor,
+                        singleLineMessageModel.paintSize
+                    )
                 }
-            } else if (array[0] == "TSE") {
-                val message = TimeSyncEvent(it)
-                timeSyncJob?.cancel()
-                timeSyncJob = lifecycleScope.launch(Dispatchers.Main) {
-                    timeLeft = message.timeLeft
-                    while (timeLeft > 0) {
-                        binding.tvTimeLeft.text = timeLeft.toString()
-                        delay(250)
-                        timeLeft -= 250
+                "CME" -> {
+                    val message = ChatMessageEvent(it)
+                    requireActivity().runOnUiThread {
+                        adapter.addMessage(message)
+                        binding.chatRecyclerView.smoothScrollToPosition(0)
+                        //todo level
                     }
-                    binding.tvTimeLeft.text = "0"
+                }
+                "TSE" -> {
+                    val message = TimeSyncEvent(it)
+                    timeSyncJob?.cancel()
+                    timeSyncJob = lifecycleScope.launch(Dispatchers.Main) {
+                        timeLeft = message.timeLeft
+                        while (timeLeft > 0) {
+                            binding.tvTimeLeft.text = timeLeft.toString()
+                            delay(250)
+                            timeLeft -= 250
+                        }
+                        binding.tvTimeLeft.text = "0"
+                    }
+                }
+                "CCE" -> {
+                    clearCanvas()
+                }
+                "PHE" -> {
+                    val message = PlayerHitEvent(it)
+                    requireActivity().runOnUiThread {
+                        adapter.addMessage(message)
+                        binding.chatRecyclerView.smoothScrollToPosition(0)
+                    }
+                }
+                "SBE" -> {
+                    val message = ScoreboardEvent(it)
+                    val newList = message.scoreboard.mapIndexed { index, scoreboardRow ->
+                        ScoreboardItemModel(
+                            index.toString(),
+                            scoreboardRow.nickname,
+                            scoreboardRow.score.toString()
+                        )
+                    }
+                    viewModel.scoreboardList = newList
+                    requireActivity().runOnUiThread {
+                        findNavController().navigate(R.id.action_guessingFragment_to_scoreboardFragment)
+                    }
+                }
+                "FSE" -> {
+                    val message = ScoreboardEvent(it)
+                    val newList = message.scoreboard.mapIndexed { index, scoreboardRow ->
+                        ScoreboardItemModel(
+                            index.toString(),
+                            scoreboardRow.nickname,
+                            scoreboardRow.score.toString()
+                        )
+                    }
+                    viewModel.scoreboardList = newList
+                    requireActivity().runOnUiThread {
+                        findNavController().navigate(R.id.action_guessingFragment_to_scoreboardFragment)
+                    }
                 }
             }
 
@@ -107,6 +150,9 @@ class GuessingFragment : Fragment() {
         }
     }
 
+    fun clearCanvas() {
+        canvas.drawColor(Color.parseColor("#FFFCE8"))
+    }
 
     private fun waitForImageView() {
         val viewTreeObserver = binding.imageView.viewTreeObserver

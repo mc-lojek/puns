@@ -57,14 +57,30 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:padding="5dp"
-                android:text="Hasło: Okoń"
-                android:textAlignment="center"
+                android:paddingRight="5dp"
+                android:text="Hasło:"
+                android:textAlignment="textEnd"
                 android:textSize="30sp"
-                app:layout_constraintBottom_toTopOf="@+id/btnBlue"
+                app:layout_constraintBottom_toTopOf="@+id/btnClear"
+                app:layout_constraintEnd_toStartOf="@+id/chatRecyclerView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvKeywordHeadline"
+                tools:text="Okoń" />
+
+            <TextView
+                android:id="@+id/tvKeywordHeadline"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="5dp"
+                android:paddingLeft="5dp"
+                android:text="Hasło:"
+                android:textAlignment="textStart"
+                android:textSize="30sp"
+                app:layout_constraintBottom_toTopOf="@+id/tvKeyword"
                 app:layout_constraintEnd_toStartOf="@+id/chatRecyclerView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Hasło: Okoń" />
+                tools:text="Hasło:" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnRed"
@@ -133,6 +149,15 @@
                 app:layout_constraintVertical_bias="0.505"
                 tools:itemCount="2"
                 tools:listitem="@layout/chat_recycler_view_message" />
+
+            <Button
+                android:id="@+id/btnClear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clear canvas"
+                app:layout_constraintBottom_toTopOf="@+id/btnGreen"
+                app:layout_constraintEnd_toStartOf="@+id/chatRecyclerView"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

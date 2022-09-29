@@ -44,9 +44,7 @@ class EntryFragment : Fragment() {
 
     private fun setupListeners() {
         binding.loginBtn.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putString("queue_name", "room-11-12")
-            findNavController().navigate(R.id.action_entryFragment_to_game_nav_graph, bundle)
+            findNavController().navigate(R.id.action_entryFragment_to_scoreboardFragment2)
         }
         binding.guessingBtn.setOnClickListener {
             val bundle = Bundle()

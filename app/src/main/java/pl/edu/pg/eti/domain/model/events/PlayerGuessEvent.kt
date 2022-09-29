@@ -1,30 +1,32 @@
-package pl.edu.pg.eti.domain.model.events
-
 import pl.edu.pg.eti.domain.model.enums.RoutingKey
-
+import pl.edu.pg.eti.domain.model.events.RabbitEvent
 
 class PlayerGuessEvent : RabbitEvent {
     constructor(csv: String) {
         val arr = csv.split(",")
-        this.nickname = arr[1]
-        this.content = arr[2]
+        this.id = arr[1].toLong()
+        this.nickname = arr[2]
+        this.content = arr[3]
     }
 
     constructor(
+        id: Long,
         nickname: String,
-        content: String
+        content: String,
     ) {
-        this.nickname=nickname
-        this.content=content
+        this.id = id
+        this.nickname = nickname
+        this.content = content
     }
 
 
     override val routingKey = RoutingKey.TO_SERVER
+    val id: Long
     val nickname: String
     val content: String
 
 
     override fun toCSV(): String {
-        return "PGE,${nickname},${content}"
+        return "PGE,${id},${nickname},${content}"
     }
 }

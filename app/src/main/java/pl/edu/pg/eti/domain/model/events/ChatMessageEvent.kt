@@ -7,25 +7,25 @@ class ChatMessageEvent : RabbitEvent {
         val arr = csv.split(",")
         this.nickname = arr[1]
         this.content = arr[2]
-        this.playerId = arr[3].toLong()
+        this.level = arr[3].toLong()
     }
 
     constructor(
         nickname: String,
         content: String,
-        playerId: Long
+        level: Long
     ) {
         this.nickname = nickname
         this.content = content
-        this.playerId = playerId
+        this.level = level
     }
 
     val nickname: String
     val content: String
-    val playerId: Long
+    val level: Long
 
     override fun toCSV(): String {
-        val output = "CME,${nickname},${content},${playerId}"
+        val output = "CME,${nickname},${content},${level}"
         return output
     }
 
