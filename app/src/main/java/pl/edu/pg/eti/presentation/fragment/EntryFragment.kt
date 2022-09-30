@@ -14,6 +14,7 @@ import pl.edu.pg.eti.R
 import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.databinding.FragmentEntryBinding
 import pl.edu.pg.eti.presentation.viewmodel.EntryViewModel
+import kotlin.random.Random
 
 @AndroidEntryPoint
 class EntryFragment : Fragment() {
@@ -51,6 +52,7 @@ class EntryFragment : Fragment() {
             bundle.putString("queue_name", "room-14-15")
             findNavController().navigate(R.id.action_entryFragment_to_game_nav_graph, bundle)
         }
+        binding.etID.setText(Random.nextInt().toString())
         binding.btnFastGame.setOnClickListener {
             val id = binding.etID.text.toString().toLong()
             viewModel.joinRoom(id)

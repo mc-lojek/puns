@@ -10,6 +10,7 @@ import com.rabbitmq.client.DeliverCallback
 import com.rabbitmq.client.Delivery
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pl.edu.pg.eti.domain.manager.SessionManager
@@ -59,6 +60,7 @@ class GameViewModel @Inject constructor(
                     print(ex.stackTrace)
                 }
                 isInitialized = true
+                delay(15000)
                 sendPlayerReady()
             }
         }
