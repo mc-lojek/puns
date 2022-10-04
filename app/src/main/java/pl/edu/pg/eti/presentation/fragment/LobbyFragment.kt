@@ -10,12 +10,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.databinding.FragmentLobbyBinding
-import pl.edu.pg.eti.domain.model.events.PlayerReadyEvent
+import pl.edu.pg.eti.domain.model.events.PlayerJoinedEvent
+import pl.edu.pg.eti.domain.model.events.PlayerLeftEvent
+import pl.edu.pg.eti.domain.model.events.StartGameEvent
 import pl.edu.pg.eti.domain.model.events.StartRoundEvent
 import pl.edu.pg.eti.presentation.viewmodel.GameViewModel
 import timber.log.Timber
@@ -43,12 +43,30 @@ class LobbyFragment : Fragment() {
     fun consumeMessages() {
         viewModel.callback = {
             when (it.substring(0, 3)) {
+                "PJE"->{
+                 val playerJoinedEvent = PlayerJoinedEvent(it)
+                    //todo obslugiwanie ilosci graczy
+                    Timber.d("Dostalem taki playerJoinedEvent: ${playerJoinedEvent}")
+                }
+                "PLE"->{
+                    val playerLeftEvent = PlayerLeftEvent(it)
+                    //todo obslugiwanie ilosci graczy
+                    Timber.d("Dostalem taki playerLeftEvent: ${playerLeftEvent}")
+                }
+                "SGE"->{
+                    val startGameEvent = StartGameEvent(it)
+                    //todo obslugiwanie ilosci graczy
+                    Timber.d("Dostalem taki startGameEvent: ${startGameEvent}")
+                    viewModel.sendPlayerReady()
+
+
+
+                }
                 "SRE" -> {
                     val startRoundEvent = StartRoundEvent(it)
                     lifecycleScope.launch{
                         viewModel.roundsPassed=startRoundEvent.roundsPassed
                         viewModel.roundsLeft=startRoundEvent.roundsLeft
-                        delay(1000)
                         if (startRoundEvent.drawingId == viewModel.sessionManager.queueName.substringAfterLast(
                                 "-"
                             ).toLong()

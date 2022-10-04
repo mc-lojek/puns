@@ -52,7 +52,7 @@ class EntryFragment : Fragment() {
             bundle.putString("queue_name", "room-14-15")
             findNavController().navigate(R.id.action_entryFragment_to_game_nav_graph, bundle)
         }
-        binding.etID.setText(Random.nextInt().toString())
+        binding.etID.setText((Random.nextInt(0,100000)).toString())
         binding.btnFastGame.setOnClickListener {
             val id = binding.etID.text.toString().toLong()
             viewModel.joinRoom(id)

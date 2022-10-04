@@ -44,10 +44,8 @@ class ScoreboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.scoreboard.bind(viewModel.scoreboardList)
 
-        lifecycleScope.launch {
-            delay(1000)
-            findNavController().navigate(R.id.action_scoreboardFragment_to_lobbyFragment)
-        }
+        viewModel.sendPlayerReady()
+        consumeMessages()
     }
 
     fun consumeMessages() {
@@ -58,15 +56,14 @@ class ScoreboardFragment : Fragment() {
                     lifecycleScope.launch {
                         viewModel.roundsPassed = startRoundEvent.roundsPassed
                         viewModel.roundsLeft = startRoundEvent.roundsLeft
-                        delay(2000)
                         if (startRoundEvent.drawingId == viewModel.sessionManager.queueName.substringAfterLast(
                                 "-"
                             ).toLong()
                         ) {
                             viewModel.keyword = startRoundEvent.keyword
-                            findNavController().navigate(R.id.action_lobbyFragment_to_drawingFragment)
+                            findNavController().navigate(R.id.action_scoreboardFragment_to_drawingFragment)
                         } else {
-                            findNavController().navigate(R.id.action_lobbyFragment_to_guessingFragment)
+                            findNavController().navigate(R.id.action_scoreboardFragment_to_guessingFragment)
                         }
                     }
                 }

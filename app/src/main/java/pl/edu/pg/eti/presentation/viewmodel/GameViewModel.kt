@@ -60,7 +60,7 @@ class GameViewModel @Inject constructor(
                     print(ex.stackTrace)
                 }
                 isInitialized = true
-                delay(15000)
+                //delay(12000)
                 sendPlayerReady()
             }
         }

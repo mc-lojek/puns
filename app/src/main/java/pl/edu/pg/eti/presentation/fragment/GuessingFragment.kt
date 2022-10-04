@@ -122,7 +122,7 @@ class GuessingFragment : Fragment() {
                         ScoreboardItemModel(
                             index.toString(),
                             scoreboardRow.nickname,
-                            scoreboardRow.score.toString()
+                            scoreboardRow.roundScore.toString()
                         )
                     }
                     viewModel.scoreboardList = newList
@@ -136,7 +136,7 @@ class GuessingFragment : Fragment() {
                         ScoreboardItemModel(
                             index.toString(),
                             scoreboardRow.nickname,
-                            scoreboardRow.score.toString()
+                            scoreboardRow.totalScore.toString()
                         )
                     }
                     viewModel.scoreboardList = newList

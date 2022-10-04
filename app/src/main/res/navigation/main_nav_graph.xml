@@ -32,6 +32,12 @@
             <action
                 android:id="@+id/action_scoreboardFragment_to_lobbyFragment"
                 app:destination="@id/lobbyFragment" />
+            <action
+                android:id="@+id/action_scoreboardFragment_to_drawingFragment"
+                app:destination="@id/drawingFragment" />
+            <action
+                android:id="@+id/action_scoreboardFragment_to_guessingFragment"
+                app:destination="@id/guessingFragment" />
         </fragment>
         <fragment
             android:id="@+id/lobbyFragment"

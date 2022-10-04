@@ -2,7 +2,7 @@ package pl.edu.pg.eti.domain.model.events
 
 import pl.edu.pg.eti.domain.model.enums.RoutingKey
 
-class PlayerJoinedEvent: RabbitEvent {
+class PlayerLeftEvent: RabbitEvent {
     constructor(csv: String) {
         val arr = csv.split(",")
         this.id = arr[1].toLong()
@@ -24,6 +24,6 @@ class PlayerJoinedEvent: RabbitEvent {
     val nickname: String
     val playersCount: Int
 
-    override fun toCSV() = "PJE,${id},${nickname},${playersCount}"
+    override fun toCSV() = "PLE,${id},${nickname},${playersCount}"
     override val routingKey: RoutingKey = RoutingKey.TO_ALL
 }
