@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.presentation.adapter
 
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -50,6 +51,12 @@ class MessageRecyclerViewAdapter(
         fun bind(message: ChatMessageEvent){
             v.findViewById<TextView>(R.id.tvNickname).text=message.nickname
             v.findViewById<TextView>(R.id.tvContent).text=message.content
+            if(message.level==3L){
+                v.findViewById<TextView>(R.id.tvContent).setTextColor(Color.parseColor("#00ff00"))
+            }
+            else if(message.level==2L){
+                v.findViewById<TextView>(R.id.tvContent).setTextColor(Color.parseColor("#ffa500"))
+            }
             //todo message.level obsługiwanie
         }
     }

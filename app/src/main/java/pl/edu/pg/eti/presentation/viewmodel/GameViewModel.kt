@@ -72,15 +72,16 @@ class GameViewModel @Inject constructor(
         floatEndX: Float,
         floatEndY: Float,
         paintColor: Int,
-        paintSize: Float
+        paintSize: Float,
+        screenRatio: Float
     ) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
             sessionManager.publish(
                 DrawLineEvent(
-                    floatStartX,
-                    floatStartY,
-                    floatEndX,
-                    floatEndY,
+                    floatStartX/screenRatio,
+                    floatStartY/screenRatio,
+                    floatEndX/screenRatio,
+                    floatEndY/screenRatio,
                     paintColor,
                     paintSize
                 )

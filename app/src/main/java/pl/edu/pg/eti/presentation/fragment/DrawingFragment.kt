@@ -21,6 +21,7 @@ import pl.edu.pg.eti.R
 import pl.edu.pg.eti.databinding.FragmentDrawingBinding
 import pl.edu.pg.eti.domain.model.ScoreboardItemModel
 import pl.edu.pg.eti.domain.model.events.*
+import pl.edu.pg.eti.domain.util.BASIC_CANVAS_SIZE
 import pl.edu.pg.eti.presentation.adapter.MessageRecyclerViewAdapter
 import pl.edu.pg.eti.presentation.viewmodel.GameViewModel
 import timber.log.Timber
@@ -40,6 +41,7 @@ class DrawingFragment : Fragment() {
     private val viewModel: GameViewModel by navGraphViewModels(R.id.game_nav_graph) { defaultViewModelProviderFactory }
     private var timeLeft = 60_000L
     private var timeSyncJob: Job? = null
+    private var screenRatio = -1f
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -84,7 +86,7 @@ class DrawingFragment : Fragment() {
                     timeSyncJob = lifecycleScope.launch(Dispatchers.Main) {
                         timeLeft = message.timeLeft
                         while (timeLeft > 0) {
-                            binding.tvTimeLeft.text = timeLeft.toString()
+                            binding.tvTimeLeft.text = (timeLeft / 1000).toString()
                             delay(250)
                             timeLeft -= 250
                         }
@@ -155,6 +157,7 @@ class DrawingFragment : Fragment() {
     }
 
     private fun setStartingValues() {
+        screenRatio = binding.imageView.width / BASIC_CANVAS_SIZE
         canvas = Canvas(bitmap)
         canvas.drawColor(Color.parseColor("#FFFCE8"))
         paint.color = Color.BLACK
@@ -229,7 +232,8 @@ class DrawingFragment : Fragment() {
             floatEndX,
             floatEndY,
             paint.color,
-            paint.strokeWidth
+            paint.strokeWidth,
+            screenRatio
         )
     }
 }
