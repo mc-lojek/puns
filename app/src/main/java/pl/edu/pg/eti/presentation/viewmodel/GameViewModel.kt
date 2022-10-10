@@ -61,7 +61,7 @@ class GameViewModel @Inject constructor(
                 }
                 isInitialized = true
                 //delay(12000)
-                sendPlayerReady()
+                //sendPlayerReady()
             }
         }
 

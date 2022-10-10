@@ -39,39 +39,40 @@ class LobbyFragment : Fragment() {
         return binding.root
     }
 
+    fun setPlyerCount(count:Int){
+        binding.tvPlayersJoined.text=count.toString()
+    }
 
     fun consumeMessages() {
         viewModel.callback = {
             when (it.substring(0, 3)) {
-                "PJE"->{
-                 val playerJoinedEvent = PlayerJoinedEvent(it)
+                "PJE" -> {
+                    val playerJoinedEvent = PlayerJoinedEvent(it)
                     //todo obslugiwanie ilosci graczy
+                    //setPlyerCount(playerJoinedEvent.playersCount)
                     Timber.d("Dostalem taki playerJoinedEvent: ${playerJoinedEvent}")
                 }
-                "PLE"->{
+                "PLE" -> {
                     val playerLeftEvent = PlayerLeftEvent(it)
                     //todo obslugiwanie ilosci graczy
                     Timber.d("Dostalem taki playerLeftEvent: ${playerLeftEvent}")
                 }
-                "SGE"->{
+                "SGE" -> {
                     val startGameEvent = StartGameEvent(it)
                     //todo obslugiwanie ilosci graczy
                     Timber.d("Dostalem taki startGameEvent: ${startGameEvent}")
                     viewModel.sendPlayerReady()
-
-
-
                 }
                 "SRE" -> {
                     val startRoundEvent = StartRoundEvent(it)
-                    lifecycleScope.launch{
-                        viewModel.roundsPassed=startRoundEvent.roundsPassed
-                        viewModel.roundsLeft=startRoundEvent.roundsLeft
+                    lifecycleScope.launch {
+                        viewModel.roundsPassed = startRoundEvent.roundsPassed
+                        viewModel.roundsLeft = startRoundEvent.roundsLeft
                         if (startRoundEvent.drawingId == viewModel.sessionManager.queueName.substringAfterLast(
                                 "-"
                             ).toLong()
                         ) {
-                            viewModel.keyword=startRoundEvent.keyword
+                            viewModel.keyword = startRoundEvent.keyword
                             findNavController().navigate(R.id.action_lobbyFragment_to_drawingFragment)
                         } else {
                             findNavController().navigate(R.id.action_lobbyFragment_to_guessingFragment)
@@ -87,25 +88,16 @@ class LobbyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(!viewModel.isInitialized){
+        if (!viewModel.isInitialized) {
             val queueName = requireArguments().getString("queue_name")
             val exchangeName = requireArguments().getString("exchange_name")!!
             Timber.d("queue ${queueName} exchange: ${exchangeName}")
             viewModel.initializeAndConsume(queueName!!, exchangeName)
-        }
-        else{
-            viewModel.sendPlayerReady()
+        } else {
+            //viewModel.sendPlayerReady()
+            Timber.d("ViewModel is already initialized")
         }
         consumeMessages()
-
-
-        binding.drawing.setOnClickListener {
-            findNavController().navigate(R.id.action_lobbyFragment_to_drawingFragment)
-        }
-        binding.guess.setOnClickListener {
-            findNavController().navigate(R.id.action_lobbyFragment_to_guessingFragment)
-
-        }
     }
 
 }
