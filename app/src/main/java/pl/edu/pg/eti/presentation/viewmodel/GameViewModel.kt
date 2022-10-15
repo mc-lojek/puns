@@ -113,9 +113,9 @@ class GameViewModel @Inject constructor(
                 Timber.d("Player ready event")
                 sessionManager.publish(
                     PlayerReadyEvent(
-                        sessionManager.queueName.substringAfterLast("-").toLong()
+                        sessionManager.queueName.substringAfterLast("-").toLong()//todo id gracza
                     )
-                )//todo id gracza
+                )
             }
         }
     }

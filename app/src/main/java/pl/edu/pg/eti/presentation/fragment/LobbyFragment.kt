@@ -10,6 +10,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.databinding.FragmentLobbyBinding
@@ -25,6 +27,8 @@ class LobbyFragment : Fragment() {
 
     private lateinit var binding: FragmentLobbyBinding
     private val viewModel: GameViewModel by navGraphViewModels(R.id.game_nav_graph) { defaultViewModelProviderFactory }
+    private var playersCountSyncJob: Job? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,8 +43,8 @@ class LobbyFragment : Fragment() {
         return binding.root
     }
 
-    fun setPlyerCount(count:Int){
-        binding.tvPlayersJoined.text=count.toString()
+    fun setPlyerCount(count: Int) {
+        binding.tvPlayersJoined.text = count.toString()
     }
 
     fun consumeMessages() {
@@ -48,18 +52,26 @@ class LobbyFragment : Fragment() {
             when (it.substring(0, 3)) {
                 "PJE" -> {
                     val playerJoinedEvent = PlayerJoinedEvent(it)
-                    //todo obslugiwanie ilosci graczy
-                    //setPlyerCount(playerJoinedEvent.playersCount)
-                    Timber.d("Dostalem taki playerJoinedEvent: ${playerJoinedEvent}")
+                    playersCountSyncJob?.cancel()
+                    playersCountSyncJob = lifecycleScope.launch(Dispatchers.Main) {
+                        setPlyerCount(playerJoinedEvent.playersCount)
+                        Timber.d("Dostalem taki playerJoinedEvent: ${playerJoinedEvent}")
+                    }
                 }
                 "PLE" -> {
                     val playerLeftEvent = PlayerLeftEvent(it)
-                    //todo obslugiwanie ilosci graczy
-                    Timber.d("Dostalem taki playerLeftEvent: ${playerLeftEvent}")
+                    playersCountSyncJob?.cancel()
+                    playersCountSyncJob = lifecycleScope.launch(Dispatchers.Main) {
+                        setPlyerCount(playerLeftEvent.playersCount)
+                        Timber.d("Dostalem taki playerLeftEvent: ${playerLeftEvent}")
+                    }
                 }
                 "SGE" -> {
                     val startGameEvent = StartGameEvent(it)
-                    //todo obslugiwanie ilosci graczy
+                    playersCountSyncJob?.cancel()
+                    playersCountSyncJob = lifecycleScope.launch(Dispatchers.Main) {
+                        setPlyerCount(startGameEvent.playersCount)
+                    }
                     Timber.d("Dostalem taki startGameEvent: ${startGameEvent}")
                     viewModel.sendPlayerReady()
                 }
@@ -86,6 +98,8 @@ class LobbyFragment : Fragment() {
         }
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (!viewModel.isInitialized) {
@@ -98,6 +112,9 @@ class LobbyFragment : Fragment() {
             Timber.d("ViewModel is already initialized")
         }
         consumeMessages()
+        binding.btnBack.setOnClickListener {
+            //todo wyslac na api info ze wychodze
+        }
     }
 
 }

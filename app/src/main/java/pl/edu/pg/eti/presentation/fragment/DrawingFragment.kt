@@ -65,9 +65,16 @@ class DrawingFragment : Fragment() {
 
         consumeMessages()
         binding.tvRound.text =
-            "${viewModel.roundsPassed}/${viewModel.roundsLeft + viewModel.roundsPassed}"
+            "${viewModel.roundsPassed+1}/${viewModel.roundsLeft + viewModel.roundsPassed+1}"
         binding.tvKeyword.text = viewModel.keyword
-
+        timeSyncJob = lifecycleScope.launch(Dispatchers.Main) {
+            while (timeLeft > 0) {
+                binding.tvTimeLeft.text = (timeLeft / 1000).toString()
+                delay(250)
+                timeLeft -= 250
+            }
+            binding.tvTimeLeft.text = "0"
+        }
     }
 
     fun consumeMessages() {

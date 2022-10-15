@@ -9,25 +9,57 @@
         android:layout_height="match_parent">
 
 
-        <TextView
-            android:id="@+id/tvTimeLeft"
+        <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="60s"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvRound"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="60s" />
-
-        <TextView
-            android:id="@+id/tvRound"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1/3"
-            app:layout_constraintEnd_toStartOf="@+id/tvTimeLeft"
+            android:layout_marginEnd="60dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="1/3" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tvRound2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Round: " />
+
+            <TextView
+                android:id="@+id/tvRound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1/3"
+                tools:text="1/3" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/linearLayout"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tvTimeLeft3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time left: " />
+
+            <TextView
+                android:id="@+id/tvTimeLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="60" />
+
+            <TextView
+                android:id="@+id/tvTimeLeft2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="s" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/imageView"
@@ -39,7 +71,7 @@
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvRound" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
@@ -73,14 +105,13 @@
                 android:layout_height="0dp"
                 android:padding="5dp"
                 android:paddingLeft="5dp"
-                android:text="Hasło:"
+                android:text="Keyword:"
                 android:textAlignment="textStart"
                 android:textSize="30sp"
                 app:layout_constraintBottom_toTopOf="@+id/tvKeyword"
                 app:layout_constraintEnd_toStartOf="@+id/chatRecyclerView"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Hasło:" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnRed"
