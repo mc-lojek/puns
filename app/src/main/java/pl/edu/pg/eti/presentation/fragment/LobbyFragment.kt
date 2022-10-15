@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import pl.edu.pg.eti.R
+import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.databinding.FragmentLobbyBinding
 import pl.edu.pg.eti.domain.model.events.PlayerJoinedEvent
 import pl.edu.pg.eti.domain.model.events.PlayerLeftEvent
@@ -113,7 +114,21 @@ class LobbyFragment : Fragment() {
         }
         consumeMessages()
         binding.btnBack.setOnClickListener {
-            //todo wyslac na api info ze wychodze
+            viewModel.leaveRoom()
+            viewModel.roomLeaveLiveData.observe(viewLifecycleOwner){
+                when (it){
+                    is Resource.Error -> {
+                        Timber.d("error")
+                    }
+                    is Resource.Loading -> {
+                        Timber.d("loading")
+                    }
+                    is Resource.Success -> {
+                        findNavController().popBackStack(R.id.game_nav_graph,true)
+                    }
+                }
+
+            }
         }
     }
 

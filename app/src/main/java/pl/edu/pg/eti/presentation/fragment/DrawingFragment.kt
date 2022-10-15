@@ -69,7 +69,7 @@ class DrawingFragment : Fragment() {
         binding.tvKeyword.text = viewModel.keyword
         timeSyncJob = lifecycleScope.launch(Dispatchers.Main) {
             while (timeLeft > 0) {
-                binding.tvTimeLeft.text = (timeLeft / 1000).toString()
+                binding.tvTimeLeft.text = ((timeLeft+10) / 1000).toString()
                 delay(250)
                 timeLeft -= 250
             }
@@ -93,7 +93,7 @@ class DrawingFragment : Fragment() {
                     timeSyncJob = lifecycleScope.launch(Dispatchers.Main) {
                         timeLeft = message.timeLeft
                         while (timeLeft > 0) {
-                            binding.tvTimeLeft.text = (timeLeft / 1000).toString()
+                            binding.tvTimeLeft.text = ((timeLeft+10) / 1000).toString()
                             delay(250)
                             timeLeft -= 250
                         }

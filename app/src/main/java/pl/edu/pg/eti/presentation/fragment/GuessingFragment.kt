@@ -72,7 +72,7 @@ class GuessingFragment : Fragment() {
             "${viewModel.roundsPassed+1}/${viewModel.roundsLeft + viewModel.roundsPassed+1}"
         timeSyncJob = lifecycleScope.launch(Dispatchers.Main) {
             while (timeLeft > 0) {
-                binding.tvTimeLeft.text = (timeLeft / 1000).toString()
+                binding.tvTimeLeft.text = ((timeLeft+10) / 1000).toString()
                 delay(250)
                 timeLeft -= 250
             }

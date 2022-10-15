@@ -31,4 +31,9 @@ class EntryViewModel @Inject constructor(
         }
     }
 
+    fun clearLiveData(){
+        _roomJoinLiveData.postValue(Resource.Loading())
+    }
+
+
 }

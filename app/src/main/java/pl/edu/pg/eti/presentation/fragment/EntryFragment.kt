@@ -14,6 +14,7 @@ import pl.edu.pg.eti.R
 import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.databinding.FragmentEntryBinding
 import pl.edu.pg.eti.presentation.viewmodel.EntryViewModel
+import timber.log.Timber
 import kotlin.random.Random
 
 @AndroidEntryPoint
@@ -59,6 +60,7 @@ class EntryFragment : Fragment() {
                     bundle.putString("queue_name", it.data!!.queueName)
                     bundle.putString("exchange_name", it.data!!.exchangeName)
                     findNavController().navigate(R.id.action_entryFragment_to_game_nav_graph, bundle)
+                    viewModel.clearLiveData()
                 }
                 is Resource.Error -> {
                     Snackbar.make(binding.root, it.message.toString(), Snackbar.LENGTH_SHORT)

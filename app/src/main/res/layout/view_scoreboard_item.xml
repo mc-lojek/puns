@@ -23,19 +23,19 @@
             android:id="@+id/tvPlace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{scoreboard_row.place}" />
+            android:text="place" />
 
         <TextView
             android:id="@+id/tvNick"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{scoreboard_row.nickname}" />
+            android:text="nick" />
 
         <TextView
             android:id="@+id/tvPts"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{scoreboard_row.points}" />
+            android:text="pts" />
 
     </LinearLayout>
 </layout>

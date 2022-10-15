@@ -13,11 +13,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.domain.manager.SessionManager
+import pl.edu.pg.eti.domain.model.RoomJoin
 import pl.edu.pg.eti.domain.model.ScoreboardItemModel
 import pl.edu.pg.eti.domain.model.events.ClearCanvasEvent
 import pl.edu.pg.eti.domain.model.events.DrawLineEvent
 import pl.edu.pg.eti.domain.model.events.PlayerReadyEvent
+import pl.edu.pg.eti.domain.repository.GameRepository
 import timber.log.Timber
 import java.io.IOException
 import java.nio.charset.StandardCharsets
@@ -25,7 +28,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GameViewModel @Inject constructor(
-    val sessionManager: SessionManager
+    val sessionManager: SessionManager,
+    val repo: GameRepository
 ) : ViewModel() {
     val cancelCallback = CancelCallback { consumerTag: String? ->
         println("[$consumerTag] was canceled")
@@ -46,6 +50,9 @@ class GameViewModel @Inject constructor(
 
     private val _timeLeftLiveData: MutableLiveData<Long> = MutableLiveData()
     val timeLeftLiveData: LiveData<Long> = _timeLeftLiveData
+
+    private val _roomLeaveLiveData: MutableLiveData<Resource<String>> = MutableLiveData()
+    val roomLeaveLiveData: LiveData<Resource<String>> = _roomLeaveLiveData
 
     fun initializeAndConsume(queueName: String, exchangeName: String) =
         viewModelScope.launch {
@@ -94,7 +101,7 @@ class GameViewModel @Inject constructor(
             sessionManager.publish(
                 PlayerGuessEvent(
                     sessionManager.queueName.substringAfterLast("-").toLong(),//todo id gracza
-                    "nick",//todo nickname gracza
+                    sessionManager.queueName.substringAfterLast("-"),//todo nickname gracza
                     content
                 )
             )
@@ -120,4 +127,14 @@ class GameViewModel @Inject constructor(
         }
     }
 
+    fun leaveRoom() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _roomLeaveLiveData.postValue(Resource.Loading())
+                val splittedQueue = sessionManager.queueName.split("-")
+                val result = repo.leaveRoom(splittedQueue[1].toLong(),splittedQueue[2].toLong())//todo id gracza
+                _roomLeaveLiveData.postValue(result)
+            }
+        }
+    }
 }
