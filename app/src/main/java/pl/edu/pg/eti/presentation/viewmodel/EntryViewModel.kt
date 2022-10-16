@@ -25,7 +25,7 @@ class EntryViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _roomJoinLiveData.postValue(Resource.Loading())
-                val result = repo.joinRoom(userId)
+                val result = repo.joinRoom(userId,"name1")//todo user name
                 _roomJoinLiveData.postValue(result)
             }
         }

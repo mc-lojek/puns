@@ -132,7 +132,7 @@ class GameViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 _roomLeaveLiveData.postValue(Resource.Loading())
                 val splittedQueue = sessionManager.queueName.split("-")
-                val result = repo.leaveRoom(splittedQueue[1].toLong(),splittedQueue[2].toLong())//todo id gracza
+                val result = repo.leaveRoom(splittedQueue[1].toLong(),splittedQueue[2].toLong(),"user1")//todo id gracza, name gracza
                 _roomLeaveLiveData.postValue(result)
             }
         }

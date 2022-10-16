@@ -4,6 +4,6 @@ import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.domain.model.RoomJoin
 
 interface GameRepository {
-    suspend fun joinRoom(UserId:Long): Resource<RoomJoin>
-    suspend fun leaveRoom(roomId: Long, userId: Long): Resource<String>
+    suspend fun joinRoom(userId:Long,userName:String): Resource<RoomJoin>
+    suspend fun leaveRoom(roomId: Long, userId:Long,userName:String): Resource<String>
 }
