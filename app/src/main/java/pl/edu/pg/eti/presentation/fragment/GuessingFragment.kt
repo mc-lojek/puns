@@ -121,6 +121,9 @@ class GuessingFragment : Fragment() {
                 "PHE" -> {
                     val message = PlayerHitEvent(it)
                     requireActivity().runOnUiThread {
+                        if(message.nickname.equals(viewModel.sessionManager.playerNickname)) {
+                            binding.btnSend.isEnabled=false
+                        }
                         adapter.addMessage(message)
                         binding.chatRecyclerView.smoothScrollToPosition(0)
                     }
@@ -129,28 +132,32 @@ class GuessingFragment : Fragment() {
                     val message = ScoreboardEvent(it)
                     val newList = message.scoreboard.mapIndexed { index, scoreboardRow ->
                         ScoreboardItemModel(
-                            index.toString(),
+                            (index+1).toString(),
                             scoreboardRow.nickname,
                             scoreboardRow.roundScore.toString()
                         )
                     }
                     viewModel.scoreboardList = newList
                     requireActivity().runOnUiThread {
-                        findNavController().navigate(R.id.action_guessingFragment_to_scoreboardFragment)
+                        val bundle = Bundle()
+                        bundle.putBoolean("isFinal", false)
+                        findNavController().navigate(R.id.action_guessingFragment_to_scoreboardFragment,bundle)
                     }
                 }
                 "FSE" -> {
                     val message = ScoreboardEvent(it)
                     val newList = message.scoreboard.mapIndexed { index, scoreboardRow ->
                         ScoreboardItemModel(
-                            index.toString(),
+                            (index+1).toString(),
                             scoreboardRow.nickname,
                             scoreboardRow.totalScore.toString()
                         )
                     }
                     viewModel.scoreboardList = newList
                     requireActivity().runOnUiThread {
-                        findNavController().navigate(R.id.action_guessingFragment_to_scoreboardFragment)
+                        val bundle = Bundle()
+                        bundle.putBoolean("isFinal", true)
+                        findNavController().navigate(R.id.action_guessingFragment_to_scoreboardFragment,bundle)
                     }
                 }
             }

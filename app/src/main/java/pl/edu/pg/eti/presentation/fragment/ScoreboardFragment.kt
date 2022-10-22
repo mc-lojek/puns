@@ -43,9 +43,16 @@ class ScoreboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.scoreboard.bind(viewModel.scoreboardList)
-
+        val isFinal = requireArguments().getBoolean("isFinal")
+        if(isFinal){
+            binding.btnExitFinal.visibility = View.VISIBLE
+        }
         viewModel.sendPlayerReady()
         consumeMessages()
+
+        binding.btnExitFinal.setOnClickListener {
+            findNavController().popBackStack(R.id.game_nav_graph, true)
+        }
     }
 
     fun consumeMessages() {
@@ -57,7 +64,7 @@ class ScoreboardFragment : Fragment() {
                         viewModel.roundsPassed = startRoundEvent.roundsPassed
                         viewModel.roundsLeft = startRoundEvent.roundsLeft
                         if (startRoundEvent.drawingId == viewModel.sessionManager.queueName.substringAfterLast(
-                                "-"
+                                "."
                             ).toLong()
                         ) {
                             viewModel.keyword = startRoundEvent.keyword

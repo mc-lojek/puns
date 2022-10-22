@@ -48,7 +48,7 @@ class EntryFragment : Fragment() {
         binding.etID.setText((Random.nextInt(0,100000)).toString())
         binding.btnFastGame.setOnClickListener {
             val id = binding.etID.text.toString().toLong()
-            viewModel.joinRoom(id)
+            viewModel.joinRoom(id,"name1")//todo nickname gracza
         }
     }
 

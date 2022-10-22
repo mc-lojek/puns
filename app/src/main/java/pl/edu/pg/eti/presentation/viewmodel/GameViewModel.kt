@@ -59,6 +59,8 @@ class GameViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 sessionManager.exchangeName = exchangeName
                 sessionManager.queueName = queueName
+                sessionManager.playerId = queueName.substringAfterLast(".").toLong()//todo id gracza
+                sessionManager.playerNickname = queueName.substringAfterLast(".")//todo nickname gracza
                 try {
                     sessionManager.initSessionManager()
                     sessionManager.consume(deliverCallback, cancelCallback)
@@ -100,8 +102,8 @@ class GameViewModel @Inject constructor(
         withContext(Dispatchers.IO) {
             sessionManager.publish(
                 PlayerGuessEvent(
-                    sessionManager.queueName.substringAfterLast("-").toLong(),//todo id gracza
-                    sessionManager.queueName.substringAfterLast("-"),//todo nickname gracza
+                    sessionManager.playerId,
+                    sessionManager.playerNickname,
                     content
                 )
             )
@@ -120,7 +122,7 @@ class GameViewModel @Inject constructor(
                 Timber.d("Player ready event")
                 sessionManager.publish(
                     PlayerReadyEvent(
-                        sessionManager.queueName.substringAfterLast("-").toLong()//todo id gracza
+                        sessionManager.playerId
                     )
                 )
             }
@@ -132,7 +134,7 @@ class GameViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 _roomLeaveLiveData.postValue(Resource.Loading())
                 val splittedQueue = sessionManager.queueName.split("-")
-                val result = repo.leaveRoom(splittedQueue[1].toLong(),splittedQueue[2].toLong(),"user1")//todo id gracza, name gracza
+                val result = repo.leaveRoom(splittedQueue[1].toLong(),sessionManager.playerId,sessionManager.playerNickname)//todo id pokoju
                 _roomLeaveLiveData.postValue(result)
             }
         }

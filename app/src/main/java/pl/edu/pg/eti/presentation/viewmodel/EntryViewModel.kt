@@ -21,11 +21,11 @@ class EntryViewModel @Inject constructor(
     val roomJoinLiveData: LiveData<Resource<RoomJoin>> = _roomJoinLiveData
 
 
-    fun joinRoom(userId:Long) {
+    fun joinRoom(userId:Long, nickname:String) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _roomJoinLiveData.postValue(Resource.Loading())
-                val result = repo.joinRoom(userId,"name1")//todo user name
+                val result = repo.joinRoom(userId,nickname)
                 _roomJoinLiveData.postValue(result)
             }
         }

@@ -16,6 +16,8 @@ class SessionManager(
     lateinit var exchangeName: String
     lateinit var queueName: String
     private lateinit var channel: Channel
+    var playerId: Long = -1
+    var playerNickname = ""
 
     fun initSessionManager() {
         factory = ConnectionFactory()

@@ -47,6 +47,9 @@ class ScoreboardView  : FrameLayout {
         for (scoreboardRow in scoreboardRowList) {
             val row = ScoreboardItemView(context)
             row.binding.scoreboardRow=scoreboardRow
+            if(scoreboardRow.place!="1"){
+                row.binding.ivPlace.visibility=View.INVISIBLE
+            }
             binding.container.addView(row)
         }
     }

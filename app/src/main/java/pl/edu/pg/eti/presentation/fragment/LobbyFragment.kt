@@ -81,9 +81,7 @@ class LobbyFragment : Fragment() {
                     lifecycleScope.launch {
                         viewModel.roundsPassed = startRoundEvent.roundsPassed
                         viewModel.roundsLeft = startRoundEvent.roundsLeft
-                        if (startRoundEvent.drawingId == viewModel.sessionManager.queueName.substringAfterLast(
-                                "-"
-                            ).toLong()
+                        if (startRoundEvent.drawingId == viewModel.sessionManager.playerId
                         ) {
                             viewModel.keyword = startRoundEvent.keyword
                             findNavController().navigate(R.id.action_lobbyFragment_to_drawingFragment)
