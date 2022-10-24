@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.databinding.FragmentLobbyBinding
+import pl.edu.pg.eti.databinding.FragmentPrivatelobbyBinding
 import pl.edu.pg.eti.domain.model.events.PlayerJoinedEvent
 import pl.edu.pg.eti.domain.model.events.PlayerLeftEvent
 import pl.edu.pg.eti.domain.model.events.StartGameEvent
@@ -24,9 +25,9 @@ import pl.edu.pg.eti.presentation.viewmodel.GameViewModel
 import timber.log.Timber
 
 @AndroidEntryPoint
-class LobbyFragment : Fragment() {
+class PrivateLobbyFragment : Fragment() {
 
-    private lateinit var binding: FragmentLobbyBinding
+    private lateinit var binding: FragmentPrivatelobbyBinding
     private val viewModel: GameViewModel by navGraphViewModels(R.id.game_nav_graph) { defaultViewModelProviderFactory }
     private var playersCountSyncJob: Job? = null
 
@@ -37,7 +38,7 @@ class LobbyFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.fragment_lobby,
+            R.layout.fragment_privatelobby,
             container,
             false
         )
@@ -45,7 +46,7 @@ class LobbyFragment : Fragment() {
     }
 
     fun setPlyerCount(count: Int) {
-        binding.tvPlayersJoined.text = count.toString()
+        //binding.tvPlayersJoined.text = count.toString()
     }
 
     fun consumeMessages() {
@@ -55,7 +56,7 @@ class LobbyFragment : Fragment() {
                     val playerJoinedEvent = PlayerJoinedEvent(it)
                     playersCountSyncJob?.cancel()
                     playersCountSyncJob = lifecycleScope.launch(Dispatchers.Main) {
-                        setPlyerCount(playerJoinedEvent.playersCount)
+                        //setPlyerCount(playerJoinedEvent.playersCount)
                         Timber.d("Dostalem taki playerJoinedEvent: ${playerJoinedEvent}")
                     }
                 }
@@ -63,7 +64,7 @@ class LobbyFragment : Fragment() {
                     val playerLeftEvent = PlayerLeftEvent(it)
                     playersCountSyncJob?.cancel()
                     playersCountSyncJob = lifecycleScope.launch(Dispatchers.Main) {
-                        setPlyerCount(playerLeftEvent.playersCount)
+                        //setPlyerCount(playerLeftEvent.playersCount)
                         Timber.d("Dostalem taki playerLeftEvent: ${playerLeftEvent}")
                     }
                 }
@@ -71,7 +72,7 @@ class LobbyFragment : Fragment() {
                     val startGameEvent = StartGameEvent(it)
                     playersCountSyncJob?.cancel()
                     playersCountSyncJob = lifecycleScope.launch(Dispatchers.Main) {
-                        setPlyerCount(startGameEvent.playersCount)
+                        //setPlyerCount(startGameEvent.playersCount)
                     }
                     Timber.d("Dostalem taki startGameEvent: ${startGameEvent}")
                     viewModel.sendPlayerReady()
@@ -84,9 +85,9 @@ class LobbyFragment : Fragment() {
                         if (startRoundEvent.drawingId == viewModel.sessionManager.playerId
                         ) {
                             viewModel.keyword = startRoundEvent.keyword
-                            findNavController().navigate(R.id.action_lobbyFragment_to_drawingFragment)
+                            findNavController().navigate(R.id.action_privateLobbyFragment_to_drawingFragment)
                         } else {
-                            findNavController().navigate(R.id.action_lobbyFragment_to_guessingFragment)
+                            findNavController().navigate(R.id.action_privateLobbyFragment_to_guessingFragment)
                         }
                     }
                 }
@@ -106,17 +107,14 @@ class LobbyFragment : Fragment() {
             val exchangeName = requireArguments().getString("exchange_name")!!
             Timber.d("queue ${queueName} exchange: ${exchangeName}")
             val hash = requireArguments().getString("hash")
-            if(hash!=null){
-                Timber.d("dupa")
-                findNavController().navigate(R.id.action_lobbyFragment_to_privateLobbyFragment,requireArguments())
-            }
+            binding.tvHash.text = hash
             viewModel.initializeAndConsume(queueName!!, exchangeName)
         } else {
             //viewModel.sendPlayerReady()
             Timber.d("ViewModel is already initialized")
         }
         consumeMessages()
-        binding.btnBack.setOnClickListener {
+        binding.btnBack3.setOnClickListener {
             viewModel.leaveRoom()
             viewModel.roomLeaveLiveData.observe(viewLifecycleOwner){
                 when (it){

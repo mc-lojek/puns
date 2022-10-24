@@ -9,29 +9,39 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pl.edu.pg.eti.data.network.Resource
+import pl.edu.pg.eti.domain.model.RoomConfig
 import pl.edu.pg.eti.domain.model.RoomJoin
 import pl.edu.pg.eti.domain.repository.GameRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class EntryViewModel @Inject constructor(
+class SetupGameViewModel @Inject constructor(
     val repo: GameRepository
 ) : ViewModel() {
     private val _roomJoinLiveData: MutableLiveData<Resource<RoomJoin>> = MutableLiveData()
     val roomJoinLiveData: LiveData<Resource<RoomJoin>> = _roomJoinLiveData
 
 
-    fun joinRoom(userId:Long, nickname:String, hash:String?=null) {
+    fun joinRoom(userId: Long, nickname: String, roomConfig: RoomConfig) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _roomJoinLiveData.postValue(Resource.Loading())
-                val result = repo.joinRoom(userId,nickname, hash)
-                _roomJoinLiveData.postValue(result)
+                val room = repo.createPrivateRoom(roomConfig)
+                when (room) {
+                    is Resource.Success -> {
+                        val hash = room.data!!.hash
+                        val result = repo.joinRoom(userId, nickname, hash)
+                        _roomJoinLiveData.postValue(result)
+                    }
+                    is Resource.Error ->{
+                        _roomJoinLiveData.postValue(Resource.Error("Creating room failed"))
+                    }
+                }
             }
         }
     }
 
-    fun clearLiveData(){
+    fun clearLiveData() {
         _roomJoinLiveData.postValue(Resource.Loading())
     }
 

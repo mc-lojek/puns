@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_entryFragment_to_scoreboardFragment2"
             app:destination="@id/scoreboardFragment2" />
+        <action
+            android:id="@+id/action_entryFragment_to_setupGameFragment"
+            app:destination="@id/setupGameFragment" />
     </fragment>
     <fragment
         android:id="@+id/LoginFragment"
@@ -29,9 +32,6 @@
             android:id="@+id/scoreboardFragment"
             android:name="pl.edu.pg.eti.presentation.fragment.ScoreboardFragment"
             android:label="ScoreboardFragment" >
-            <action
-                android:id="@+id/action_scoreboardFragment_to_lobbyFragment"
-                app:destination="@id/lobbyFragment" />
             <action
                 android:id="@+id/action_scoreboardFragment_to_drawingFragment"
                 app:destination="@id/drawingFragment" />
@@ -49,6 +49,9 @@
             <action
                 android:id="@+id/action_lobbyFragment_to_drawingFragment"
                 app:destination="@id/drawingFragment" />
+            <action
+                android:id="@+id/action_lobbyFragment_to_privateLobbyFragment"
+                app:destination="@id/privateLobbyFragment" />
         </fragment>
         <fragment
             android:id="@+id/drawingFragment"
@@ -66,9 +69,28 @@
                 android:id="@+id/action_guessingFragment_to_scoreboardFragment"
                 app:destination="@id/scoreboardFragment" />
         </fragment>
+        <fragment
+            android:id="@+id/privateLobbyFragment"
+            android:name="pl.edu.pg.eti.presentation.fragment.PrivateLobbyFragment"
+            android:label="PrivateLobbyFragment" >
+            <action
+                android:id="@+id/action_privateLobbyFragment_to_drawingFragment"
+                app:destination="@id/drawingFragment" />
+            <action
+                android:id="@+id/action_privateLobbyFragment_to_guessingFragment"
+                app:destination="@id/guessingFragment" />
+        </fragment>
     </navigation>
     <fragment
         android:id="@+id/scoreboardFragment2"
         android:name="pl.edu.pg.eti.presentation.fragment.ScoreboardFragment"
         android:label="ScoreboardFragment" />
+    <fragment
+        android:id="@+id/setupGameFragment"
+        android:name="pl.edu.pg.eti.presentation.fragment.SetupGameFragment"
+        android:label="SetupGameFragment" >
+        <action
+            android:id="@+id/action_setupGameFragment_to_game_nav_graph"
+            app:destination="@id/game_nav_graph" />
+    </fragment>
 </navigation>

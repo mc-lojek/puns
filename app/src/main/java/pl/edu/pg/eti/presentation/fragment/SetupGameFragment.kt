@@ -13,14 +13,20 @@ import dagger.hilt.android.AndroidEntryPoint
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.databinding.FragmentEntryBinding
+import pl.edu.pg.eti.databinding.FragmentSetupGameBinding
+import pl.edu.pg.eti.domain.model.RoomConfig
+import pl.edu.pg.eti.domain.model.events.StartGameEvent
 import pl.edu.pg.eti.presentation.viewmodel.EntryViewModel
+import pl.edu.pg.eti.presentation.viewmodel.SetupGameViewModel
 import timber.log.Timber
 import kotlin.random.Random
 
 @AndroidEntryPoint
-class EntryFragment : Fragment() {
-    private val viewModel: EntryViewModel by viewModels()
-    private lateinit var binding: FragmentEntryBinding
+class SetupGameFragment : Fragment() {
+    private val viewModel: SetupGameViewModel by viewModels()
+    private lateinit var binding: FragmentSetupGameBinding
+    private var id = -1L
+    private var nickname = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,7 +35,7 @@ class EntryFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.fragment_entry,
+            R.layout.fragment_setup_game,
             container,
             false
         )
@@ -39,45 +45,35 @@ class EntryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        nickname = requireArguments().getString("nickname")!!
+        id = requireArguments().getLong("id")
         setupListeners()
         setupObservers()
     }
 
     private fun setupListeners() {
-        binding.etID.setText((Random.nextInt(0,100000)).toString())
-        binding.btnFastGame.setOnClickListener {
-            val id = binding.etID.text.toString().toLong()
-            viewModel.joinRoom(id,"name1")//todo nickname gracza
+        binding.btnBack.setOnClickListener {
+            findNavController().navigateUp()
         }
-        binding.btnJoinRoom.setOnClickListener {
-            val hash = binding.etRoomHash.text.toString().uppercase()
-            binding.etRoomHash.setText("")
-            //walidacja czy wpisany hash ma 6 znaków 0-9, A-Z
-
-            val id = binding.etID.text.toString().toLong()
-            viewModel.joinRoom(id,"name1", hash)//todo nickname gracza
-
-        }
-
-        binding.btnCreateRoom.setOnClickListener {
-            val id = binding.etID.text.toString().toLong()
-            val bundle = Bundle()
-            bundle.putLong("id", id)
-            bundle.putString("nickname", "name1")//todo nickname gracza
-            findNavController().navigate(R.id.action_entryFragment_to_setupGameFragment,bundle)
+        binding.btnStartLobby.setOnClickListener {
+            viewModel.joinRoom(id,nickname, RoomConfig(1,3,1_000_000_000))
         }
     }
 
     private fun setupObservers() {
         viewModel.roomJoinLiveData.observe(viewLifecycleOwner) {
+            Timber.d("elo ${it}")
             when (it) {
                 is Resource.Success -> {
                     val bundle = Bundle()
                     bundle.putString("queue_name", it.data!!.queueName)
                     bundle.putString("exchange_name", it.data!!.exchangeName)
-                    bundle.putString("hash",it.data!!.hash)
-                    findNavController().navigate(R.id.action_entryFragment_to_game_nav_graph, bundle)
+                    bundle.putString("hash", it.data!!.hash)
+                    Timber.d(it.data!!.hash)
+                    findNavController().navigate(
+                        R.id.action_setupGameFragment_to_game_nav_graph,
+                        bundle
+                    )
 
 
                     viewModel.clearLiveData()

@@ -2,6 +2,8 @@ package pl.edu.pg.eti.data.network
 
 import pl.edu.pg.eti.data.dto.RoomJoinDto
 import pl.edu.pg.eti.data.dto.UserPayloadDto
+import pl.edu.pg.eti.domain.model.Room
+import pl.edu.pg.eti.domain.model.RoomConfig
 import retrofit2.http.*
 
 interface ApiService {
@@ -19,6 +21,20 @@ interface ApiService {
         @Body userPayload: UserPayloadDto,
         @Header("Authorization") token: String
     ): RoomJoinDto
+
+
+    @POST("/api/game/room/join/{hash}")
+    suspend fun joinPrivateRoom(
+        @Path("hash") roomHash:String,
+        @Body userPayload: UserPayloadDto,
+        @Header("Authorization") token: String
+    ): RoomJoinDto
+
+    @POST("/api/game/room/create")
+    suspend fun createPrivateRoom(
+        @Body roomConfig: RoomConfig,
+        @Header("Authorization") token: String
+    ): Room
 
 
 }
