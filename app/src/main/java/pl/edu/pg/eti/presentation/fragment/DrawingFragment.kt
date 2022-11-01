@@ -62,8 +62,8 @@ class DrawingFragment : Fragment() {
         setupDrawingListener()
         setupAdapter()
         waitForImageView()
-
         consumeMessages()
+        timeLeft=viewModel.basicRoundTime
         binding.tvRound.text =
             "${viewModel.roundsPassed+1}/${viewModel.roundsLeft + viewModel.roundsPassed+1}"
         binding.tvKeyword.text = viewModel.keyword

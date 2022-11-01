@@ -5,10 +5,14 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -58,6 +62,8 @@ class GuessingFragment : Fragment() {
         return binding.root
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -66,8 +72,13 @@ class GuessingFragment : Fragment() {
             viewModel.sendGuess(binding.textGuess.text.toString())
             binding.textGuess.text.clear()
         }
+        binding.textGuess.onSubmit {
+            binding.btnSend.performClick()
+        }
+
         setupAdapter()
         consumeMessages()
+        timeLeft=viewModel.basicRoundTime
         binding.tvRound.text =
             "${viewModel.roundsPassed+1}/${viewModel.roundsLeft + viewModel.roundsPassed+1}"
         timeSyncJob = lifecycleScope.launch(Dispatchers.Main) {
@@ -265,4 +276,16 @@ class GuessingFragment : Fragment() {
     }
 
 
+
+    fun EditText.onSubmit(func: () -> Unit) {
+        setOnEditorActionListener { _, actionId, _ ->
+
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                func()
+            }
+
+            true
+
+        }
+    }
 }

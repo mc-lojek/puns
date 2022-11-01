@@ -46,6 +46,7 @@ class GameViewModel @Inject constructor(
     var roundsPassed = 0
     var roundsLeft = 0
     var scoreboardList = listOf<ScoreboardItemModel>()
+    var basicRoundTime = 0L
 
 
     private val _timeLeftLiveData: MutableLiveData<Long> = MutableLiveData()

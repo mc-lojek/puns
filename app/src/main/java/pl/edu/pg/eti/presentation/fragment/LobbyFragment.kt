@@ -30,7 +30,6 @@ class LobbyFragment : Fragment() {
     private val viewModel: GameViewModel by navGraphViewModels(R.id.game_nav_graph) { defaultViewModelProviderFactory }
     private var playersCountSyncJob: Job? = null
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -105,12 +104,14 @@ class LobbyFragment : Fragment() {
             val queueName = requireArguments().getString("queue_name")
             val exchangeName = requireArguments().getString("exchange_name")!!
             Timber.d("queue ${queueName} exchange: ${exchangeName}")
+            binding.tvPlayersJoined.text=requireArguments().getInt("playersCount").toString()
             val hash = requireArguments().getString("hash")
             if(hash!=null){
                 Timber.d("dupa")
                 findNavController().navigate(R.id.action_lobbyFragment_to_privateLobbyFragment,requireArguments())
             }
             viewModel.initializeAndConsume(queueName!!, exchangeName)
+            viewModel.basicRoundTime=requireArguments().getLong("time")
         } else {
             //viewModel.sendPlayerReady()
             Timber.d("ViewModel is already initialized")

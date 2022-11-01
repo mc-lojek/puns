@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.SeekBar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -47,6 +49,20 @@ class SetupGameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         nickname = requireArguments().getString("nickname")!!
         id = requireArguments().getLong("id")
+
+        ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.time_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            binding.spinnerTime.adapter = adapter
+            binding.spinnerTime.setSelection(2)
+        }
+
+
         setupListeners()
         setupObservers()
     }
@@ -56,8 +72,47 @@ class SetupGameFragment : Fragment() {
             findNavController().navigateUp()
         }
         binding.btnStartLobby.setOnClickListener {
-            viewModel.joinRoom(id,nickname, RoomConfig(1,3,1_000_000_000))
+
+            viewModel.joinRoom(
+                id,
+                nickname,
+                RoomConfig(
+                    binding.sbNumRounds.progress,
+                    binding.sbNumPlayers.progress,
+                    binding.spinnerTime.selectedItem.toString().toLong() * 1_000_000_000
+                )
+            )
         }
+        binding.sbNumPlayers.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(
+                seek: SeekBar,
+                progress: Int, fromUser: Boolean
+            ) {
+                binding.tvPlayerNumber.text = progress.toString()
+            }
+
+            override fun onStartTrackingTouch(seek: SeekBar) {
+            }
+
+            override fun onStopTrackingTouch(seek: SeekBar) {
+            }
+        })
+        binding.sbNumRounds.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(
+                seek: SeekBar,
+                progress: Int, fromUser: Boolean
+            ) {
+                binding.tvRoundsNumber.text = progress.toString()
+            }
+
+            override fun onStartTrackingTouch(seek: SeekBar) {
+            }
+
+            override fun onStopTrackingTouch(seek: SeekBar) {
+            }
+        })
     }
 
     private fun setupObservers() {
@@ -69,6 +124,8 @@ class SetupGameFragment : Fragment() {
                     bundle.putString("queue_name", it.data!!.queueName)
                     bundle.putString("exchange_name", it.data!!.exchangeName)
                     bundle.putString("hash", it.data!!.hash)
+                    bundle.putLong("time",it.data!!.roundTime/1_000_000)
+                    bundle.putInt("playersCount",it.data!!.playersCount)
                     Timber.d(it.data!!.hash)
                     findNavController().navigate(
                         R.id.action_setupGameFragment_to_game_nav_graph,

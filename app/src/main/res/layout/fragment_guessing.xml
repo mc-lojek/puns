@@ -111,7 +111,10 @@
                 app:layout_constraintEnd_toStartOf="@+id/btnSend"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Guess" />
+                tools:text="Guess"
+                android:singleLine="true"
+                android:imeOptions="actionDone"
+                />
 
             <Button
                 android:id="@+id/btnSend"

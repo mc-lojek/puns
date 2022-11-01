@@ -13,5 +13,6 @@ data class RoomDto(
     val state: String,
     val playersCount: Int,
     val id: Long,
-    val hash: String?
+    val hash: String?,
+    val roundTime:Long
 )

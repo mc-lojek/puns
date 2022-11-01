@@ -109,6 +109,7 @@ class PrivateLobbyFragment : Fragment() {
             val hash = requireArguments().getString("hash")
             binding.tvHash.text = hash
             viewModel.initializeAndConsume(queueName!!, exchangeName)
+            viewModel.basicRoundTime=requireArguments().getLong("time")
         } else {
             //viewModel.sendPlayerReady()
             Timber.d("ViewModel is already initialized")
