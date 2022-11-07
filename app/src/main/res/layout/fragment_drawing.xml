@@ -94,7 +94,7 @@
                 android:textAlignment="textEnd"
                 android:textSize="30sp"
                 app:layout_constraintBottom_toTopOf="@+id/btnClear"
-                app:layout_constraintEnd_toStartOf="@+id/chatRecyclerView"
+                app:layout_constraintEnd_toEndOf="@+id/btnMinus"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvKeywordHeadline"
                 tools:text="Okoń" />
@@ -102,56 +102,15 @@
             <TextView
                 android:id="@+id/tvKeywordHeadline"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:paddingLeft="5dp"
                 android:text="Keyword:"
                 android:textAlignment="textStart"
                 android:textSize="30sp"
-                app:layout_constraintBottom_toTopOf="@+id/tvKeyword"
-                app:layout_constraintEnd_toStartOf="@+id/chatRecyclerView"
+                app:layout_constraintEnd_toEndOf="@+id/tvKeyword"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnRed"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@drawable/custom_rounded_button"
-                android:backgroundTint="@color/red"
-                app:layout_constraintBottom_toTopOf="@+id/btnMinus"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnGreen"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@drawable/custom_rounded_button"
-                android:backgroundTint="@color/green"
-                app:layout_constraintBottom_toTopOf="@+id/btnMinus"
-                app:layout_constraintStart_toEndOf="@+id/btnRed"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnBlue"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@drawable/custom_rounded_button"
-                android:backgroundTint="@color/blue"
-                app:layout_constraintBottom_toTopOf="@+id/btnMinus"
-                app:layout_constraintStart_toEndOf="@+id/btnGreen"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnBlack"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@drawable/custom_rounded_button"
-                android:backgroundTint="@color/black"
-                app:layout_constraintBottom_toTopOf="@+id/btnMinus"
-                app:layout_constraintStart_toEndOf="@+id/btnBlue"
-                tools:ignore="SpeakableTextPresentCheck" />
+                app:layout_constraintTop_toBottomOf="@+id/colorSeekBar" />
 
             <Button
                 android:id="@+id/btnPlus"
@@ -175,20 +134,28 @@
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btnBlack"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.505"
+                app:layout_constraintStart_toEndOf="@+id/btnMinus"
+                app:layout_constraintTop_toBottomOf="@+id/colorSeekBar"
                 tools:itemCount="2"
                 tools:listitem="@layout/chat_recycler_view_message" />
 
             <Button
                 android:id="@+id/btnClear"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Clear canvas"
-                app:layout_constraintBottom_toTopOf="@+id/btnGreen"
-                app:layout_constraintEnd_toStartOf="@+id/chatRecyclerView"
+                app:layout_constraintBottom_toTopOf="@+id/btnMinus"
+                app:layout_constraintEnd_toEndOf="@+id/btnMinus"
                 app:layout_constraintStart_toStartOf="parent" />
+
+
+            <com.rtugeek.android.colorseekbar.ColorSeekBar
+                android:id="@+id/colorSeekBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:colorSeekBarColorSeeds="@array/material_colors"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingConstraints" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

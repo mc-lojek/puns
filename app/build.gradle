@@ -102,4 +102,7 @@ dependencies {
     //rabbitmq
     implementation 'com.rabbitmq:amqp-client:5.9.0'
     implementation "org.slf4j:slf4j-simple:1.7.25"
+
+    //color seek bar
+    implementation 'com.github.rtugeek:colorseekbar:2.0.3'
 }

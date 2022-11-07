@@ -63,13 +63,13 @@ class DrawingFragment : Fragment() {
         setupAdapter()
         waitForImageView()
         consumeMessages()
-        timeLeft=viewModel.basicRoundTime
+        timeLeft = viewModel.basicRoundTime
         binding.tvRound.text =
-            "${viewModel.roundsPassed+1}/${viewModel.roundsLeft + viewModel.roundsPassed+1}"
+            "${viewModel.roundsPassed + 1}/${viewModel.roundsLeft + viewModel.roundsPassed + 1}"
         binding.tvKeyword.text = viewModel.keyword
         timeSyncJob = lifecycleScope.launch(Dispatchers.Main) {
             while (timeLeft > 0) {
-                binding.tvTimeLeft.text = ((timeLeft+10) / 1000).toString()
+                binding.tvTimeLeft.text = ((timeLeft + 10) / 1000).toString()
                 delay(250)
                 timeLeft -= 250
             }
@@ -93,7 +93,7 @@ class DrawingFragment : Fragment() {
                     timeSyncJob = lifecycleScope.launch(Dispatchers.Main) {
                         timeLeft = message.timeLeft
                         while (timeLeft > 0) {
-                            binding.tvTimeLeft.text = ((timeLeft+10) / 1000).toString()
+                            binding.tvTimeLeft.text = ((timeLeft + 10) / 1000).toString()
                             delay(250)
                             timeLeft -= 250
                         }
@@ -111,7 +111,7 @@ class DrawingFragment : Fragment() {
                     val message = ScoreboardEvent(it)
                     val newList = message.scoreboard.mapIndexed { index, scoreboardRow ->
                         ScoreboardItemModel(
-                            (index+1).toString(),
+                            (index + 1).toString(),
                             scoreboardRow.nickname,
                             scoreboardRow.roundScore.toString()
                         )
@@ -120,14 +120,17 @@ class DrawingFragment : Fragment() {
                     requireActivity().runOnUiThread {
                         val bundle = Bundle()
                         bundle.putBoolean("isFinal", false)
-                        findNavController().navigate(R.id.action_drawingFragment_to_scoreboardFragment,bundle)
+                        findNavController().navigate(
+                            R.id.action_drawingFragment_to_scoreboardFragment,
+                            bundle
+                        )
                     }
                 }
                 "FSE" -> {
                     val message = ScoreboardEvent(it)
                     val newList = message.scoreboard.mapIndexed { index, scoreboardRow ->
                         ScoreboardItemModel(
-                            (index+1).toString(),
+                            (index + 1).toString(),
                             scoreboardRow.nickname,
                             scoreboardRow.totalScore.toString()
                         )
@@ -136,7 +139,10 @@ class DrawingFragment : Fragment() {
                     requireActivity().runOnUiThread {
                         val bundle = Bundle()
                         bundle.putBoolean("isFinal", true)
-                        findNavController().navigate(R.id.action_drawingFragment_to_scoreboardFragment, bundle)
+                        findNavController().navigate(
+                            R.id.action_drawingFragment_to_scoreboardFragment,
+                            bundle
+                        )
                     }
                 }
             }
@@ -171,7 +177,7 @@ class DrawingFragment : Fragment() {
         screenRatio = binding.imageView.width / BASIC_CANVAS_SIZE
         canvas = Canvas(bitmap)
         canvas.drawColor(Color.parseColor("#FFFCE8"))
-        paint.color = Color.BLACK
+        paint.color = -769226
         paint.isAntiAlias = true
         paint.style = Paint.Style.STROKE
         paint.strokeCap = Paint.Cap.ROUND
@@ -208,15 +214,11 @@ class DrawingFragment : Fragment() {
         }
         )
 
-
-        fun onPaintButtonClick(view: View) {
-            paint.color = view.backgroundTintList!!.defaultColor
+        binding.colorSeekBar.setOnColorChangeListener { progress, color ->
+            paint.color = color
         }
 
-        binding.btnBlack.setOnClickListener(::onPaintButtonClick)
-        binding.btnBlue.setOnClickListener(::onPaintButtonClick)
-        binding.btnGreen.setOnClickListener(::onPaintButtonClick)
-        binding.btnRed.setOnClickListener(::onPaintButtonClick)
+
 
         binding.btnClear.setOnClickListener {
             clearCanvas()

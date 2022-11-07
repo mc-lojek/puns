@@ -107,7 +107,6 @@ class LobbyFragment : Fragment() {
             binding.tvPlayersJoined.text=requireArguments().getInt("playersCount").toString()
             val hash = requireArguments().getString("hash")
             if(hash!=null){
-                Timber.d("dupa")
                 findNavController().navigate(R.id.action_lobbyFragment_to_privateLobbyFragment,requireArguments())
             }
             viewModel.initializeAndConsume(queueName!!, exchangeName)
