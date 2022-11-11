@@ -42,6 +42,7 @@ class DrawingFragment : Fragment() {
     private var timeLeft = 60_000L
     private var timeSyncJob: Job? = null
     private var screenRatio = -1f
+    private var blockDrawing = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -145,6 +146,15 @@ class DrawingFragment : Fragment() {
                         )
                     }
                 }
+                "BIE" -> {
+                    val message = BlockInteractionEvent(it)
+                    requireActivity().runOnUiThread {
+                        adapter.addMessage(ChatMessageEvent("",message.keyword,5))
+                        binding.chatRecyclerView.smoothScrollToPosition(0)
+                        binding.btnClear.isEnabled=false
+                        blockDrawing=true
+                    }
+                }
             }
             Timber.d(it)
         }
@@ -232,21 +242,22 @@ class DrawingFragment : Fragment() {
         }
         binding.btnMinus.setOnClickListener {
             paint.strokeWidth = if (paint.strokeWidth - 2f < 6) 6f else paint.strokeWidth - 2f
-            //adapter.addMessage(MessageModel("elo", "content"))
         }
     }
 
     private fun drawPainting() {
-        canvas.drawLine(floatStartX, floatStartY, floatEndX, floatEndY, paint)
-        binding.imageView.setImageBitmap(bitmap)
-        viewModel.sendDrawLineEvent(
-            floatStartX,
-            floatStartY,
-            floatEndX,
-            floatEndY,
-            paint.color,
-            paint.strokeWidth,
-            screenRatio
-        )
+        if(!blockDrawing){
+            canvas.drawLine(floatStartX, floatStartY, floatEndX, floatEndY, paint)
+            binding.imageView.setImageBitmap(bitmap)
+            viewModel.sendDrawLineEvent(
+                floatStartX,
+                floatStartY,
+                floatEndX,
+                floatEndY,
+                paint.color,
+                paint.strokeWidth,
+                screenRatio
+            )
+        }
     }
 }

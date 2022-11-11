@@ -153,6 +153,7 @@
                 android:id="@+id/colorSeekBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 app:colorSeekBarColorSeeds="@array/material_colors"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="MissingConstraints" />

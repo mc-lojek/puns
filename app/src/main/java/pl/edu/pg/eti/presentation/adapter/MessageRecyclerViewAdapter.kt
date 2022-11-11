@@ -18,9 +18,16 @@ class MessageRecyclerViewAdapter(
 
 
     fun addMessage(message: ChatMessageEvent){
-        Timber.d("${message.nickname} ${message.content}")
-        this.messageList.add(0,message)
-        notifyItemInserted(0)
+        if(message.level==5L){
+            Timber.d("Koniec, haslem bylo: ${message.content}")
+            this.messageList.add(0,ChatMessageEvent(message.nickname,"End of round. Keyword was: ${message.content}",3))
+            notifyItemInserted(0)
+        }
+        else{
+            Timber.d("${message.nickname} ${message.content}")
+            this.messageList.add(0,message)
+            notifyItemInserted(0)
+        }
     }
 
     fun addMessage(message: PlayerHitEvent){

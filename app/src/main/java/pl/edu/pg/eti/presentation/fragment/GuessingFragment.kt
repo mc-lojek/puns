@@ -171,6 +171,14 @@ class GuessingFragment : Fragment() {
                         findNavController().navigate(R.id.action_guessingFragment_to_scoreboardFragment,bundle)
                     }
                 }
+                "BIE" -> {
+                    val message = BlockInteractionEvent(it)
+                    requireActivity().runOnUiThread {
+                        adapter.addMessage(ChatMessageEvent("",message.keyword,5))
+                        binding.chatRecyclerView.smoothScrollToPosition(0)
+                        binding.btnSend.isEnabled=false
+                    }
+                }
             }
 
             Timber.d(it)
@@ -269,7 +277,7 @@ class GuessingFragment : Fragment() {
             if (array[0] == "mess") {
 
             }
-            println("[$consumerTag] Received: '$message'")
+            Timber.d("[$consumerTag] Received: '$message'")
         }
 
 

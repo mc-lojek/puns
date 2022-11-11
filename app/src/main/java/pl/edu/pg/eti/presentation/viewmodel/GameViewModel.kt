@@ -32,12 +32,12 @@ class GameViewModel @Inject constructor(
     val repo: GameRepository
 ) : ViewModel() {
     val cancelCallback = CancelCallback { consumerTag: String? ->
-        println("[$consumerTag] was canceled")
+        Timber.d("[$consumerTag] was canceled")
     }
     val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
         val message = String(delivery.body, StandardCharsets.UTF_8)
         callback?.let { it(message) }
-        println("Received: '$message'")
+        Timber.d("Received: '$message'")
     }
 
     var isInitialized = false

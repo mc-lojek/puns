@@ -68,10 +68,10 @@ class LobbyFragment : Fragment() {
                 }
                 "SGE" -> {
                     val startGameEvent = StartGameEvent(it)
-                    playersCountSyncJob?.cancel()
-                    playersCountSyncJob = lifecycleScope.launch(Dispatchers.Main) {
-                        setPlyerCount(startGameEvent.playersCount)
-                    }
+                    //playersCountSyncJob?.cancel()
+                    //playersCountSyncJob = lifecycleScope.launch(Dispatchers.Main) {
+                    //    setPlyerCount(startGameEvent.playersCount)
+                    //}
                     Timber.d("Dostalem taki startGameEvent: ${startGameEvent}")
                     viewModel.sendPlayerReady()
                 }
