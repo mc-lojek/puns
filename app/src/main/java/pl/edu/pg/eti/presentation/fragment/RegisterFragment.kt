@@ -54,6 +54,7 @@ class RegisterFragment : Fragment() {
             val email = email_input.text.toString()
             val password = password_input.text.toString()
 
+            val patternIncludesComma = "[,]".toRegex()
             val patternAtLeast3Letters = "...".toRegex()
             val patternAtLeast1BigLetter = "[A-Z]".toRegex()
             val patternAtLeast1SmallLetter = "[a-z]".toRegex()
@@ -69,6 +70,12 @@ class RegisterFragment : Fragment() {
             //check email
             if (!patternEmail.containsMatchIn (email)) {
                 registerHint.text = "incorrect email"
+                return@setOnClickListener
+            }
+
+            //check if password contains comma
+            if(patternIncludesComma.containsMatchIn(password)) {
+                registerHint.text = "password cannot contain ','"
                 return@setOnClickListener
             }
 
