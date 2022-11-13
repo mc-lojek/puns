@@ -2,6 +2,7 @@ package pl.edu.pg.eti.presentation.activity
 
 import android.R
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity() {
             currentDestination = destination
             Timber.d(currentDestination.label.toString())
         }
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     override fun onBackPressed() {

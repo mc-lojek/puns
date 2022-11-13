@@ -69,8 +69,10 @@ class GuessingFragment : Fragment() {
 
         waitForImageView()
         binding.btnSend.setOnClickListener {
-            viewModel.sendGuess(binding.textGuess.text.toString())
-            binding.textGuess.text.clear()
+            if(!binding.textGuess.text.trim().isEmpty()){
+                viewModel.sendGuess(binding.textGuess.text.toString())
+                binding.textGuess.text.clear()
+            }
         }
         binding.textGuess.onSubmit {
             binding.btnSend.performClick()

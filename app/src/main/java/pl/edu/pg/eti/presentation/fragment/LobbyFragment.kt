@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -20,6 +22,7 @@ import pl.edu.pg.eti.domain.model.events.PlayerJoinedEvent
 import pl.edu.pg.eti.domain.model.events.PlayerLeftEvent
 import pl.edu.pg.eti.domain.model.events.StartGameEvent
 import pl.edu.pg.eti.domain.model.events.StartRoundEvent
+import pl.edu.pg.eti.domain.util.TIME_TOAST_MESSAGE_LEFT_JOIN_EVENT
 import pl.edu.pg.eti.presentation.viewmodel.GameViewModel
 import timber.log.Timber
 
@@ -57,6 +60,11 @@ class LobbyFragment : Fragment() {
                         setPlyerCount(playerJoinedEvent.playersCount)
                         Timber.d("Dostalem taki playerJoinedEvent: ${playerJoinedEvent}")
                     }
+                    val snackbar = Snackbar.make(
+                        requireView(), "Player ${playerJoinedEvent.nickname} joined",
+                        Snackbar.LENGTH_LONG
+                    ).setAction("Action", null)
+                    snackbar.show()
                 }
                 "PLE" -> {
                     val playerLeftEvent = PlayerLeftEvent(it)
@@ -65,6 +73,11 @@ class LobbyFragment : Fragment() {
                         setPlyerCount(playerLeftEvent.playersCount)
                         Timber.d("Dostalem taki playerLeftEvent: ${playerLeftEvent}")
                     }
+                    val snackbar = Snackbar.make(
+                        requireView(), "Player ${playerLeftEvent.nickname} left",
+                        Snackbar.LENGTH_LONG
+                    ).setAction("Action", null)
+                    snackbar.show()
                 }
                 "SGE" -> {
                     val startGameEvent = StartGameEvent(it)
@@ -97,20 +110,23 @@ class LobbyFragment : Fragment() {
     }
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (!viewModel.isInitialized) {
             val queueName = requireArguments().getString("queue_name")
             val exchangeName = requireArguments().getString("exchange_name")!!
             Timber.d("queue ${queueName} exchange: ${exchangeName}")
-            binding.tvPlayersJoined.text=requireArguments().getInt("playersCount").toString()
+            binding.tvPlayersJoined.text = requireArguments().getInt("playersCount").toString()
+            binding.tvPlayersMax.text=requireArguments().getInt("maxPlayers").toString()
             val hash = requireArguments().getString("hash")
-            if(hash!=null){
-                findNavController().navigate(R.id.action_lobbyFragment_to_privateLobbyFragment,requireArguments())
+            if (hash != null) {
+                findNavController().navigate(
+                    R.id.action_lobbyFragment_to_privateLobbyFragment,
+                    requireArguments()
+                )
             }
             viewModel.initializeAndConsume(queueName!!, exchangeName)
-            viewModel.basicRoundTime=requireArguments().getLong("time")
+            viewModel.basicRoundTime = requireArguments().getLong("time")
         } else {
             //viewModel.sendPlayerReady()
             Timber.d("ViewModel is already initialized")
@@ -118,8 +134,8 @@ class LobbyFragment : Fragment() {
         consumeMessages()
         binding.btnBack.setOnClickListener {
             viewModel.leaveRoom()
-            viewModel.roomLeaveLiveData.observe(viewLifecycleOwner){
-                when (it){
+            viewModel.roomLeaveLiveData.observe(viewLifecycleOwner) {
+                when (it) {
                     is Resource.Error -> {
                         Timber.d("error")
                     }
@@ -127,7 +143,7 @@ class LobbyFragment : Fragment() {
                         Timber.d("loading")
                     }
                     is Resource.Success -> {
-                        findNavController().popBackStack(R.id.game_nav_graph,true)
+                        findNavController().popBackStack(R.id.game_nav_graph, true)
                     }
                 }
 

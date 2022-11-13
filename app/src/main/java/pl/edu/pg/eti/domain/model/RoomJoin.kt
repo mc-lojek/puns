@@ -5,6 +5,7 @@ data class RoomJoin(
     val queueName: String,
     val hash: String?,
     val playersCount: Int,
+    val maxPlayers: Int,
     val roundTime:Long
 ) {
     val isPrivate: Boolean

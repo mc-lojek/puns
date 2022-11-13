@@ -79,6 +79,7 @@ class EntryFragment : Fragment() {
                     bundle.putString("hash",it.data!!.hash)
                     bundle.putLong("time",it.data!!.roundTime/1_000_000)
                     bundle.putInt("playersCount",it.data!!.playersCount)
+                    bundle.putInt("maxPlayers",it.data!!.maxPlayers)
                     findNavController().navigate(R.id.action_entryFragment_to_game_nav_graph, bundle)
 
 
