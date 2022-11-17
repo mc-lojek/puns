@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.data.service
 
+import pl.edu.pg.eti.domain.model.GuestData
 import pl.edu.pg.eti.domain.model.Tokens
 import pl.edu.pg.eti.domain.model.User
 import pl.edu.pg.eti.domain.model.UserWithoutNick
@@ -21,4 +22,9 @@ interface ApiService {
     suspend fun  loginUser(
         @Body userWithoutNick: UserWithoutNick
         ):Response<Tokens>
+
+    @POST("/api/users/guest")
+    suspend fun  loginGuest(
+
+    ):Response<GuestData>
 }
