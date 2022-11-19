@@ -1,6 +1,6 @@
 package pl.edu.pg.eti.data.repository
 
-import pl.edu.pg.eti.data.service.ApiService
+import pl.edu.pg.eti.data.network.ApiService
 import pl.edu.pg.eti.domain.model.User
 import pl.edu.pg.eti.domain.repository.RegisterRepository
 import retrofit2.Response

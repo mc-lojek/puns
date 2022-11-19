@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Puns</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="login">ZALOGUJ</string>
     <string name="register">ZAREJESTRUJ</string>
     <string name="nick">nick</string>
@@ -18,6 +17,7 @@
     <string name="timePerRound">CZAS NA TURE</string>
     <string name="playGuest">GRAJ JAKO GOŚĆ</string>
     <string name="placeholder">LOREM IPSUM</string>
+
     <string name="keyword">Hasło: </string>
 
     <string-array name="timePerRound">
@@ -27,6 +27,14 @@
         <item>120s</item>
         <item>150s</item>
         <item>180s</item>
+    </string-array>
+
+    <string name="keyword_prefix">Hasło</string>
+
+    <string-array name="time_array">
+        <item>30</item>
+        <item>45</item>
+        <item>60</item>
     </string-array>
 
 </resources>

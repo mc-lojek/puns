@@ -9,25 +9,57 @@
         android:layout_height="match_parent">
 
 
-        <TextView
-            android:id="@+id/tvTimeLeft"
+        <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="60s"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvRound"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="60s" />
-
-        <TextView
-            android:id="@+id/tvRound"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1/3"
-            app:layout_constraintEnd_toStartOf="@+id/tvTimeLeft"
+            android:layout_marginEnd="60dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="1/3" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tvRound2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Round: " />
+
+            <TextView
+                android:id="@+id/tvRound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1/3"
+                tools:text="1/3" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/linearLayout"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tvTimeLeft3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time left: " />
+
+            <TextView
+                android:id="@+id/tvTimeLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="60" />
+
+            <TextView
+                android:id="@+id/tvTimeLeft2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="s" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/imageView"
@@ -39,7 +71,7 @@
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvRound" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
@@ -54,54 +86,31 @@
 
             <TextView
                 android:id="@+id/tvKeyword"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="5dp"
+                android:paddingRight="5dp"
+                android:text="Hasło:"
+                android:textAlignment="textEnd"
+                android:textSize="30sp"
+                app:layout_constraintBottom_toTopOf="@+id/btnClear"
+                app:layout_constraintEnd_toEndOf="@+id/btnMinus"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvKeywordHeadline"
+                tools:text="Okoń" />
+
+            <TextView
+                android:id="@+id/tvKeywordHeadline"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="Hasło: Okoń"
+                android:paddingLeft="5dp"
+                android:text="Keyword:"
+                android:textAlignment="textStart"
                 android:textSize="30sp"
+                app:layout_constraintEnd_toEndOf="@+id/tvKeyword"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Hasło: Okoń" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnRed"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@drawable/custom_rounded_button"
-                android:backgroundTint="#F44336"
-                app:layout_constraintBottom_toTopOf="@+id/btnMinus"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnGreen"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@drawable/custom_rounded_button"
-                android:backgroundTint="#4CAF50"
-                app:layout_constraintBottom_toTopOf="@+id/btnMinus"
-                app:layout_constraintStart_toEndOf="@+id/btnRed"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnBlue"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@drawable/custom_rounded_button"
-                android:backgroundTint="#03A9F4"
-                app:layout_constraintBottom_toTopOf="@+id/btnMinus"
-                app:layout_constraintStart_toEndOf="@+id/btnGreen"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnBlack"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@drawable/custom_rounded_button"
-                android:backgroundTint="#000000"
-                app:layout_constraintBottom_toTopOf="@+id/btnMinus"
-                app:layout_constraintStart_toEndOf="@+id/btnBlue"
-                tools:ignore="SpeakableTextPresentCheck" />
+                app:layout_constraintTop_toBottomOf="@+id/colorSeekBar" />
 
             <Button
                 android:id="@+id/btnPlus"
@@ -118,6 +127,36 @@
                 android:text="-"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/btnPlus" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/chatRecyclerView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btnMinus"
+                app:layout_constraintTop_toBottomOf="@+id/colorSeekBar"
+                tools:itemCount="2"
+                tools:listitem="@layout/chat_recycler_view_message" />
+
+            <Button
+                android:id="@+id/btnClear"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Clear canvas"
+                app:layout_constraintBottom_toTopOf="@+id/btnMinus"
+                app:layout_constraintEnd_toEndOf="@+id/btnMinus"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+            <com.rtugeek.android.colorseekbar.ColorSeekBar
+                android:id="@+id/colorSeekBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:colorSeekBarColorSeeds="@array/material_colors"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingConstraints" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -8,58 +8,117 @@
     <fragment
         android:id="@+id/entryFragment"
         android:name="pl.edu.pg.eti.presentation.fragment.EntryFragment"
-        android:label="fragment_entry"
-        tools:layout="@layout/fragment_entry" >
+        tools:layout="@layout/fragment_entry"
+        android:label="EntryFragment" >
         <action
-            android:id="@+id/action_entryFragment_to_LoginFragment"
-            app:destination="@id/LoginFragment" />
+            android:id="@+id/action_entryFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
         <action
-            android:id="@+id/action_entryFragment_to_RegisterFragment"
-            app:destination="@id/RegisterFragment" />
+            android:id="@+id/action_entryFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
         <action
             android:id="@+id/action_entryFragment_to_mainMenuFragment"
             app:destination="@id/mainMenuFragment" />
     </fragment>
     <fragment
-        android:id="@+id/LoginFragment"
+        android:id="@+id/registerFragment"
+        android:name="pl.edu.pg.eti.presentation.fragment.RegisterFragment"
+        tools:layout="@layout/fragment_register"
+        android:label="RegisterFragment" />
+    <fragment
+        android:id="@+id/loginFragment"
         android:name="pl.edu.pg.eti.presentation.fragment.LoginFragment"
-        android:label="fragment_complaint_list"
-        tools:layout="@layout/fragment_login">
+        tools:layout="@layout/fragment_login"
+        android:label="LoginFragment" >
         <action
-            android:id="@+id/action_LoginFragment_to_forgotPassFragment"
+            android:id="@+id/action_loginFragment_to_forgotPassFragment"
             app:destination="@id/forgotPassFragment" />
         <action
-            android:id="@+id/action_LoginFragment_to_mainMenuFragment"
+            android:id="@+id/action_loginFragment_to_mainMenuFragment"
             app:destination="@id/mainMenuFragment" />
     </fragment>
     <fragment
-        android:id="@+id/RegisterFragment"
-        android:name="pl.edu.pg.eti.presentation.fragment.RegisterFragment"
-        android:label="RegisterFragment"
-        tools:layout="@layout/fragment_register">
-        <action
-            android:id="@+id/action_RegisterFragment_to_entryFragment"
-            app:destination="@id/entryFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/forgotPassFragment"
+        tools:layout="@layout/fragment_forgot_pass"
         android:name="pl.edu.pg.eti.presentation.fragment.ForgotPassFragment"
-        android:label="ForgotPassFragment"
-        tools:layout="@layout/fragment_forgot_pass">
+        android:label="ForgotPassFragment" />
+    <fragment
+        android:id="@+id/setupGameFragment"
+        android:name="pl.edu.pg.eti.presentation.fragment.SetupGameFragment"
+        android:label="SetupGameFragment" >
+        <action
+            android:id="@+id/action_setupGameFragment_to_game_nav_graph"
+            app:destination="@id/game_nav_graph" />
     </fragment>
     <fragment
         android:id="@+id/mainMenuFragment"
         android:name="pl.edu.pg.eti.presentation.fragment.MainMenuFragment"
-        android:label="MainMenuFragment"
-        tools:layout="@layout/fragment_main_menu">
+        android:label="MainMenuFragment" >
         <action
-            android:id="@+id/action_mainMenuFragment_to_createLobbyFragment"
-            app:destination="@id/createLobbyFragment" />
+            android:id="@+id/action_mainMenuFragment_to_game_nav_graph"
+            app:destination="@id/game_nav_graph" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_setupGameFragment"
+            app:destination="@id/setupGameFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/createLobbyFragment"
-        android:name="pl.edu.pg.eti.presentation.fragment.CreateLobbyFragment"
-        android:label="CreateLobbyFragment"
-        tools:layout="@layout/fragment_create_lobby">
-    </fragment>
+
+
+    <navigation
+        android:id="@+id/game_nav_graph"
+        app:startDestination="@id/lobbyFragment">
+        <fragment
+            android:id="@+id/scoreboardFragment"
+            android:name="pl.edu.pg.eti.presentation.fragment.ScoreboardFragment"
+            android:label="ScoreboardFragment">
+            <action
+                android:id="@+id/action_scoreboardFragment_to_drawingFragment"
+                app:destination="@id/drawingFragment" />
+            <action
+                android:id="@+id/action_scoreboardFragment_to_guessingFragment"
+                app:destination="@id/guessingFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/lobbyFragment"
+            android:name="pl.edu.pg.eti.presentation.fragment.LobbyFragment"
+            android:label="LobbyFragment">
+            <action
+                android:id="@+id/action_lobbyFragment_to_guessingFragment"
+                app:destination="@id/guessingFragment" />
+            <action
+                android:id="@+id/action_lobbyFragment_to_drawingFragment"
+                app:destination="@id/drawingFragment" />
+            <action
+                android:id="@+id/action_lobbyFragment_to_privateLobbyFragment"
+                app:destination="@id/privateLobbyFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/drawingFragment"
+            android:name="pl.edu.pg.eti.presentation.fragment.DrawingFragment"
+            android:label="DrawingFragment">
+            <action
+                android:id="@+id/action_drawingFragment_to_scoreboardFragment"
+                app:destination="@id/scoreboardFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/guessingFragment"
+            android:name="pl.edu.pg.eti.presentation.fragment.GuessingFragment"
+            android:label="GuessingFragment">
+            <action
+                android:id="@+id/action_guessingFragment_to_scoreboardFragment"
+                app:destination="@id/scoreboardFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/privateLobbyFragment"
+            android:name="pl.edu.pg.eti.presentation.fragment.PrivateLobbyFragment"
+            android:label="PrivateLobbyFragment">
+            <action
+                android:id="@+id/action_privateLobbyFragment_to_drawingFragment"
+                app:destination="@id/drawingFragment" />
+            <action
+                android:id="@+id/action_privateLobbyFragment_to_guessingFragment"
+                app:destination="@id/guessingFragment" />
+        </fragment>
+    </navigation>
+
+
 </navigation>

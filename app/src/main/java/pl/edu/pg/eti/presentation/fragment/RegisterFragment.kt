@@ -106,7 +106,7 @@ class RegisterFragment : Fragment() {
             if(it.code() == 200) {
                 //Timber.d(it.body().toString())
                 Snackbar.make(view, "Register successful", Snackbar.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_RegisterFragment_to_entryFragment)
+                findNavController().navigateUp()
             }
             else{
                 Timber.d(it.code().toString())

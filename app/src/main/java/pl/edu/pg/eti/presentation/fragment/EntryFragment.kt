@@ -46,10 +46,10 @@ class EntryFragment : Fragment() {
 
     private fun setupListeners() {
         binding.loginBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_entryFragment_to_LoginFragment)
+            findNavController().navigate(R.id.action_entryFragment_to_loginFragment)
         }
         binding.registerBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_entryFragment_to_RegisterFragment)
+            findNavController().navigate(R.id.action_entryFragment_to_registerFragment)
         }
         binding.guestBtn.setOnClickListener{
             viewModel.loginGuest();

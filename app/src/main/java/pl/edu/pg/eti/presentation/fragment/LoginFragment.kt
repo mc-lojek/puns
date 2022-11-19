@@ -60,7 +60,7 @@ class LoginFragment : Fragment() {
         }
 
         binding.ForgotPassBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_LoginFragment_to_forgotPassFragment)
+            findNavController().navigate(R.id.action_loginFragment_to_forgotPassFragment)
         }
     }
 
@@ -83,7 +83,7 @@ class LoginFragment : Fragment() {
                 }
 
                 Snackbar.make(view, "Login successful", Snackbar.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_LoginFragment_to_mainMenuFragment)
+                findNavController().navigate(R.id.action_loginFragment_to_mainMenuFragment)
             }
             else{
                 Timber.d(it.code().toString())
