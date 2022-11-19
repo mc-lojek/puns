@@ -18,15 +18,20 @@ import kotlinx.android.synthetic.main.fragment_register.*
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.databinding.FragmentEntryBinding
 import pl.edu.pg.eti.databinding.FragmentLoginBinding
+import pl.edu.pg.eti.domain.manager.TokenManager
 import pl.edu.pg.eti.domain.model.User
 import pl.edu.pg.eti.domain.model.UserWithoutNick
 import pl.edu.pg.eti.presentation.viewmodel.LoginViewModel
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
+
+    @Inject
+    lateinit var tokenManager: TokenManager
 
     private val viewModel: LoginViewModel by viewModels()
 
@@ -80,6 +85,9 @@ class LoginFragment : Fragment() {
                     putString("access_token", tokens?.access_token)
                     putString("refresh_token", tokens?.refresh_token)
                     apply()
+
+                    tokenManager.initialize(tokens.access_token, tokens.refresh_token)
+
                 }
 
                 Snackbar.make(view, "Login successful", Snackbar.LENGTH_SHORT).show()
