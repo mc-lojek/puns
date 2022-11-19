@@ -97,7 +97,7 @@ class RegisterFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            viewModel.registerUser(nick, email, password)
+            viewModel.registerUser(nick, password, email)
         }
     }
 
