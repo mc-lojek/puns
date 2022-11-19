@@ -51,7 +51,7 @@ class ScoreboardFragment : Fragment() {
         consumeMessages()
 
         binding.btnExitFinal.setOnClickListener {
-            findNavController().popBackStack(R.id.entryFragment, false)
+            findNavController().popBackStack(R.id.entryGameFragment, false)
         }
     }
 

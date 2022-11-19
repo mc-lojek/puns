@@ -14,14 +14,10 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.data.network.Resource
-import pl.edu.pg.eti.databinding.FragmentEntryBinding
 import pl.edu.pg.eti.databinding.FragmentSetupGameBinding
 import pl.edu.pg.eti.domain.model.RoomConfig
-import pl.edu.pg.eti.domain.model.events.StartGameEvent
-import pl.edu.pg.eti.presentation.viewmodel.EntryViewModel
 import pl.edu.pg.eti.presentation.viewmodel.SetupGameViewModel
 import timber.log.Timber
-import kotlin.random.Random
 
 @AndroidEntryPoint
 class SetupGameFragment : Fragment() {

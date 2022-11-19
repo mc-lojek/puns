@@ -14,7 +14,7 @@ import pl.edu.pg.eti.domain.repository.GameRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class EntryViewModel @Inject constructor(
+class GameEntryViewModel @Inject constructor(
     val repo: GameRepository
 ) : ViewModel() {
     private val _roomJoinLiveData: MutableLiveData<Resource<RoomJoin>> = MutableLiveData()

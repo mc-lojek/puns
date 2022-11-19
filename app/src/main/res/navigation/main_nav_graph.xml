@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav_graph"
-    app:startDestination="@id/entryFragment">
+    app:startDestination="@id/entryGameFragment">
 
     <fragment
-        android:id="@+id/entryFragment"
-        android:name="pl.edu.pg.eti.presentation.fragment.EntryFragment"
-        android:label="fragment_entry"
-        tools:layout="@layout/fragment_entry" >
+        android:id="@+id/entryGameFragment"
+        android:name="pl.edu.pg.eti.presentation.fragment.GameEntryFragment"
+        android:label="fragment_game_entry"
+        tools:layout="@layout/fragment_game_entry" >
         <action
             android:id="@+id/action_entryFragment_to_game_nav_graph"
             app:destination="@id/game_nav_graph" />
@@ -19,12 +19,6 @@
         <action
             android:id="@+id/action_entryFragment_to_setupGameFragment"
             app:destination="@id/setupGameFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/LoginFragment"
-        android:name="pl.edu.pg.eti.presentation.fragment.LoginFragment"
-        android:label="fragment_complaint_list"
-        tools:layout="@layout/fragment_login">
     </fragment>
     <navigation android:id="@+id/game_nav_graph"
         app:startDestination="@id/lobbyFragment">

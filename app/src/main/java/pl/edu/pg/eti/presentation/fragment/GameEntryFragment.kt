@@ -12,15 +12,15 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.data.network.Resource
-import pl.edu.pg.eti.databinding.FragmentEntryBinding
-import pl.edu.pg.eti.presentation.viewmodel.EntryViewModel
+import pl.edu.pg.eti.databinding.FragmentGameEntryBinding
+import pl.edu.pg.eti.presentation.viewmodel.GameEntryViewModel
 import timber.log.Timber
 import kotlin.random.Random
 
 @AndroidEntryPoint
-class EntryFragment : Fragment() {
-    private val viewModel: EntryViewModel by viewModels()
-    private lateinit var binding: FragmentEntryBinding
+class GameEntryFragment : Fragment() {
+    private val viewModel: GameEntryViewModel by viewModels()
+    private lateinit var binding: FragmentGameEntryBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,7 +29,7 @@ class EntryFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.fragment_entry,
+            R.layout.fragment_game_entry,
             container,
             false
         )
