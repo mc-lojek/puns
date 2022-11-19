@@ -12,6 +12,7 @@ import javax.inject.Singleton
 import pl.edu.pg.eti.data.network.ApiService
 import pl.edu.pg.eti.data.repository.GameRepositoryImpl
 import pl.edu.pg.eti.domain.manager.SessionManager
+import pl.edu.pg.eti.domain.manager.TokenManager
 import pl.edu.pg.eti.domain.repository.GameRepository
 
 @InstallIn(SingletonComponent::class)
@@ -29,6 +30,12 @@ class DomainModule {
     }
 
     @Provides
+    fun provideGameRepository(service: ApiService, tokenManager: TokenManager): GameRepository {
+        return GameRepositoryImpl(service, tokenManager)
+    }
+
+
+    @Provides
     fun provideSessionManager(): SessionManager {
         val sm = SessionManager(
             "51.83.130.165",
@@ -41,9 +48,8 @@ class DomainModule {
     }
 
     @Provides
-    fun provideGameRepository(service: ApiService): GameRepository {
-        return GameRepositoryImpl(service)
+    @Singleton
+    fun provideTokenManager(): TokenManager {
+        return TokenManager()
     }
-
-
 }

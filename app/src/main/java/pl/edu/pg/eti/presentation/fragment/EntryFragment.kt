@@ -13,11 +13,17 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.databinding.FragmentEntryBinding
+import pl.edu.pg.eti.domain.manager.TokenManager
 import pl.edu.pg.eti.presentation.viewmodel.EntryViewModel
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class EntryFragment : Fragment() {
+
+    @Inject
+    lateinit var tokenManager: TokenManager
+
 
     private lateinit var binding: FragmentEntryBinding
 
@@ -77,6 +83,8 @@ class EntryFragment : Fragment() {
                     putString("access_token", tokens?.guestData.accessToken)
                     putString("refresh_token", tokens?.guestData.refreshToken)
                     apply()
+
+                    tokenManager.initialize(tokens.guestData.accessToken, tokens.guestData.refreshToken)
                 }
 
                 Snackbar.make(view, "Logged as guest", Snackbar.LENGTH_SHORT).show()

@@ -4,13 +4,17 @@ import pl.edu.pg.eti.data.dto.UserPayloadDto
 import pl.edu.pg.eti.data.mapper.toDomain
 import pl.edu.pg.eti.data.network.ApiService
 import pl.edu.pg.eti.data.network.Resource
+import pl.edu.pg.eti.domain.manager.TokenManager
 import pl.edu.pg.eti.domain.model.Room
 import pl.edu.pg.eti.domain.model.RoomConfig
 import pl.edu.pg.eti.domain.model.RoomJoin
 import pl.edu.pg.eti.domain.repository.GameRepository
 import javax.inject.Inject
 
-class GameRepositoryImpl @Inject constructor(private val service: ApiService) : GameRepository {
+class GameRepositoryImpl @Inject constructor(
+    private val service: ApiService,
+    private val tokenManager: TokenManager
+    ) : GameRepository {
     override suspend fun joinRoom(
         userId: Long,
         userName: String,
@@ -20,13 +24,13 @@ class GameRepositoryImpl @Inject constructor(private val service: ApiService) : 
             val response = if (hash == null) {
                 service.joinRoom(
                     UserPayloadDto(userName, userId),
-                    "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4Iiwicm9sZXMiOlsiVVNFUiJdLCJleHAiOjE2NjU2ODY0NDV9.8Hu_hOkvxiIj9_uH33rP2oESh8Is6RwnaA7hb60wmSY"
+                    "JWT ${tokenManager.accessToken}"
                 )
             } else {
                 service.joinPrivateRoom(
                     hash, UserPayloadDto(userName, userId),
-                    "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4Iiwicm9sZXMiOlsiVVNFUiJdLCJleHAiOjE2NjU2ODY0NDV9.8Hu_hOkvxiIj9_uH33rP2oESh8Is6RwnaA7hb60wmSY"
-                )//todo zmienic token na radkowy po mergu
+                    "JWT ${tokenManager.accessToken}"
+                )
             }
             Resource.Success(response.toDomain())
         } catch (e: Exception) {
@@ -41,7 +45,7 @@ class GameRepositoryImpl @Inject constructor(private val service: ApiService) : 
             service.leaveRoom(
                 roomId,
                 UserPayloadDto(userName, userId),
-                "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4Iiwicm9sZXMiOlsiVVNFUiJdLCJleHAiOjE2NjU2ODY0NDV9.8Hu_hOkvxiIj9_uH33rP2oESh8Is6RwnaA7hb60wmSY"
+                "JWT ${tokenManager.accessToken}"
             )
             Resource.Success("")
         } catch (e: Exception) {
@@ -55,7 +59,7 @@ class GameRepositoryImpl @Inject constructor(private val service: ApiService) : 
         return try {
             val room = service.createPrivateRoom(
                 roomConfig,
-                "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4Iiwicm9sZXMiOlsiVVNFUiJdLCJleHAiOjE2NjU2ODY0NDV9.8Hu_hOkvxiIj9_uH33rP2oESh8Is6RwnaA7hb60wmSY"
+                "JWT ${tokenManager.accessToken}"
             )
             Resource.Success(room)
         } catch (e: Exception) {
