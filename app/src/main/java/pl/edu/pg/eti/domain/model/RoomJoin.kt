@@ -6,7 +6,8 @@ data class RoomJoin(
     val hash: String?,
     val playersCount: Int,
     val maxPlayers: Int,
-    val roundTime:Long
+    val roundTime:Long,
+    val playersInRoom: List<String>
 ) {
     val isPrivate: Boolean
     get() = hash!=null

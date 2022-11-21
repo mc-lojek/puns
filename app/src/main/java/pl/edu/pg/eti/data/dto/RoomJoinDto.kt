@@ -3,7 +3,8 @@ package pl.edu.pg.eti.data.dto
 data class RoomJoinDto(
     val queueName: String,
     val room: RoomDto,
-    val id: Long
+    val id: Long,
+    val players: List<String>
 ) {
 
 }
