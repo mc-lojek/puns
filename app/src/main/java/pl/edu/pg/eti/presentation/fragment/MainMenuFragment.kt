@@ -13,13 +13,19 @@ import dagger.hilt.android.AndroidEntryPoint
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.databinding.FragmentMainMenuBinding
+import pl.edu.pg.eti.domain.manager.TokenManager
 import pl.edu.pg.eti.presentation.viewmodel.MainMenuViewModel
+import timber.log.Timber
+import javax.inject.Inject
 import kotlin.random.Random
 
 @AndroidEntryPoint
 class MainMenuFragment : Fragment() {
     private val viewModel: MainMenuViewModel by viewModels()
     private lateinit var binding: FragmentMainMenuBinding
+
+    @Inject
+    lateinit var tokenManager: TokenManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,27 +50,33 @@ class MainMenuFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        binding.etID.setText((Random.nextInt(5,7)).toString())
         binding.btnFastGame.setOnClickListener {
-            val id = binding.etID.text.toString().toLong()
-            viewModel.joinRoom(id,"name1")//todo nickname gracza
+            viewModel.joinRoom(tokenManager.userId!!,tokenManager.username!!)
         }
         binding.btnJoinRoom.setOnClickListener {
             val hash = binding.etRoomHash.text.toString().uppercase()
             binding.etRoomHash.setText("")
             //walidacja czy wpisany hash ma 6 znaków 0-9, A-Z
 
-            val id = binding.etID.text.toString().toLong()
-            viewModel.joinRoom(id,"name1", hash)//todo nickname gracza
+            viewModel.joinRoom(tokenManager.userId!!,tokenManager.username!!, hash)
 
         }
 
         binding.btnCreateRoom.setOnClickListener {
-            val id = binding.etID.text.toString().toLong()
-            val bundle = Bundle()
-            bundle.putLong("id", id)
-            bundle.putString("nickname", "name1")//todo nickname gracza
-            findNavController().navigate(R.id.action_mainMenuFragment_to_setupGameFragment,bundle)
+            Timber.d("guest: ${tokenManager.isGuest!!}")
+            if(tokenManager.isGuest!!){
+                val snackbar = Snackbar.make(
+                    requireView(), "Only registered players can create private rooms",
+                    Snackbar.LENGTH_LONG
+                ).setAction("Action", null)
+                snackbar.show()
+            }
+            else{
+                val bundle = Bundle()
+                bundle.putLong("id", tokenManager.userId!!)
+                bundle.putString("nickname", tokenManager.username!!)
+                findNavController().navigate(R.id.action_mainMenuFragment_to_setupGameFragment,bundle)
+            }
         }
     }
 
@@ -79,6 +91,8 @@ class MainMenuFragment : Fragment() {
                     bundle.putLong("time",it.data!!.roundTime/1_000_000)
                     bundle.putInt("playersCount",it.data!!.playersCount)
                     bundle.putInt("maxPlayers",it.data!!.maxPlayers)
+                    val arrayList = ArrayList(it.data!!.playersInRoom)
+                    bundle.putStringArrayList("playersInRoom",arrayList)
                     findNavController().navigate(R.id.action_mainMenuFragment_to_game_nav_graph, bundle)
 
 

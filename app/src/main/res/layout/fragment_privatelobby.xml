@@ -11,21 +11,12 @@
             android:id="@+id/btn_hash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="36dp"
             android:text="Button"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_back3" />
-
-        <TextView
-            android:id="@+id/tvHash"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textSize="28sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="117dp" />
 
         <Button
             android:id="@+id/btn_back3"
@@ -45,6 +36,35 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Click to copy!"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_hash"
+            app:layout_constraintEnd_toEndOf="@+id/btn_hash"
+            app:layout_constraintStart_toStartOf="@+id/btn_hash" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rc_PlayerList"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/btnStartLobby"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Players in lobby:"
+            app:layout_constraintEnd_toEndOf="@+id/btn_hash"
+            app:layout_constraintStart_toStartOf="@+id/btn_hash"
+            app:layout_constraintTop_toBottomOf="@+id/btn_hash" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

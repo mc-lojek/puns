@@ -19,6 +19,7 @@ import pl.edu.pg.eti.domain.model.RoomJoin
 import pl.edu.pg.eti.domain.model.ScoreboardItemModel
 import pl.edu.pg.eti.domain.model.events.ClearCanvasEvent
 import pl.edu.pg.eti.domain.model.events.DrawLineEvent
+import pl.edu.pg.eti.domain.model.events.HostStartEvent
 import pl.edu.pg.eti.domain.model.events.PlayerReadyEvent
 import pl.edu.pg.eti.domain.repository.GameRepository
 import timber.log.Timber
@@ -55,13 +56,13 @@ class GameViewModel @Inject constructor(
     private val _roomLeaveLiveData: MutableLiveData<Resource<String>> = MutableLiveData()
     val roomLeaveLiveData: LiveData<Resource<String>> = _roomLeaveLiveData
 
-    fun initializeAndConsume(queueName: String, exchangeName: String) =
+    fun initializeAndConsume(queueName: String, exchangeName: String,playerId:Long,playerNickname:String) =
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 sessionManager.exchangeName = exchangeName
                 sessionManager.queueName = queueName
-                sessionManager.playerId = queueName.substringAfterLast(".").toLong()//todo id gracza
-                sessionManager.playerNickname = queueName.substringAfterLast(".")//todo nickname gracza
+                sessionManager.playerId = playerId
+                sessionManager.playerNickname = playerNickname
                 try {
                     sessionManager.initSessionManager()
                     sessionManager.consume(deliverCallback, cancelCallback)
@@ -108,12 +109,19 @@ class GameViewModel @Inject constructor(
                     content
                 )
             )
+            Timber.d("Wysylam id ${sessionManager.playerId} i nick ${sessionManager.playerNickname}")
         }
     }
 
     fun sendClearCanvas() = viewModelScope.launch {
         withContext(Dispatchers.IO) {
             sessionManager.publish(ClearCanvasEvent())
+        }
+    }
+
+    fun sendStartGameEvent(id:Long) = viewModelScope.launch {
+        withContext(Dispatchers.IO) {
+            sessionManager.publish(HostStartEvent(id))
         }
     }
 

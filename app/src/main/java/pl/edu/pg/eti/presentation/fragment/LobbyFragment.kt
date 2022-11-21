@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.databinding.FragmentLobbyBinding
+import pl.edu.pg.eti.domain.manager.TokenManager
 import pl.edu.pg.eti.domain.model.events.PlayerJoinedEvent
 import pl.edu.pg.eti.domain.model.events.PlayerLeftEvent
 import pl.edu.pg.eti.domain.model.events.StartGameEvent
@@ -25,6 +26,7 @@ import pl.edu.pg.eti.domain.model.events.StartRoundEvent
 import pl.edu.pg.eti.domain.util.TIME_TOAST_MESSAGE_LEFT_JOIN_EVENT
 import pl.edu.pg.eti.presentation.viewmodel.GameViewModel
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LobbyFragment : Fragment() {
@@ -32,6 +34,9 @@ class LobbyFragment : Fragment() {
     private lateinit var binding: FragmentLobbyBinding
     private val viewModel: GameViewModel by navGraphViewModels(R.id.game_nav_graph) { defaultViewModelProviderFactory }
     private var playersCountSyncJob: Job? = null
+
+    @Inject
+    lateinit var tokenManager: TokenManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -125,7 +130,7 @@ class LobbyFragment : Fragment() {
                     requireArguments()
                 )
             }
-            viewModel.initializeAndConsume(queueName!!, exchangeName)
+            viewModel.initializeAndConsume(queueName!!, exchangeName,tokenManager.userId!!,tokenManager.username!!)
             viewModel.basicRoundTime = requireArguments().getLong("time")
         } else {
             //viewModel.sendPlayerReady()

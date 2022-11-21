@@ -3,6 +3,7 @@ package pl.edu.pg.eti.presentation.fragment
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -22,13 +24,18 @@ import kotlinx.coroutines.launch
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.databinding.FragmentPrivatelobbyBinding
+import pl.edu.pg.eti.domain.manager.TokenManager
+import pl.edu.pg.eti.domain.model.PlayerListClass
 import pl.edu.pg.eti.domain.model.events.PlayerJoinedEvent
 import pl.edu.pg.eti.domain.model.events.PlayerLeftEvent
 import pl.edu.pg.eti.domain.model.events.StartGameEvent
 import pl.edu.pg.eti.domain.model.events.StartRoundEvent
 import pl.edu.pg.eti.domain.util.TIME_TOAST_MESSAGE_LEFT_JOIN_EVENT
+import pl.edu.pg.eti.presentation.adapter.MessageRecyclerViewAdapter
+import pl.edu.pg.eti.presentation.adapter.PlayerListAdapter
 import pl.edu.pg.eti.presentation.viewmodel.GameViewModel
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PrivateLobbyFragment : Fragment() {
@@ -36,7 +43,13 @@ class PrivateLobbyFragment : Fragment() {
     private lateinit var binding: FragmentPrivatelobbyBinding
     private val viewModel: GameViewModel by navGraphViewModels(R.id.game_nav_graph) { defaultViewModelProviderFactory }
     private var playersCountSyncJob: Job? = null
+    private var adapter = PlayerListAdapter(arrayListOf())
     private var hash = ""
+    private lateinit var playersList: ArrayList<String>
+    private var hostId = -1L
+
+    @Inject
+    lateinit var tokenManager: TokenManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,16 +64,44 @@ class PrivateLobbyFragment : Fragment() {
         return binding.root
     }
 
-    fun setPlyerCount(count: Int) {
-        //binding.tvPlayersJoined.text = count.toString()
+    private fun refreshPlayersList() {
+        //Timber.d("Refreshing list of players")
+        requireActivity().runOnUiThread {
+            adapter.clearAll()
+            for (s in playersList) {
+                adapter.addElem(PlayerListClass(s))
+            }
+        }
     }
 
+    private fun setupAdapter() {
+        binding.rcPlayerList.layoutManager = LinearLayoutManager(context)
+        binding.rcPlayerList.adapter = adapter
+        refreshPlayersList()
+    }
+
+    fun showHideStartGameButton(){
+        requireActivity().runOnUiThread {
+            if(hostId!=tokenManager.userId){
+                binding.btnStartLobby.visibility=View.GONE
+            }
+            else{
+                binding.btnStartLobby.visibility=View.VISIBLE
+            }
+        }
+    }
 
     fun consumeMessages() {
         viewModel.callback = {
             when (it.substring(0, 3)) {
                 "PJE" -> {
                     val playerJoinedEvent = PlayerJoinedEvent(it)
+
+                    if (!playersList.contains(playerJoinedEvent.nickname)) {
+                        playersList.add(playerJoinedEvent.nickname)
+                        refreshPlayersList()
+                    }
+                    hostId=playerJoinedEvent.hostId
                     playersCountSyncJob?.cancel()
                     playersCountSyncJob = lifecycleScope.launch(Dispatchers.Main) {
                         //setPlyerCount(playerJoinedEvent.playersCount)
@@ -71,9 +112,17 @@ class PrivateLobbyFragment : Fragment() {
                         Snackbar.LENGTH_LONG
                     ).setAction("Action", null)
                     snackbar.show()
+                    showHideStartGameButton()
                 }
                 "PLE" -> {
                     val playerLeftEvent = PlayerLeftEvent(it)
+
+                    if (playersList.contains(playerLeftEvent.nickname)) {
+                        playersList.remove(playerLeftEvent.nickname)
+                        refreshPlayersList()
+                    }
+
+                    hostId=playerLeftEvent.hostId
                     playersCountSyncJob?.cancel()
                     playersCountSyncJob = lifecycleScope.launch(Dispatchers.Main) {
                         //setPlyerCount(playerLeftEvent.playersCount)
@@ -84,6 +133,7 @@ class PrivateLobbyFragment : Fragment() {
                         Snackbar.LENGTH_LONG
                     ).setAction("Action", null)
                     snackbar.show()
+                    showHideStartGameButton()
                 }
                 "SGE" -> {
                     val startGameEvent = StartGameEvent(it)
@@ -121,17 +171,25 @@ class PrivateLobbyFragment : Fragment() {
         if (!viewModel.isInitialized) {
             val queueName = requireArguments().getString("queue_name")
             val exchangeName = requireArguments().getString("exchange_name")!!
+            playersList = requireArguments().getStringArrayList("playersInRoom")!!
+            Timber.d("players list: $playersList")
             Timber.d("queue ${queueName} exchange: ${exchangeName}")
             hash = requireArguments().getString("hash").toString()
-            binding.tvHash.text = hash
             binding.btnHash.text = hash
-            viewModel.initializeAndConsume(queueName!!, exchangeName)
+            viewModel.initializeAndConsume(
+                queueName!!,
+                exchangeName,
+                tokenManager.userId!!,
+                tokenManager.username!!
+            )
             viewModel.basicRoundTime = requireArguments().getLong("time")
         } else {
             //viewModel.sendPlayerReady()
             Timber.d("ViewModel is already initialized")
         }
         consumeMessages()
+        setupAdapter()
+        showHideStartGameButton()
 
         binding.btnHash.setOnClickListener {
             val clipboard =
@@ -144,6 +202,10 @@ class PrivateLobbyFragment : Fragment() {
                 Snackbar.LENGTH_LONG
             ).setAction("Action", null)
             snackbar.show()
+        }
+
+        binding.btnStartLobby.setOnClickListener {
+            viewModel.sendStartGameEvent(tokenManager.userId!!)
         }
 
 

@@ -122,7 +122,9 @@ class SetupGameFragment : Fragment() {
                     bundle.putString("hash", it.data!!.hash)
                     bundle.putLong("time",it.data!!.roundTime/1_000_000)
                     bundle.putInt("playersCount",it.data!!.playersCount)
-                    Timber.d(it.data!!.hash)
+                    val arrayList = ArrayList(it.data!!.playersInRoom)
+                    bundle.putStringArrayList("playersInRoom",arrayList)
+                    Timber.d("w pokoju sa: ${arrayList}")
                     findNavController().navigate(
                         R.id.action_setupGameFragment_to_game_nav_graph,
                         bundle

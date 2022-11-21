@@ -40,7 +40,8 @@
             android:paddingLeft="40dp"
             android:text="@{scoreboard_row.nickname}"
             android:textSize="34sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:autoSizeTextType="none" />
 
         <Space
             android:layout_width="wrap_content"
