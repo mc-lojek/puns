@@ -4,6 +4,7 @@
     <string name="register">ZAREJESTRUJ</string>
     <string name="nick">nick</string>
     <string name="password">hasło</string>
+    <string name="confirmPassword">powtórz hasło</string>
     <string name="forgotPass">ZAPOMNIAŁEM HASŁA</string>
     <string name="resetPass">ZRESETUJ HASŁO</string>
     <string name="quickGame">SZYBKA GRA</string>
