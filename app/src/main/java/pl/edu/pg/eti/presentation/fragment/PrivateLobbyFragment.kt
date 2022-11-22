@@ -126,7 +126,7 @@ class PrivateLobbyFragment : Fragment() {
                     playersCountSyncJob?.cancel()
                     playersCountSyncJob = lifecycleScope.launch(Dispatchers.Main) {
                         //setPlyerCount(playerLeftEvent.playersCount)
-                        Timber.d("Dostalem taki playerLeftEvent: ${playerLeftEvent}")
+                        Timber.d("Dostalem taki playerLeftEvent2: ${playerLeftEvent}")
                     }
                     val snackbar = Snackbar.make(
                         requireView(), "Player ${playerLeftEvent.nickname} left",

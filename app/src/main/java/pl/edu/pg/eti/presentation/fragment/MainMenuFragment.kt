@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -56,10 +57,17 @@ class MainMenuFragment : Fragment() {
         binding.btnJoinRoom.setOnClickListener {
             val hash = binding.etRoomHash.text.toString().uppercase()
             binding.etRoomHash.setText("")
-            //walidacja czy wpisany hash ma 6 znaków 0-9, A-Z
+            if(hash.isEmpty()){
+                Snackbar.make(
+                    requireView(), "Invalid hash",
+                    Snackbar.LENGTH_LONG
+                ).setAction("Action", null).show()
+            }
+            else{
+                //walidacja czy wpisany hash ma 6 znaków 0-9, A-Z
 
-            viewModel.joinRoom(tokenManager.userId!!,tokenManager.username!!, hash)
-
+                viewModel.joinRoom(tokenManager.userId!!,tokenManager.username!!, hash)
+            }
         }
 
         binding.btnCreateRoom.setOnClickListener {
@@ -99,7 +107,19 @@ class MainMenuFragment : Fragment() {
                     viewModel.clearLiveData()
                 }
                 is Resource.Error -> {
-                    Snackbar.make(binding.root, it.message.toString(), Snackbar.LENGTH_SHORT)
+                    //Snackbar.make(binding.root, it.message.toString(), Snackbar.LENGTH_SHORT).show()
+                    if(it.message.toString().contains("IN_GAME")){
+                        Toast.makeText(requireContext(),"Room full, or already started",Toast.LENGTH_SHORT).show()
+                    }else{
+                        var error = it.message.toString().split('"')
+                        Timber.d("size ${error.size} $error")
+                        if(error.size==5){
+                            Toast.makeText(requireContext(),error[3],Toast.LENGTH_SHORT).show()
+                        }
+                        else{
+                            Toast.makeText(requireContext(),it.message,Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
                 is Resource.Loading -> {}
             }

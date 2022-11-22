@@ -11,6 +11,7 @@ import kotlinx.coroutines.withContext
 import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.domain.model.RoomJoin
 import pl.edu.pg.eti.domain.repository.GameRepository
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,6 +27,7 @@ class MainMenuViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 _roomJoinLiveData.postValue(Resource.Loading())
                 val result = repo.joinRoom(userId,nickname, hash)
+                Timber.d(result.toString())
                 _roomJoinLiveData.postValue(result)
             }
         }

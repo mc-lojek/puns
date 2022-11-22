@@ -9,6 +9,8 @@ import pl.edu.pg.eti.domain.model.Room
 import pl.edu.pg.eti.domain.model.RoomConfig
 import pl.edu.pg.eti.domain.model.RoomJoin
 import pl.edu.pg.eti.domain.repository.GameRepository
+import retrofit2.HttpException
+import timber.log.Timber
 import javax.inject.Inject
 
 class GameRepositoryImpl @Inject constructor(
@@ -33,7 +35,9 @@ class GameRepositoryImpl @Inject constructor(
                 )
             }
             Resource.Success(response.toDomain())
-        } catch (e: Exception) {
+        }catch(ex: HttpException){
+            Resource.Error(ex.response()?.errorBody()?.string() ?: "UnknownError")
+        }  catch (e: Exception) {
             e.printStackTrace()
             Resource.Error(e.message ?: "UnknownError")
         }

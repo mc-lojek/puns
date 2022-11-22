@@ -74,26 +74,11 @@ class SetupGameFragment : Fragment() {
                 nickname,
                 RoomConfig(
                     binding.sbNumRounds.progress,
-                    binding.sbNumPlayers.progress,
+                    10,//
                     binding.spinnerTime.selectedItem.toString().toLong() * 1_000_000_000
                 )
             )
         }
-        binding.sbNumPlayers.setOnSeekBarChangeListener(object :
-            SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(
-                seek: SeekBar,
-                progress: Int, fromUser: Boolean
-            ) {
-                binding.tvPlayerNumber.text = progress.toString()
-            }
-
-            override fun onStartTrackingTouch(seek: SeekBar) {
-            }
-
-            override fun onStopTrackingTouch(seek: SeekBar) {
-            }
-        })
         binding.sbNumRounds.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(
