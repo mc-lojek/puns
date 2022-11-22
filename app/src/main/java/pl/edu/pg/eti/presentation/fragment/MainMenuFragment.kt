@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -28,6 +29,7 @@ class MainMenuFragment : Fragment() {
     @Inject
     lateinit var tokenManager: TokenManager
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,6 +41,11 @@ class MainMenuFragment : Fragment() {
             container,
             false
         )
+
+        // Disable going back for popup purposes
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+
+        }
         return binding.root
     }
 

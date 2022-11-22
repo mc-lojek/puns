@@ -13,6 +13,7 @@
             android:layout_width="250dp"
             android:layout_height="50dp"
             android:inputType="textEmailAddress"
+
             android:hint="E-mail"
 
             app:layout_constraintBottom_toBottomOf="parent"

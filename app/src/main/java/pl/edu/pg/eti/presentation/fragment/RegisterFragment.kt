@@ -53,6 +53,7 @@ class RegisterFragment : Fragment() {
             val nick = nick_input.text.toString()
             val email = email_input.text.toString()
             val password = password_input.text.toString()
+            val confirmPassword = confirm_password_input.text.toString()
 
             val patternIncludesComma = "[,]".toRegex()
             val patternAtLeast3Letters = "...".toRegex()
@@ -60,10 +61,16 @@ class RegisterFragment : Fragment() {
             val patternAtLeast1SmallLetter = "[a-z]".toRegex()
             val patternAtLeast1Number = "[0-9]".toRegex()
             val patternEmail = ".+[@].+[.].+".toRegex()
+            val patternIncludesSpace = "[ ]".toRegex()
 
             //check nick
             if (!patternAtLeast3Letters.containsMatchIn (nick)) {
                 registerHint.text = "nick too short"
+                return@setOnClickListener
+            }
+
+            if(patternIncludesSpace.containsMatchIn(nick)){
+                registerHint.text = "nick can't contain space"
                 return@setOnClickListener
             }
 
@@ -73,13 +80,21 @@ class RegisterFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            //check if password contains comma
-            if(patternIncludesComma.containsMatchIn(password)) {
-                registerHint.text = "password cannot contain ','"
+            if(patternIncludesSpace.containsMatchIn(email)){
+                registerHint.text = "email can't contain space"
                 return@setOnClickListener
             }
 
+
             //check password
+            if(patternIncludesComma.containsMatchIn(password)) {
+                registerHint.text = "password can't contain ','"
+                return@setOnClickListener
+            }
+            if(patternIncludesSpace.containsMatchIn(password)){
+                registerHint.text = "password can't contain space"
+                return@setOnClickListener
+            }
             if (!patternAtLeast3Letters.containsMatchIn (password)) {
                 registerHint.text = "password too short"
                 return@setOnClickListener
@@ -96,6 +111,14 @@ class RegisterFragment : Fragment() {
                 registerHint.text = "password need at least one number"
                 return@setOnClickListener
             }
+
+            //check confirm password
+
+            if(!password.equals(confirmPassword)){
+                registerHint.text = "confirmed password does not match"
+                return@setOnClickListener
+            }
+
 
             viewModel.registerUser(nick, password, email)
         }
