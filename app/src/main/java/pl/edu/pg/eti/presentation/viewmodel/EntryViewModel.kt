@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import pl.edu.pg.eti.domain.model.GuestData
 import pl.edu.pg.eti.domain.repository.LoginRepository
 import retrofit2.Response
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel

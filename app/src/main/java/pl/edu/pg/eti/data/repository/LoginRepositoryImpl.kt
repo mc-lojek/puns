@@ -13,7 +13,7 @@ class LoginRepositoryImpl @Inject constructor(private val apiService : ApiServic
         return apiService.loginUser(userWithoutNick = UserWithoutNick(nick, pass))
     }
 
-    override suspend fun loginGuest(): Response<GuestData> {
+    override suspend fun loginGuest(): Response<GuestData>{
         return apiService.loginGuest()
     }
 }

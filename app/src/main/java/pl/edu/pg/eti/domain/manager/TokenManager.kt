@@ -35,5 +35,4 @@ class TokenManager {
         username = null
         isGuest = null
     }
-
 }

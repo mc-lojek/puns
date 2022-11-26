@@ -82,8 +82,8 @@ class LoginFragment : Fragment() {
                     }
                     //Timber.d(tokens?.refresh_token)
                     //Timber.d(tokens?.access_token)
-                    putString("access_token", tokens?.access_token)
-                    putString("refresh_token", tokens?.refresh_token)
+                    putString("access_token", tokens?.access_token).commit()
+                    putString("refresh_token", tokens?.refresh_token).commit()
                     apply()
 
                     tokenManager.initialize(tokens.access_token, tokens.refresh_token)

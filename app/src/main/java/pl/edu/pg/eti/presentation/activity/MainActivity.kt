@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         when (currentDestination.label){
-            "LobbyFragment","GuessingFragment","DrawingFragment","ScoreboardFragment"->{
+            "LobbyFragment","GuessingFragment","DrawingFragment","ScoreboardFragment","EntryFragment"->{
                 return
             }
         }
