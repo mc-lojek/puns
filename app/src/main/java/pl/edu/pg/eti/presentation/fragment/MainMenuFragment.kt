@@ -1,6 +1,9 @@
 package pl.edu.pg.eti.presentation.fragment
 
+import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.provider.Settings.Global.putString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +21,6 @@ import pl.edu.pg.eti.domain.manager.TokenManager
 import pl.edu.pg.eti.presentation.viewmodel.MainMenuViewModel
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.random.Random
 
 @AndroidEntryPoint
 class MainMenuFragment : Fragment() {
@@ -39,6 +41,18 @@ class MainMenuFragment : Fragment() {
             container,
             false
         )
+        var doubleClicked = false
+        // Disable going back for popup purposes
+       /*requireActivity().onBackPressedDispatcher.addCallback(this) {
+
+            if(doubleClicked){
+                System.exit(0);
+            }
+
+            Snackbar.make(requireView(), "Tap again to close game", Snackbar.LENGTH_SHORT).show()
+            doubleClicked = true;
+            Handler().postDelayed({ doubleClicked = false }, 500)
+        }*/
         return binding.root
     }
 
@@ -86,6 +100,17 @@ class MainMenuFragment : Fragment() {
                 bundle.putString("nickname", tokenManager.username!!)
                 findNavController().navigate(R.id.action_mainMenuFragment_to_setupGameFragment,bundle)
             }
+        }
+
+        binding.btnLogout.setOnClickListener {
+            tokenManager.logout()
+            val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return@setOnClickListener
+            with (sharedPref.edit()) {
+                remove("access_token").commit()
+                remove("refresh_token").commit()
+            }
+            Snackbar.make(requireView(), "Logged out", Snackbar.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_mainMenuFragment_to_entryFragment)
         }
     }
 

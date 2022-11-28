@@ -60,6 +60,9 @@
         <action
             android:id="@+id/action_mainMenuFragment_to_setupGameFragment"
             app:destination="@id/setupGameFragment" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_entryFragment"
+            app:destination="@id/entryFragment" />
     </fragment>
 
 
