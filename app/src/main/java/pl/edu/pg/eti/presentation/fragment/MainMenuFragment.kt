@@ -50,19 +50,19 @@ class MainMenuFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        binding.btnFastGame.setOnClickListener {
+        binding.fastGameBtn.setOnClickListener {
             viewModel.joinRoom(tokenManager.userId!!,tokenManager.username!!)
         }
-        binding.btnJoinRoom.setOnClickListener {
-            val hash = binding.etRoomHash.text.toString().uppercase()
-            binding.etRoomHash.setText("")
+        binding.joinBtn.setOnClickListener {
+            val hash = binding.hashEt.text.toString().uppercase()
+            binding.hashEt.setText("")
             //walidacja czy wpisany hash ma 6 znaków 0-9, A-Z
 
             viewModel.joinRoom(tokenManager.userId!!,tokenManager.username!!, hash)
 
         }
 
-        binding.btnCreateRoom.setOnClickListener {
+        binding.createBtn.setOnClickListener {
             Timber.d("guest: ${tokenManager.isGuest!!}")
             if(tokenManager.isGuest!!){
                 val snackbar = Snackbar.make(

@@ -47,7 +47,7 @@ class ForgotPassFragment : Fragment() {
 
     private fun setupListeners() {
         binding.ForgotPassFunctionBtn.setOnClickListener {
-            Timber.d(email_input.text.toString())
+            Timber.d(binding.emailEt.text.toString())
         }
     }
 }

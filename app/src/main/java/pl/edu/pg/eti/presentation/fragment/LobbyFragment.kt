@@ -137,7 +137,7 @@ class LobbyFragment : Fragment() {
             Timber.d("ViewModel is already initialized")
         }
         consumeMessages()
-        binding.btnBack.setOnClickListener {
+        binding.backBtn.setOnClickListener {
             viewModel.leaveRoom()
             viewModel.roomLeaveLiveData.observe(viewLifecycleOwner) {
                 when (it) {

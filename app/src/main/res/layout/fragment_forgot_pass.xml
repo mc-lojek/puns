@@ -4,35 +4,50 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_margin="50dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        <EditText
-            android:id="@+id/email_input"
-            android:layout_width="250dp"
-            android:layout_height="50dp"
-            android:inputType="textEmailAddress"
-            android:hint="E-mail"
-
-            app:layout_constraintBottom_toBottomOf="parent"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:autoSizeTextType="uniform"
+            android:text="@string/reset_"
+            android:textColor="@color/rich_dark"
+            android:textSize="20dp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.2"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            android:background="@drawable/edit_text_border"/>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/email_input"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:hint="@string/email"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/ForgotPassFunction_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/resetPass"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/reset_pass"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.3" />
+            app:layout_constraintTop_toBottomOf="@id/email_input"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

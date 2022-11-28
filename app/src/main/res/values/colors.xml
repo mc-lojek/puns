@@ -10,4 +10,12 @@
     <color name="red">#F44336</color>
     <color name="green">#4CAF50</color>
     <color name="blue">#03A9F4</color>
+
+    <color name="fire_opal">#F15946</color>
+    <color name="fire_opal_dark">#ee341b</color>
+    <color name="orange_yellow">#F9C22E</color>
+    <color name="orange_yellow_dark">#EDB007</color>
+    <color name="rich_dark">#0C090D</color>
+
+
 </resources>

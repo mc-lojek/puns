@@ -7,64 +7,145 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/btn_hash"
+        <TextView
+            android:id="@+id/room_code_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
-            android:text="Button"
+            android:layout_marginTop="80dp"
+            android:text="@string/room_code"
+            android:textColor="@color/rich_dark"
+            android:textSize="26sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_back3" />
-
-        <Button
-            android:id="@+id/btn_back3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="7dp"
-            android:text="back"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/btnStartLobby"
+        <LinearLayout
+            android:id="@+id/hash_ll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
-            android:text="start game"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Click to copy!"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/btn_hash"
-            app:layout_constraintEnd_toEndOf="@+id/btn_hash"
-            app:layout_constraintStart_toStartOf="@+id/btn_hash" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rc_PlayerList"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/btnStartLobby"
+            android:layout_margin="8dp"
+            android:gravity="center_vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+            app:layout_constraintTop_toBottomOf="@id/room_code_tv">
+
+            <TextView
+                android:id="@+id/hash_digit_tv_1"
+                style="@style/room_code_digit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="X" />
+
+            <TextView
+                android:id="@+id/hash_digit_tv_2"
+                style="@style/room_code_digit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="X" />
+
+            <TextView
+                android:id="@+id/hash_digit_tv_3"
+                style="@style/room_code_digit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="X" />
+
+            <TextView
+                android:id="@+id/hash_digit_tv_4"
+                style="@style/room_code_digit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="X" />
+
+            <TextView
+                android:id="@+id/hash_digit_tv_5"
+                style="@style/room_code_digit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="X" />
+
+            <TextView
+                android:id="@+id/hash_digit_tv_6"
+                style="@style/room_code_digit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="X" />
+
+            <ImageView
+                android:id="@+id/room_code_copy_btn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/ic_baseline_content_copy_24"
+                app:layout_constraintEnd_toEndOf="@id/hash_ll"
+                app:layout_constraintStart_toStartOf="@id/hash_ll"
+                app:layout_constraintTop_toBottomOf="@id/hash_ll" />
+
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/room_code_hint_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Players in lobby:"
-            app:layout_constraintEnd_toEndOf="@+id/btn_hash"
-            app:layout_constraintStart_toStartOf="@+id/btn_hash"
-            app:layout_constraintTop_toBottomOf="@+id/btn_hash" />
+            android:layout_marginTop="8dp"
+            android:text="@string/room_code_hint"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hash_ll" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginVertical="8dp"
+            android:background="@color/rich_dark"
+            app:layout_constraintTop_toBottomOf="@id/room_code_hint_tv" />
+
+        <Button
+            android:id="@+id/start_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="16dp"
+            android:layout_marginHorizontal="24dp"
+            android:text="@string/start_game"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/players_rv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/start_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/players_tv"
+            tools:listitem="@layout/player_list_element" />
+
+        <TextView
+            android:id="@+id/players_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/rounded_corner_borders"
+            android:backgroundTint="@color/orange_yellow_dark"
+            android:padding="4dp"
+            android:text="@string/players_in_lobby"
+            android:textColor="@color/rich_dark"
+            android:textSize="22sp"
+            app:layout_constraintTop_toBottomOf="@+id/room_code_hint_tv" />
+
+        <ImageView
+            android:id="@+id/back_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_baseline_arrow_back_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

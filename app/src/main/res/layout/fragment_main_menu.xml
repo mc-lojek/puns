@@ -6,65 +6,79 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.fragment.MainMenuFragment">
+        android:padding="50dp"
+        tools:context=".presentation.fragment.EntryFragment">
+
+        <ImageView
+            android:id="@+id/logo_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="120dp"
+            android:src="@drawable/ic_duck"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/rich_dark"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/logo_iv"
+            android:text="@string/lets_play"
+            android:textAllCaps="true"/>
 
         <!-- TODO: Update blank fragment layout -->
+        <Button
+            android:id="@+id/fast_game_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="20dp"
+            android:text="@string/quick_game"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name_tv" />
 
         <Button
-            android:id="@+id/btnFastGame"
-            android:layout_width="wrap_content"
+            android:id="@+id/create_btn"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="fast game"
+            android:elevation="20dp"
+            android:text="@string/create_lobby"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="77dp" />
+            app:layout_constraintTop_toBottomOf="@id/fast_game_btn" />
 
-        <Button
-            android:id="@+id/btnCreateRoom"
-            android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/hash_input"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Create room"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnFastGame" />
+            android:hint="@string/room_code"
+            app:endIconMode="clear_text"
+            app:layout_constraintTop_toBottomOf="@id/create_btn">
 
-        <LinearLayout
-            android:id="@+id/linearLayout6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/btnJoinRoom"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnCreateRoom">
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/hash_et"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Room id:"
-                android:textSize="28sp" />
+                android:inputType="textEmailAddress" />
 
-            <EditText
-                android:id="@+id/etRoomHash"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="textPersonName" />
-
-        </LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/btnJoinRoom"
-            android:layout_width="wrap_content"
+            android:id="@+id/join_btn"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="join room"
+            android:elevation="20dp"
+            android:text="@string/join_lobby"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
+            app:layout_constraintTop_toBottomOf="@id/hash_input" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

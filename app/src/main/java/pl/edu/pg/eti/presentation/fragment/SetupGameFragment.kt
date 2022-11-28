@@ -64,7 +64,7 @@ class SetupGameFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        binding.btnBack.setOnClickListener {
+        binding.backBtn.setOnClickListener {
             findNavController().navigateUp()
         }
         binding.btnStartLobby.setOnClickListener {

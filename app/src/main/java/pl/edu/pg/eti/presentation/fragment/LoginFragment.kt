@@ -58,10 +58,8 @@ class LoginFragment : Fragment() {
 
     private fun setupListeners() {
 
-        loginHint.text = ""
-
         binding.LoginFunctionBtn.setOnClickListener {
-            viewModel.loginUser(email_input.text.toString(), password_input.text.toString())
+            viewModel.loginUser(binding.emailEt.text.toString(), binding.passwordEt.text.toString())
         }
 
         binding.ForgotPassBtn.setOnClickListener {
@@ -96,7 +94,6 @@ class LoginFragment : Fragment() {
             else{
                 Timber.d(it.code().toString())
                 //TODO: handle errors
-                loginHint.text = "user not found"
             }
         }
     }
