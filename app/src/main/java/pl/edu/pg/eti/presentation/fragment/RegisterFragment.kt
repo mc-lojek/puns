@@ -48,7 +48,7 @@ class RegisterFragment : Fragment() {
     private fun setupListeners() {
         binding.registerBtn.setOnClickListener {
 
-            //registerHint.text = ""
+            register_hint.text = ""
 
             val nick = nickname_et.text.toString()
             val email = email_et.text.toString()
@@ -63,37 +63,37 @@ class RegisterFragment : Fragment() {
 
             //check nick
             if (!patternAtLeast3Letters.containsMatchIn (nick)) {
-                //registerHint.text = "nick too short"
+                register_hint.text = "nick too short"
                 return@setOnClickListener
             }
 
             //check email
             if (!patternEmail.containsMatchIn (email)) {
-                //registerHint.text = "incorrect email"
+                register_hint.text = "incorrect email"
                 return@setOnClickListener
             }
 
             //check if password contains comma
             if(patternIncludesComma.containsMatchIn(password)) {
-                //registerHint.text = "password cannot contain ','"
+                register_hint.text = "password cannot contain ','"
                 return@setOnClickListener
             }
 
             //check password
             if (!patternAtLeast3Letters.containsMatchIn (password)) {
-//                registerHint.text = "password too short"
+                register_hint.text = "password too short"
                 return@setOnClickListener
             }
             if (!patternAtLeast1BigLetter.containsMatchIn (password)) {
-//                registerHint.text = "password need at least one big letter"
+                register_hint.text = "password need at least one big letter"
                 return@setOnClickListener
             }
             if (!patternAtLeast1SmallLetter.containsMatchIn (password)) {
-//                registerHint.text = "password need at least one small letter"
+                register_hint.text = "password need at least one small letter"
                 return@setOnClickListener
             }
             if (!patternAtLeast1Number.containsMatchIn (password)) {
-//                registerHint.text = "password need at least one number"
+                register_hint.text = "password need at least one number"
                 return@setOnClickListener
             }
 
