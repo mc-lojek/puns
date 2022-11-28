@@ -24,8 +24,13 @@ class MessageRecyclerViewAdapter(
             notifyItemInserted(0)
         }
         else{
-            Timber.d("${message.nickname} ${message.content}")
-            this.messageList.add(0,message)
+            if(message.level==1L){
+                this.messageList.add(0,ChatMessageEvent(message.nickname,"So close! ${message.content}",1))
+            }
+            else{
+                Timber.d("${message.nickname} ${message.content}")
+                this.messageList.add(0,message)
+            }
             notifyItemInserted(0)
         }
     }
@@ -61,7 +66,7 @@ class MessageRecyclerViewAdapter(
             if(message.level==3L){
                 v.findViewById<TextView>(R.id.tvContent).setTextColor(Color.parseColor("#00ff00"))
             }
-            else if(message.level==2L){
+            else if(message.level==1L){
                 v.findViewById<TextView>(R.id.tvContent).setTextColor(Color.parseColor("#ffa500"))
             }
             //todo message.level obsługiwanie
