@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -43,8 +44,7 @@ class MainMenuFragment : Fragment() {
         )
         var doubleClicked = false
         // Disable going back for popup purposes
-       /*requireActivity().onBackPressedDispatcher.addCallback(this) {
-
+        requireActivity().onBackPressedDispatcher.addCallback(this){
             if(doubleClicked){
                 System.exit(0);
             }
@@ -52,7 +52,7 @@ class MainMenuFragment : Fragment() {
             Snackbar.make(requireView(), "Tap again to close game", Snackbar.LENGTH_SHORT).show()
             doubleClicked = true;
             Handler().postDelayed({ doubleClicked = false }, 500)
-        }*/
+        }
         return binding.root
     }
 

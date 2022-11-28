@@ -93,6 +93,7 @@ class LoginFragment : Fragment() {
             }
             else{
                 Timber.d(it.code().toString())
+                login_hint.text = "user not found"
                 //TODO: handle errors
             }
         }
