@@ -192,14 +192,14 @@ class GuessingFragment : Fragment() {
     }
 
     private fun waitForImageView() {
-        val viewTreeObserver = binding.imageView.viewTreeObserver
+        val viewTreeObserver = binding.canvasIv.viewTreeObserver
         if (viewTreeObserver.isAlive) {
             viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
                 override fun onGlobalLayout() {
                     view!!.viewTreeObserver.removeOnGlobalLayoutListener(this)
                     bitmap = Bitmap.createBitmap(
-                        binding.imageView.measuredWidth,
-                        binding.imageView.measuredWidth,
+                        binding.canvasIv.measuredWidth,
+                        binding.canvasIv.measuredWidth,
                         Bitmap.Config.RGB_565
                     )
                     setStartingValues()
@@ -209,7 +209,7 @@ class GuessingFragment : Fragment() {
     }
 
     private fun setStartingValues() {
-        screenRatio = binding.imageView.width / BASIC_CANVAS_SIZE
+        screenRatio = binding.canvasIv.width / BASIC_CANVAS_SIZE
         canvas = Canvas(bitmap)
         canvas.drawColor(Color.parseColor("#FFFCE8"))
         paint.color = Color.BLACK
@@ -243,7 +243,7 @@ class GuessingFragment : Fragment() {
         }
         requireActivity().runOnUiThread {
             canvas.drawLine(floatStartX, floatStartY, floatEndX, floatEndY, paint1)
-            binding.imageView.setImageBitmap(bitmap)
+            binding.canvasIv.setImageBitmap(bitmap)
         }
     }
 

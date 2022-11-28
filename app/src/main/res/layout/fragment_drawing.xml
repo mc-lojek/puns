@@ -30,6 +30,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1/3"
+                android:textColor="@color/rich_dark"
+                android:textStyle="bold"
                 tools:text="1/3" />
         </LinearLayout>
 
@@ -52,7 +54,9 @@
                 android:id="@+id/tvTimeLeft"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="60" />
+                android:text="60"
+                android:textColor="@color/rich_dark"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvTimeLeft2"
@@ -62,7 +66,7 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/canvas_iv"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/square_canvas"
@@ -81,82 +85,115 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/canvas_iv"
             app:layout_constraintVertical_bias="0.0">
 
             <TextView
-                android:id="@+id/tvKeyword"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:padding="5dp"
-                android:paddingRight="5dp"
-                android:text="Hasło:"
-                android:textAlignment="textEnd"
-                android:textSize="30sp"
-                app:layout_constraintBottom_toTopOf="@+id/btnClear"
-                app:layout_constraintEnd_toEndOf="@+id/btnMinus"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvKeywordHeadline"
-                tools:text="Okoń" />
-
-            <TextView
-                android:id="@+id/tvKeywordHeadline"
+                android:id="@+id/keyword_label_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:paddingLeft="5dp"
                 android:text="Keyword:"
                 android:textAlignment="textStart"
-                android:textSize="30sp"
-                app:layout_constraintEnd_toEndOf="@+id/tvKeyword"
+                android:textColor="@color/rich_dark"
+                android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/colorSeekBar" />
+                app:layout_constraintTop_toBottomOf="@id/color_picker" />
 
-            <Button
-                android:id="@+id/btnPlus"
-                android:layout_width="96dp"
-                android:layout_height="wrap_content"
-                android:text="+"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <Button
-                android:id="@+id/btnMinus"
-                android:layout_width="96dp"
-                android:layout_height="wrap_content"
-                android:text="-"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btnPlus" />
+            <TextView
+                android:id="@+id/keyword_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:padding="5dp"
+                android:paddingRight="5dp"
+                android:text="Hasło:"
+                android:textAlignment="textEnd"
+                android:textColor="@color/rich_dark"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@id/center_gl"
+                app:layout_constraintStart_toStartOf="@id/keyword_label_tv"
+                app:layout_constraintTop_toBottomOf="@id/keyword_label_tv"
+                tools:text="Okoń" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/chatRecyclerView"
+                android:id="@+id/chat_rv"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btnMinus"
-                app:layout_constraintTop_toBottomOf="@+id/colorSeekBar"
+                app:layout_constraintStart_toStartOf="@id/center_gl"
+                app:layout_constraintTop_toBottomOf="@+id/color_picker"
                 tools:itemCount="2"
                 tools:listitem="@layout/chat_recycler_view_message" />
 
-            <Button
-                android:id="@+id/btnClear"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/clear_btn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Clear canvas"
-                app:layout_constraintBottom_toTopOf="@+id/btnMinus"
-                app:layout_constraintEnd_toEndOf="@+id/btnMinus"
+                android:layout_margin="4dp"
+                app:icon="@drawable/ic_baseline_refresh_24"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/left_gl1"
                 app:layout_constraintStart_toStartOf="parent" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/paint_size_inc_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                app:icon="@drawable/ic_baseline_exposure_plus_1_24"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/left_gl2"
+                app:layout_constraintStart_toStartOf="@id/left_gl1" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/paint_size_dec_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                app:icon="@drawable/ic_baseline_exposure_neg_1_24"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/center_gl"
+                app:layout_constraintStart_toStartOf="@id/left_gl2" />
 
             <com.rtugeek.android.colorseekbar.ColorSeekBar
-                android:id="@+id/colorSeekBar"
+                android:id="@+id/color_picker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 app:colorSeekBarColorSeeds="@array/material_colors"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="MissingConstraints" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/center_gl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/left_gl1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.18" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/left_gl2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.34" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

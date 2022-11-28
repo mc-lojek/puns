@@ -26,6 +26,7 @@
     <string name="time_per_round">Time per round</string>
     <string name="play_as_guest">Play as guest</string>
     <string name="players_in_lobby">Players in lobby:</string>
+    <string name="scoreboard">SCOREBOARD</string>
     <string name="placeholder">LOREM IPSUM</string>
 
     <string name="keyword">Keyword:</string>

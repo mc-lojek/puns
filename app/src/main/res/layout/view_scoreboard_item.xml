@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="scoreboard_row"
             type="pl.edu.pg.eti.domain.model.ScoreboardItemModel" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@drawable/rounded_corner_borders"
@@ -17,43 +18,67 @@
 
         <ImageView
             android:id="@+id/ivPlace"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_first_place" />
+            android:padding="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/ic_trophy"
+            app:tint="@color/fire_opal_dark" />
 
         <TextView
             android:id="@+id/tvPlace"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_gravity="center"
-            android:paddingLeft="10dp"
+            android:layout_marginStart="10dp"
             android:text="@{scoreboard_row.place}"
-            android:textSize="34sp" />
+            android:textSize="34sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivPlace"
+            app:layout_constraintEnd_toEndOf="@id/left_gl"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvNick"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_gravity="center"
-            android:paddingLeft="40dp"
             android:text="@{scoreboard_row.nickname}"
-            android:textSize="34sp"
+            android:textSize="22sp"
             android:textStyle="bold"
-            app:autoSizeTextType="none" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:textColor="@color/rich_dark"
+            app:autoSizeTextType="none"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/right_gl"
+            app:layout_constraintStart_toStartOf="@id/left_gl"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvPts"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@{scoreboard_row.points}"
-            android:textSize="34sp" />
+            android:textSize="34sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/right_gl"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/left_gl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.25" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/right_gl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.8" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

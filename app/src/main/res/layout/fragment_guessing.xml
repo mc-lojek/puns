@@ -67,7 +67,7 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/canvas_iv"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/square_canvas"
@@ -78,6 +78,24 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chatRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/canvas_iv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/canvas_iv"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:itemCount="5"
+            tools:listitem="@layout/chat_recycler_view_message" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/center_gl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="0dp"
@@ -86,20 +104,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/canvas_iv"
             app:layout_constraintVertical_bias="1.0">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/chatRecyclerView"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textGuess"
-                tools:itemCount="5"
-                tools:listitem="@layout/chat_recycler_view_message" />
 
             <EditText
                 android:id="@+id/textGuess"
@@ -107,14 +113,13 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Write your guess here"
+                android:imeOptions="actionDone"
                 android:minHeight="48dp"
+                android:singleLine="true"
                 app:layout_constraintEnd_toStartOf="@+id/btnSend"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Guess"
-                android:singleLine="true"
-                android:imeOptions="actionDone"
-                />
+                tools:text="Guess" />
 
             <Button
                 android:id="@+id/btnSend"

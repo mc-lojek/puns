@@ -67,7 +67,7 @@ class DrawingFragment : Fragment() {
         timeLeft = viewModel.basicRoundTime
         binding.tvRound.text =
             "${viewModel.roundsPassed + 1}/${viewModel.roundsLeft + viewModel.roundsPassed + 1}"
-        binding.tvKeyword.text = viewModel.keyword
+        binding.keywordTv.text = viewModel.keyword
         timeSyncJob = lifecycleScope.launch(Dispatchers.Main) {
             while (timeLeft > 0) {
                 binding.tvTimeLeft.text = ((timeLeft + 10) / 1000).toString()
@@ -85,7 +85,7 @@ class DrawingFragment : Fragment() {
                     val message = ChatMessageEvent(it)
                     requireActivity().runOnUiThread {
                         adapter.addMessage(message)
-                        binding.chatRecyclerView.smoothScrollToPosition(0)
+                        binding.chatRv.smoothScrollToPosition(0)
                     }
                 }
                 "TSE" -> {
@@ -105,7 +105,7 @@ class DrawingFragment : Fragment() {
                     val message = PlayerHitEvent(it)
                     requireActivity().runOnUiThread {
                         adapter.addMessage(message)
-                        binding.chatRecyclerView.smoothScrollToPosition(0)
+                        binding.chatRv.smoothScrollToPosition(0)
                     }
                 }
                 "SBE" -> {
@@ -149,10 +149,10 @@ class DrawingFragment : Fragment() {
                 "BIE" -> {
                     val message = BlockInteractionEvent(it)
                     requireActivity().runOnUiThread {
-                        adapter.addMessage(ChatMessageEvent("",message.keyword,5))
-                        binding.chatRecyclerView.smoothScrollToPosition(0)
-                        binding.btnClear.isEnabled=false
-                        blockDrawing=true
+                        adapter.addMessage(ChatMessageEvent("", message.keyword, 5))
+                        binding.chatRv.smoothScrollToPosition(0)
+                        binding.clearBtn.isEnabled = false
+                        blockDrawing = true
                     }
                 }
             }
@@ -162,14 +162,14 @@ class DrawingFragment : Fragment() {
 
 
     private fun waitForImageView() {
-        val viewTreeObserver = binding.imageView.viewTreeObserver
+        val viewTreeObserver = binding.canvasIv.viewTreeObserver
         if (viewTreeObserver.isAlive) {
             viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
                 override fun onGlobalLayout() {
                     view!!.viewTreeObserver.removeOnGlobalLayoutListener(this)
                     bitmap = Bitmap.createBitmap(
-                        binding.imageView.measuredWidth,
-                        binding.imageView.measuredWidth,
+                        binding.canvasIv.measuredWidth,
+                        binding.canvasIv.measuredWidth,
                         Bitmap.Config.RGB_565
                     )
                     setStartingValues()
@@ -179,12 +179,12 @@ class DrawingFragment : Fragment() {
     }
 
     private fun setupAdapter() {
-        binding.chatRecyclerView.layoutManager = LinearLayoutManager(context)
-        binding.chatRecyclerView.adapter = adapter
+        binding.chatRv.layoutManager = LinearLayoutManager(context)
+        binding.chatRv.adapter = adapter
     }
 
     private fun setStartingValues() {
-        screenRatio = binding.imageView.width / BASIC_CANVAS_SIZE
+        screenRatio = binding.canvasIv.width / BASIC_CANVAS_SIZE
         canvas = Canvas(bitmap)
         canvas.drawColor(Color.parseColor("#FFFCE8"))
         paint.color = -769226
@@ -199,7 +199,7 @@ class DrawingFragment : Fragment() {
     }
 
     private fun setupDrawingListener() {
-        binding.imageView.setOnTouchListener(object : View.OnTouchListener {
+        binding.canvasIv.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 when (event?.action) {
                     MotionEvent.ACTION_DOWN -> {
@@ -224,31 +224,31 @@ class DrawingFragment : Fragment() {
         }
         )
 
-        binding.colorSeekBar.setOnColorChangeListener { progress, color ->
+        binding.colorPicker.setOnColorChangeListener { progress, color ->
             paint.color = color
         }
 
 
 
-        binding.btnClear.setOnClickListener {
+        binding.clearBtn.setOnClickListener {
             clearCanvas()
             viewModel.sendClearCanvas()
         }
 
-        binding.btnPlus.setOnClickListener {
+        binding.paintSizeIncBtn.setOnClickListener {
             paint.strokeWidth =
                 if (paint.strokeWidth + 2f > 20f) 20f else paint.strokeWidth + 2f
 
         }
-        binding.btnMinus.setOnClickListener {
+        binding.paintSizeDecBtn.setOnClickListener {
             paint.strokeWidth = if (paint.strokeWidth - 2f < 6) 6f else paint.strokeWidth - 2f
         }
     }
 
     private fun drawPainting() {
-        if(!blockDrawing){
+        if (!blockDrawing) {
             canvas.drawLine(floatStartX, floatStartY, floatEndX, floatEndY, paint)
-            binding.imageView.setImageBitmap(bitmap)
+            binding.canvasIv.setImageBitmap(bitmap)
             viewModel.sendDrawLineEvent(
                 floatStartX,
                 floatStartY,
