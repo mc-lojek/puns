@@ -46,14 +46,13 @@ class RegisterFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        binding.RegisterFunctionBtn.setOnClickListener {
+        binding.registerBtn.setOnClickListener {
 
-            registerHint.text = ""
+            //registerHint.text = ""
 
-            val nick = nick_input.text.toString()
-            val email = email_input.text.toString()
-            val password = password_input.text.toString()
-            val confirmPassword = confirm_password_input.text.toString()
+            val nick = nickname_et.text.toString()
+            val email = email_et.text.toString()
+            val password = password_et.text.toString()
 
             val patternIncludesComma = "[,]".toRegex()
             val patternAtLeast3Letters = "...".toRegex()
@@ -61,64 +60,42 @@ class RegisterFragment : Fragment() {
             val patternAtLeast1SmallLetter = "[a-z]".toRegex()
             val patternAtLeast1Number = "[0-9]".toRegex()
             val patternEmail = ".+[@].+[.].+".toRegex()
-            val patternIncludesSpace = "[ ]".toRegex()
 
             //check nick
             if (!patternAtLeast3Letters.containsMatchIn (nick)) {
-                registerHint.text = "nick too short"
-                return@setOnClickListener
-            }
-
-            if(patternIncludesSpace.containsMatchIn(nick)){
-                registerHint.text = "nick can't contain space"
+                //registerHint.text = "nick too short"
                 return@setOnClickListener
             }
 
             //check email
             if (!patternEmail.containsMatchIn (email)) {
-                registerHint.text = "incorrect email"
+                //registerHint.text = "incorrect email"
                 return@setOnClickListener
             }
 
-            if(patternIncludesSpace.containsMatchIn(email)){
-                registerHint.text = "email can't contain space"
+            //check if password contains comma
+            if(patternIncludesComma.containsMatchIn(password)) {
+                //registerHint.text = "password cannot contain ','"
                 return@setOnClickListener
             }
-
 
             //check password
-            if(patternIncludesComma.containsMatchIn(password)) {
-                registerHint.text = "password can't contain ','"
-                return@setOnClickListener
-            }
-            if(patternIncludesSpace.containsMatchIn(password)){
-                registerHint.text = "password can't contain space"
-                return@setOnClickListener
-            }
             if (!patternAtLeast3Letters.containsMatchIn (password)) {
-                registerHint.text = "password too short"
+//                registerHint.text = "password too short"
                 return@setOnClickListener
             }
             if (!patternAtLeast1BigLetter.containsMatchIn (password)) {
-                registerHint.text = "password need at least one big letter"
+//                registerHint.text = "password need at least one big letter"
                 return@setOnClickListener
             }
             if (!patternAtLeast1SmallLetter.containsMatchIn (password)) {
-                registerHint.text = "password need at least one small letter"
+//                registerHint.text = "password need at least one small letter"
                 return@setOnClickListener
             }
             if (!patternAtLeast1Number.containsMatchIn (password)) {
-                registerHint.text = "password need at least one number"
+//                registerHint.text = "password need at least one number"
                 return@setOnClickListener
             }
-
-            //check confirm password
-
-            if(!password.equals(confirmPassword)){
-                registerHint.text = "confirmed password does not match"
-                return@setOnClickListener
-            }
-
 
             viewModel.registerUser(nick, password, email)
         }

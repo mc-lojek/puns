@@ -1,27 +1,37 @@
 <resources>
     <string name="app_name">Puns</string>
-    <string name="login">ZALOGUJ</string>
-    <string name="register">ZAREJESTRUJ</string>
-    <string name="nick">nick</string>
-    <string name="password">hasło</string>
-    <string name="confirmPassword">powtórz hasło</string>
-    <string name="forgotPass">ZAPOMNIAŁEM HASŁA</string>
-    <string name="resetPass">ZRESETUJ HASŁO</string>
-    <string name="quickGame">SZYBKA GRA</string>
-    <string name="createLobby">ZAŁÓŻ POCZEKALNIE</string>
-    <string name="options">USTAWIENIA</string>
-    <string name="creators">TWÓRCY</string>
-    <string name="statistics">STATYSTYKI</string>
-    <string name="create">STWÓRZ</string>
-    <string name="numerOfPlayers">ILE GRACZY</string>
-    <string name="numerOfRounds">ILE RUND</string>
-    <string name="timePerRound">CZAS NA TURE</string>
-    <string name="playGuest">GRAJ JAKO GOŚĆ</string>
+    <string name="login">Login</string>
+    <string name="login_">Log in to your account!</string>
+    <string name="register">Register</string>
+    <string name="register_">Register new account!</string>
+    <string name="nick">Nick</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
+    <string name="repeat_password">Repeat password</string>
+    <string name="forgot_pass">Forgot password</string>
+    <string name="reset_pass">Reset Password</string>
+    <string name="reset_">Enter your e-mail!</string>
+    <string name="lets_play">Let\'s play!</string>
+    <string name="quick_game">Quick game</string>
+    <string name="create_lobby">Create lobby</string>
+    <string name="join_lobby">Join lobby</string>
+    <string name="start_game">Start game</string>
+    <string name="options">Settings</string>
+    <string name="statistics">Statistics</string>
+    <string name="create">Create</string>
+    <string name="room_code">Room code</string>
+    <string name="room_code_hint">Share it with your friends!</string>
+    <string name="number_of_players">Number of players</string>
+    <string name="number_of_rounds">Number of rounds</string>
+    <string name="time_per_round">Time per round</string>
+    <string name="play_as_guest">Play as guest</string>
+    <string name="players_in_lobby">Players in lobby:</string>
+    <string name="scoreboard">SCOREBOARD</string>
     <string name="placeholder">LOREM IPSUM</string>
 
-    <string name="keyword">Hasło: </string>
+    <string name="keyword">Keyword:</string>
 
-    <string-array name="timePerRound">
+    <string-array name="time_per_round">
         <item>45s</item>
         <item>60s</item>
         <item>90s</item>
@@ -30,7 +40,7 @@
         <item>180s</item>
     </string-array>
 
-    <string name="keyword_prefix">Hasło</string>
+    <string name="keyword_prefix">Keyword </string>
 
     <string-array name="time_array">
         <item>30</item>

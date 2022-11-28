@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -29,7 +28,6 @@ class MainMenuFragment : Fragment() {
     @Inject
     lateinit var tokenManager: TokenManager
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,11 +39,6 @@ class MainMenuFragment : Fragment() {
             container,
             false
         )
-
-        // Disable going back for popup purposes
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-
-        }
         return binding.root
     }
 
@@ -58,26 +51,27 @@ class MainMenuFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        binding.btnFastGame.setOnClickListener {
+        binding.fastGameBtn.setOnClickListener {
             viewModel.joinRoom(tokenManager.userId!!,tokenManager.username!!)
         }
-        binding.btnJoinRoom.setOnClickListener {
-            val hash = binding.etRoomHash.text.toString().uppercase()
-            binding.etRoomHash.setText("")
+        binding.joinBtn.setOnClickListener {
+
+            val hash = binding.hashEt.text.toString().uppercase()
+            binding.hashEt.setText("")
             if(hash.isEmpty()){
                 Snackbar.make(
                     requireView(), "Invalid hash",
                     Snackbar.LENGTH_LONG
                 ).setAction("Action", null).show()
             }
-            else{
+            else {
                 //walidacja czy wpisany hash ma 6 znaków 0-9, A-Z
 
-                viewModel.joinRoom(tokenManager.userId!!,tokenManager.username!!, hash)
+                viewModel.joinRoom(tokenManager.userId!!, tokenManager.username!!, hash)
             }
         }
 
-        binding.btnCreateRoom.setOnClickListener {
+        binding.createBtn.setOnClickListener {
             Timber.d("guest: ${tokenManager.isGuest!!}")
             if(tokenManager.isGuest!!){
                 val snackbar = Snackbar.make(
@@ -114,7 +108,7 @@ class MainMenuFragment : Fragment() {
                     viewModel.clearLiveData()
                 }
                 is Resource.Error -> {
-                    //Snackbar.make(binding.root, it.message.toString(), Snackbar.LENGTH_SHORT).show()
+                    //Snackbar.make(binding.root, it.message.toString(), Snackbar.LENGTH_SHORT)
                     if(it.message.toString().contains("IN_GAME")){
                         Toast.makeText(requireContext(),"Room full, or already started",Toast.LENGTH_SHORT).show()
                     }else{

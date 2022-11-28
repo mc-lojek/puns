@@ -75,18 +75,18 @@ class PrivateLobbyFragment : Fragment() {
     }
 
     private fun setupAdapter() {
-        binding.rcPlayerList.layoutManager = LinearLayoutManager(context)
-        binding.rcPlayerList.adapter = adapter
+        binding.playersRv.layoutManager = LinearLayoutManager(context)
+        binding.playersRv.adapter = adapter
         refreshPlayersList()
     }
 
     fun showHideStartGameButton(){
         requireActivity().runOnUiThread {
             if(hostId!=tokenManager.userId){
-                binding.btnStartLobby.visibility=View.GONE
+                binding.startBtn.visibility=View.GONE
             }
             else{
-                binding.btnStartLobby.visibility=View.VISIBLE
+                binding.startBtn.visibility=View.VISIBLE
             }
         }
     }
@@ -175,7 +175,12 @@ class PrivateLobbyFragment : Fragment() {
             Timber.d("players list: $playersList")
             Timber.d("queue ${queueName} exchange: ${exchangeName}")
             hash = requireArguments().getString("hash").toString()
-            binding.btnHash.text = hash
+            binding.hashDigitTv1.text = hash[0].toString()
+            binding.hashDigitTv2.text = hash[1].toString()
+            binding.hashDigitTv3.text = hash[2].toString()
+            binding.hashDigitTv4.text = hash[3].toString()
+            binding.hashDigitTv5.text = hash[4].toString()
+            binding.hashDigitTv6.text = hash[5].toString()
             viewModel.initializeAndConsume(
                 queueName!!,
                 exchangeName,
@@ -191,7 +196,7 @@ class PrivateLobbyFragment : Fragment() {
         setupAdapter()
         showHideStartGameButton()
 
-        binding.btnHash.setOnClickListener {
+        binding.roomCodeCopyBtn.setOnClickListener {
             val clipboard =
                 requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("hash", hash)
@@ -204,12 +209,12 @@ class PrivateLobbyFragment : Fragment() {
             snackbar.show()
         }
 
-        binding.btnStartLobby.setOnClickListener {
+        binding.startBtn.setOnClickListener {
             viewModel.sendStartGameEvent(tokenManager.userId!!)
         }
 
 
-        binding.btnBack3.setOnClickListener {
+        binding.backBtn.setOnClickListener {
             viewModel.leaveRoom()
             viewModel.roomLeaveLiveData.observe(viewLifecycleOwner) {
                 when (it) {

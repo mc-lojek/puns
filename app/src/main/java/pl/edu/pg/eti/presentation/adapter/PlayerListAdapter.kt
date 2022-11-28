@@ -1,5 +1,7 @@
 package pl.edu.pg.eti.presentation.adapter
 
+import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,13 +14,19 @@ import timber.log.Timber
 
 
 class PlayerListAdapter(
-    private val playerList: MutableList<PlayerListClass>
+    private val playerList: MutableList<PlayerListClass>,
 ) : RecyclerView.Adapter<PlayerListAdapter.ViewHolder>() {
-
 
     class ViewHolder(val v: View) :
         RecyclerView.ViewHolder(v) {
-        fun bind(elem: PlayerListClass) {
+        fun bind(elem: PlayerListClass, position: Int) {
+
+            if(position % 2 == 1) {
+                v.setBackgroundColor(Color.parseColor("#EDB007"))
+            } else {
+                v.setBackgroundColor(Color.parseColor("#F9C22E"))
+            }
+
             v.tv_nickname.text = elem.nickname
         }
     }
@@ -40,7 +48,7 @@ class PlayerListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val elem = playerList.get(position)
-        holder.bind(elem)
+        holder.bind(elem, position)
     }
 
     override fun getItemCount(): Int {

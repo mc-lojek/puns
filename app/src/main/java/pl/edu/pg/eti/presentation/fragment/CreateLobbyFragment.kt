@@ -38,7 +38,7 @@ class CreateLobbyFragment : Fragment() {
     }
 
     private fun setupAdapter() {
-        adapter = ArrayAdapter.createFromResource(requireContext(), R.array.timePerRound, android.R.layout.simple_spinner_item)
+        adapter = ArrayAdapter.createFromResource(requireContext(), R.array.time_per_round, android.R.layout.simple_spinner_item)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.TimePerRoundSpinner.adapter = adapter
     }
