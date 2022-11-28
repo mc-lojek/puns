@@ -78,16 +78,30 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/chatRecyclerView"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@id/canvas_iv"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/canvas_iv"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:itemCount="5"
-            tools:listitem="@layout/chat_recycler_view_message" />
+            android:orientation="horizontal"
+            android:weightSum="2"
+            app:layout_constraintBottom_toBottomOf="@+id/canvas_iv"
+            app:layout_constraintEnd_toEndOf="@+id/canvas_iv"
+            app:layout_constraintStart_toStartOf="@+id/canvas_iv"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/chatRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                tools:itemCount="5"
+                tools:listitem="@layout/chat_recycler_view_message" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+        </LinearLayout>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/center_gl"
