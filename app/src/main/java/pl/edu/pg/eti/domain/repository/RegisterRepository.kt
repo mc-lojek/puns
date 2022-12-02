@@ -1,9 +1,8 @@
 package pl.edu.pg.eti.domain.repository
 
-import pl.edu.pg.eti.domain.model.User
-import retrofit2.Response
+import pl.edu.pg.eti.data.network.Resource
 
 
 interface RegisterRepository {
-    suspend fun registerUser(nick: String, pass: String, mail: String): Response<Void>
+    suspend fun registerUser(nick: String, pass: String, mail: String): Resource<Void>
 }

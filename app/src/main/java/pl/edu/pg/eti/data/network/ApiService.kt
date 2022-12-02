@@ -40,11 +40,11 @@ interface ApiService {
     suspend fun getAllUsers(): List<User>;
 
     @POST("/api/users/register")
-    suspend fun registerUser(@Body user: User): Response<Void>
+    suspend fun registerUser(@Body user: User): Void
 
     @POST("/api/users/login")
-    suspend fun loginUser(@Body userWithoutNick: UserWithoutNick): Response<Tokens>
+    suspend fun loginUser(@Body userWithoutNick: UserWithoutNick): Tokens
 
     @POST("/api/users/guest")
-    suspend fun loginGuest(): Response<GuestData>
+    suspend fun loginGuest(): GuestData
 }

@@ -8,6 +8,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.domain.model.GuestData
 import pl.edu.pg.eti.domain.repository.LoginRepository
 import retrofit2.Response
@@ -16,15 +18,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EntryViewModel @Inject constructor(private val repository: LoginRepository): ViewModel() {
-    private val _guestLiveData: MutableLiveData<Response<GuestData>> =
-        MutableLiveData()
-    val guestLiveData: LiveData<Response<GuestData>> = _guestLiveData
+    private val _guestLiveData: MutableLiveData<Resource<GuestData>> = MutableLiveData()
+    val guestLiveData: LiveData<Resource<GuestData>> = _guestLiveData
 
     fun loginGuest() {
         viewModelScope.launch {
-            (Dispatchers.IO){
+            withContext(Dispatchers.IO){
+                _guestLiveData.postValue(Resource.Loading())
                 val response = repository.loginGuest()
-                _guestLiveData.postValue(response)
+                when (response){
+                    is Resource.Success -> {
+                        _guestLiveData.postValue(response)
+                    }
+                    is Resource.Error ->{
+                        _guestLiveData.postValue(Resource.Error("Login as guest failed"))
+                    }
+                }
             }
         }
     }

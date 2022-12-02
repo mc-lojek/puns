@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_login.*
 import pl.edu.pg.eti.R
+import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.databinding.FragmentEntryBinding
 import pl.edu.pg.eti.domain.manager.TokenManager
 import pl.edu.pg.eti.presentation.viewmodel.EntryViewModel
@@ -63,11 +64,6 @@ class EntryFragment : Fragment() {
         }
         binding.guestBtn.setOnClickListener{
             viewModel.loginGuest();
-
-
-            //val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return@setOnClickListener
-            //Timber.d(sharedPref.getString("access_token", "empty"))
-            //Timber.d(sharedPref.getString("refresh_token", "empty"))
         }
     }
 
@@ -79,10 +75,9 @@ class EntryFragment : Fragment() {
         if(accessToken == "empty" || accessToken == null || refreshToken == "empty" || refreshToken == null)
             return
 
-        //get email and pass from them
-        //try to log in
-        //viewModelLogin.loginUser(email_input.text.toString(), password_input.text.toString())
-
+        //check if guest
+        if(tokenManager.isGuest != false)
+            return
 
         tokenManager.initialize(accessToken, refreshToken)
         Snackbar.make(requireView(), "Login successful", Snackbar.LENGTH_SHORT).show()
@@ -91,30 +86,35 @@ class EntryFragment : Fragment() {
 
     private fun setupObserver(view: View){
         viewModel.guestLiveData.observe(viewLifecycleOwner){
-            if(it.code() == 200){
-                val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return@observe
-                with (sharedPref.edit()){
-                    val tokens = it.body()
-                    if(tokens?.guestData == null){
-                        Timber.d("data is broken")
-                        return@observe
+            when (it) {
+                is Resource.Success ->{
+                    val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return@observe
+                    with (sharedPref.edit()){
+                        val tokens = it.data
+                        if(tokens?.guestData == null){
+                            Timber.d("data is broken")
+                            return@observe
+                        }
+
+                        //Timber.d("1" + tokens?.guestData.username)
+                        //Timber.d("1" + tokens?.guestData.email)
+                        //Timber.d("1" + tokens?.guestData.accessToken)
+                        //Timber.d("1" + tokens?.guestData.refreshToken)
+                        putString("access_token", tokens?.guestData.accessToken)
+                        putString("refresh_token", tokens?.guestData.refreshToken)
+                        apply()
+
+                        tokenManager.initialize(tokens.guestData.accessToken, tokens.guestData.refreshToken)
                     }
 
-                    //Timber.d(tokens?.guestData.username)
-                    //Timber.d(tokens?.guestData.email)
-                    putString("access_token", tokens?.guestData.accessToken)
-                    putString("refresh_token", tokens?.guestData.refreshToken)
-                    apply()
+                    Snackbar.make(view, "Logged as guest", Snackbar.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.action_entryFragment_to_mainMenuFragment)
 
-                    tokenManager.initialize(tokens.guestData.accessToken, tokens.guestData.refreshToken)
                 }
-
-                Snackbar.make(view, "Logged as guest", Snackbar.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_entryFragment_to_mainMenuFragment)
-            }
-            else{
-                Timber.d(it.code().toString())
-                //TODO: handle error
+                is Resource.Error -> {
+                    Snackbar.make(view, it.message.toString(), Snackbar.LENGTH_SHORT).show()
+                }
+                is Resource.Loading -> {}
             }
         }
     }

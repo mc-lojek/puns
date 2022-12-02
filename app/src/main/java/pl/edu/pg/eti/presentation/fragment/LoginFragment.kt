@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.fragment_login.email_input
 import kotlinx.android.synthetic.main.fragment_login.password_input
 import kotlinx.android.synthetic.main.fragment_register.*
 import pl.edu.pg.eti.R
+import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.databinding.FragmentEntryBinding
 import pl.edu.pg.eti.databinding.FragmentLoginBinding
 import pl.edu.pg.eti.domain.manager.TokenManager
@@ -59,6 +60,8 @@ class LoginFragment : Fragment() {
     private fun setupListeners() {
 
         binding.LoginFunctionBtn.setOnClickListener {
+
+
             viewModel.loginUser(binding.emailEt.text.toString(), binding.passwordEt.text.toString())
         }
 
@@ -69,32 +72,32 @@ class LoginFragment : Fragment() {
 
     private fun setupObserver(view: View){
         viewModel.loginLiveData.observe(viewLifecycleOwner){
-            if(it.code() == 200) {
+            when (it){
+                is Resource.Success -> {
+                    val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return@observe
+                    with (sharedPref.edit()) {
+                        val tokens = it.data
+                        if(tokens?.access_token == null || tokens?.refresh_token == null){
+                            //SOMETHING IS KAPUTT
+                            return@observe
+                        }
+                        //Timber.d(tokens?.refresh_token)
+                        //Timber.d(tokens?.access_token)
+                        putString("access_token", tokens?.access_token).commit()
+                        putString("refresh_token", tokens?.refresh_token).commit()
+                        apply()
 
-                val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return@observe
-                with (sharedPref.edit()) {
-                    val tokens = it.body()
-                    if(tokens?.access_token == null || tokens?.refresh_token == null){
-                        //SOMETHING IS KAPUTT
-                        return@observe
+                        tokenManager.initialize(tokens.access_token, tokens.refresh_token)
+
                     }
-                    //Timber.d(tokens?.refresh_token)
-                    //Timber.d(tokens?.access_token)
-                    putString("access_token", tokens?.access_token).commit()
-                    putString("refresh_token", tokens?.refresh_token).commit()
-                    apply()
 
-                    tokenManager.initialize(tokens.access_token, tokens.refresh_token)
-
+                    Snackbar.make(view, "Login successful", Snackbar.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.action_loginFragment_to_mainMenuFragment)
                 }
-
-                Snackbar.make(view, "Login successful", Snackbar.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_loginFragment_to_mainMenuFragment)
-            }
-            else{
-                Timber.d(it.code().toString())
-                login_hint.text = "user not found"
-                //TODO: handle errors
+                is Resource.Error -> {
+                    Snackbar.make(view, it.message.toString(), Snackbar.LENGTH_SHORT).show()
+                }
+                is Resource.Loading -> {}
             }
         }
     }

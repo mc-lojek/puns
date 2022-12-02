@@ -8,6 +8,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.domain.model.User
 import pl.edu.pg.eti.domain.repository.RegisterRepository
 import retrofit2.Response
@@ -15,15 +17,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor( private val repository: RegisterRepository): ViewModel() {
-    private val _registerLiveData: MutableLiveData<Response<Void>> =
-        MutableLiveData()
-    val registerLiveData: LiveData<Response<Void>> = _registerLiveData
+    private val _registerLiveData: MutableLiveData<Resource<Void>> = MutableLiveData()
+    val registerLiveData: LiveData<Resource<Void>> = _registerLiveData
 
     fun registerUser(nick: String, pass: String, mail: String) {
         viewModelScope.launch {
-            (Dispatchers.IO){
+            withContext(Dispatchers.IO){
                 val registered = repository.registerUser(nick, pass, mail)
-                _registerLiveData.postValue(registered)
+                when(registered){
+                    is Resource.Success -> {
+                        _registerLiveData.postValue(registered)
+                    }
+                    is Resource.Error ->{
+                        _registerLiveData.postValue(Resource.Error("Register failed"))
+                    }
+                }
             }
         }
     }

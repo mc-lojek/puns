@@ -8,6 +8,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.domain.model.Tokens
 import pl.edu.pg.eti.domain.model.User
 import pl.edu.pg.eti.domain.repository.LoginRepository
@@ -17,15 +19,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor( private val repository: LoginRepository): ViewModel() {
-    private val _loginLiveData: MutableLiveData<Response<Tokens>> =
-        MutableLiveData()
-    val loginLiveData: LiveData<Response<Tokens>> = _loginLiveData
+    private val _loginLiveData: MutableLiveData<Resource<Tokens>> = MutableLiveData()
+    val loginLiveData: LiveData<Resource<Tokens>> = _loginLiveData
 
     fun loginUser(nick: String, pass: String) {
         viewModelScope.launch {
-            (Dispatchers.IO){
+            withContext(Dispatchers.IO){
                 val response = repository.loginUser(nick, pass)
-                _loginLiveData.postValue(response)
+                when (response){
+                    is Resource.Success -> {
+                        _loginLiveData.postValue(response)
+                    }
+                    is Resource.Error -> {
+                        _loginLiveData.postValue(Resource.Error("Login failed"))
+                    }
+                }
             }
         }
     }

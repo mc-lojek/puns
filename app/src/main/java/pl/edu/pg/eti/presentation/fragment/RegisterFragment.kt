@@ -15,6 +15,7 @@ import pl.edu.pg.eti.databinding.FragmentRegisterBinding
 import pl.edu.pg.eti.presentation.viewmodel.RegisterViewModel
 import timber.log.Timber
 import kotlinx.android.synthetic.main.fragment_register.*;
+import pl.edu.pg.eti.data.network.Resource
 
 
 @AndroidEntryPoint
@@ -103,14 +104,15 @@ class RegisterFragment : Fragment() {
 
     private fun setupObserver(view: View){
         viewModel.registerLiveData.observe(viewLifecycleOwner){
-            if(it.code() == 200) {
-                //Timber.d(it.body().toString())
-                Snackbar.make(view, "Register successful", Snackbar.LENGTH_SHORT).show()
-                findNavController().navigateUp()
-            }
-            else{
-                Timber.d(it.code().toString())
-                //TODO: handle errors
+            when (it){
+                is Resource.Success -> {
+                    Snackbar.make(view, "Register successful", Snackbar.LENGTH_SHORT).show()
+                    findNavController().navigateUp()
+                }
+                is Resource.Error ->{
+                    Snackbar.make(view, it.message.toString(), Snackbar.LENGTH_SHORT).show()
+                }
+                is Resource.Loading -> {}
             }
         }
     }
