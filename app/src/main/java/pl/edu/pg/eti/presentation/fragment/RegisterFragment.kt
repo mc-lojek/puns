@@ -67,16 +67,18 @@ class RegisterFragment : Fragment() {
                 register_hint.text = "nick too short"
                 return@setOnClickListener
             }
+            if(patternIncludesComma.containsMatchIn(nick)) {
+                register_hint.text = "nick cannot contain ','"
+                return@setOnClickListener
+            }
 
             //check email
             if (!patternEmail.containsMatchIn (email)) {
                 register_hint.text = "incorrect email"
                 return@setOnClickListener
             }
-
-            //check if password contains comma
-            if(patternIncludesComma.containsMatchIn(password)) {
-                register_hint.text = "password cannot contain ','"
+            if(patternIncludesComma.containsMatchIn(email)) {
+                register_hint.text = "email cannot contain ','"
                 return@setOnClickListener
             }
 
@@ -95,6 +97,10 @@ class RegisterFragment : Fragment() {
             }
             if (!patternAtLeast1Number.containsMatchIn (password)) {
                 register_hint.text = "password need at least one number"
+                return@setOnClickListener
+            }
+            if(patternIncludesComma.containsMatchIn(password)) {
+                register_hint.text = "password cannot contain ','"
                 return@setOnClickListener
             }
 
