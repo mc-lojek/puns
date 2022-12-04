@@ -34,6 +34,7 @@ class GameViewModel @Inject constructor(
 ) : ViewModel() {
     val cancelCallback = CancelCallback { consumerTag: String? ->
         Timber.d("[$consumerTag] was canceled")
+        _rabbitConnectionClosed.postValue("Rabbit closed")
     }
     val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
         val message = String(delivery.body, StandardCharsets.UTF_8)
@@ -55,6 +56,9 @@ class GameViewModel @Inject constructor(
 
     private val _roomLeaveLiveData: MutableLiveData<Resource<String>> = MutableLiveData()
     val roomLeaveLiveData: LiveData<Resource<String>> = _roomLeaveLiveData
+
+    private val _rabbitConnectionClosed: MutableLiveData<String> = MutableLiveData()
+    val rabbitConnectionClosed: LiveData<String> = _rabbitConnectionClosed
 
     fun initializeAndConsume(queueName: String, exchangeName: String,playerId:Long,playerNickname:String) =
         viewModelScope.launch {

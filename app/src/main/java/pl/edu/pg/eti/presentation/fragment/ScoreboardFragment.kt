@@ -53,6 +53,12 @@ class ScoreboardFragment : Fragment() {
         binding.btnExitFinal.setOnClickListener {
             findNavController().popBackStack(R.id.mainMenuFragment, false)
         }
+
+        viewModel.rabbitConnectionClosed.observe(viewLifecycleOwner) {
+            if(it.equals("Rabbit closed")){
+                binding.btnExitFinal.visibility = View.VISIBLE
+            }
+        }
     }
 
     fun consumeMessages() {
