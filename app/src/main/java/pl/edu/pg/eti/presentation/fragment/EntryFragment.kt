@@ -91,7 +91,7 @@ class EntryFragment : Fragment() {
                     val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return@observe
                     with (sharedPref.edit()){
                         val tokens = it.data
-                        if(tokens?.guestData == null){
+                        if(tokens == null){
                             Timber.d("data is broken")
                             return@observe
                         }
@@ -100,11 +100,11 @@ class EntryFragment : Fragment() {
                         //Timber.d("1" + tokens?.guestData.email)
                         //Timber.d("1" + tokens?.guestData.accessToken)
                         //Timber.d("1" + tokens?.guestData.refreshToken)
-                        putString("access_token", tokens?.guestData.accessToken)
-                        putString("refresh_token", tokens?.guestData.refreshToken)
+                        putString("access_token", tokens.accessToken)
+                        putString("refresh_token", tokens.refreshToken)
                         apply()
 
-                        tokenManager.initialize(tokens.guestData.accessToken, tokens.guestData.refreshToken)
+                        tokenManager.initialize(tokens.accessToken, tokens.refreshToken)
                     }
 
                     Snackbar.make(view, "Logged as guest", Snackbar.LENGTH_SHORT).show()

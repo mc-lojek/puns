@@ -2,19 +2,13 @@ package pl.edu.pg.eti.data.dto
 
 data class RoomJoinDto(
     val queueName: String,
-    val room: RoomDto,
-    val id: Long,
-    val players: List<String>
-) {
-
-}
-
-data class RoomDto(
-    val name: String,
-    val state: String,
-    val playersCount: Int,
-    val maxPlayers: Int,
-    val id: Long,
+    val exchangeName: String,
+    val roomId: Long,
+    val type: String,
     val hash: String?,
-    val roundTime:Long
+    val turnsCount: Int,
+    val maxPlayers: Int,
+    val roundTime: Long,
+    val playersCount: Int,
+    val players: List<String>,
 )

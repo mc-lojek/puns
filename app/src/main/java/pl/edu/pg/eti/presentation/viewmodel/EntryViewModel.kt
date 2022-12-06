@@ -10,27 +10,27 @@ import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pl.edu.pg.eti.data.network.Resource
-import pl.edu.pg.eti.domain.model.GuestData
+import pl.edu.pg.eti.domain.model.Guest
 import pl.edu.pg.eti.domain.repository.LoginRepository
 import retrofit2.Response
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class EntryViewModel @Inject constructor(private val repository: LoginRepository): ViewModel() {
-    private val _guestLiveData: MutableLiveData<Resource<GuestData>> = MutableLiveData()
-    val guestLiveData: LiveData<Resource<GuestData>> = _guestLiveData
+class EntryViewModel @Inject constructor(private val repository: LoginRepository) : ViewModel() {
+    private val _guestLiveData: MutableLiveData<Resource<Guest>> = MutableLiveData()
+    val guestLiveData: LiveData<Resource<Guest>> = _guestLiveData
 
     fun loginGuest() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO) {
                 _guestLiveData.postValue(Resource.Loading())
                 val response = repository.loginGuest()
-                when (response){
+                when (response) {
                     is Resource.Success -> {
                         _guestLiveData.postValue(response)
                     }
-                    is Resource.Error ->{
+                    is Resource.Error -> {
                         _guestLiveData.postValue(Resource.Error("Login as guest failed"))
                     }
                 }

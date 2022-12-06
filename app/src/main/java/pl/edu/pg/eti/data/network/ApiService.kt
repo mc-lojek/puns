@@ -46,5 +46,5 @@ interface ApiService {
     suspend fun loginUser(@Body userWithoutNick: UserWithoutNick): Tokens
 
     @POST("/api/users/guest")
-    suspend fun loginGuest(): GuestData
+    suspend fun loginGuest(): Guest
 }
