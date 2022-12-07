@@ -4,8 +4,8 @@ import pl.edu.pg.eti.data.dto.RoomJoinDto
 import pl.edu.pg.eti.domain.model.RoomJoin
 
 fun RoomJoinDto.toDomain()=RoomJoin(
-    queueName,
     exchangeName,
+    queueName,
     hash,
     playersCount,
     maxPlayers,
