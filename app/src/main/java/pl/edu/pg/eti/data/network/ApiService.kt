@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.data.network
 
+import pl.edu.pg.eti.data.dto.ResetPasswordDto
 import pl.edu.pg.eti.data.dto.RoomJoinDto
 import pl.edu.pg.eti.data.dto.UserPayloadDto
 import pl.edu.pg.eti.domain.model.*
@@ -46,4 +47,7 @@ interface ApiService {
 
     @POST("/api/users/guest")
     suspend fun loginGuest(): Guest
+
+    @POST("/api/users/password/reset")
+    suspend fun resetPassword(@Body body: ResetPasswordDto)
 }

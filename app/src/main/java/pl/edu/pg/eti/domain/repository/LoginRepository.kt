@@ -8,4 +8,6 @@ interface LoginRepository {
     suspend fun loginUser(nick: String, pass: String): Resource<Tokens>
 
     suspend fun loginGuest(): Resource<Guest>
+
+    suspend fun resetPassword(email: String): Resource<String>
 }

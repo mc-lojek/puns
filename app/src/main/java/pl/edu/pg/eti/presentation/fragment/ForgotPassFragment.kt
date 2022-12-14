@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import pl.edu.pg.eti.R
+import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.databinding.FragmentForgotPassBinding
 import pl.edu.pg.eti.presentation.viewmodel.ForgotPassViewModel
 import timber.log.Timber
@@ -38,11 +40,28 @@ class ForgotPassFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupListeners()
+        setupObserver()
     }
 
     private fun setupListeners() {
         binding.ForgotPassFunctionBtn.setOnClickListener {
-            Timber.d(binding.emailEt.text.toString())
+            viewModel.loginUser(binding.ForgotPassFunctionBtn.text.toString())
+        }
+    }
+
+    private fun setupObserver() {
+        viewModel.resetPasswordLiveData.observe(viewLifecycleOwner) {
+            when(it) {
+                is Resource.Error -> {
+                    Snackbar.make(binding.root, it.message!!, Snackbar.LENGTH_LONG).show()
+                }
+                is Resource.Loading -> {
+
+                }
+                is Resource.Success -> {
+                    Snackbar.make(binding.root, it.data ?: "Email sent", Snackbar.LENGTH_LONG).show()
+                }
+            }
         }
     }
 }
