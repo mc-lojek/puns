@@ -4,16 +4,16 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import pl.edu.pg.eti.data.repository.LoginRepositoryImpl
-import pl.edu.pg.eti.data.repository.RegisterRepositoryImpl
-import pl.edu.pg.eti.domain.repository.LoginRepository
-import pl.edu.pg.eti.domain.repository.RegisterRepository
-import javax.inject.Singleton
 import pl.edu.pg.eti.data.network.ApiService
 import pl.edu.pg.eti.data.repository.GameRepositoryImpl
+import pl.edu.pg.eti.data.repository.LoginRepositoryImpl
+import pl.edu.pg.eti.data.repository.RegisterRepositoryImpl
 import pl.edu.pg.eti.domain.manager.SessionManager
 import pl.edu.pg.eti.domain.manager.TokenManager
 import pl.edu.pg.eti.domain.repository.GameRepository
+import pl.edu.pg.eti.domain.repository.LoginRepository
+import pl.edu.pg.eti.domain.repository.RegisterRepository
+import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module

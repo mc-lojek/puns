@@ -10,7 +10,6 @@ import pl.edu.pg.eti.domain.model.RoomConfig
 import pl.edu.pg.eti.domain.model.RoomJoin
 import pl.edu.pg.eti.domain.repository.GameRepository
 import retrofit2.HttpException
-import timber.log.Timber
 import javax.inject.Inject
 
 class GameRepositoryImpl @Inject constructor(

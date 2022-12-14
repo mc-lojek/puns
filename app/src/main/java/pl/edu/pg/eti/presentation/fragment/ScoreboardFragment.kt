@@ -7,17 +7,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.databinding.FragmentScoreboardBinding
-import pl.edu.pg.eti.domain.model.events.PlayerReadyEvent
 import pl.edu.pg.eti.domain.model.events.StartRoundEvent
 import pl.edu.pg.eti.presentation.viewmodel.GameViewModel
 

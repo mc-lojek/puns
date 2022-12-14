@@ -5,13 +5,10 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
-import androidx.core.view.forEach
 import androidx.databinding.DataBindingUtil
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.databinding.ViewScoreboardBinding
-import pl.edu.pg.eti.databinding.ViewScoreboardItemBinding
 import pl.edu.pg.eti.domain.model.ScoreboardItemModel
-import pl.edu.pg.eti.domain.model.events.ScoreboardRow
 
 class ScoreboardView  : FrameLayout {
     constructor(context: Context) : super(context) {

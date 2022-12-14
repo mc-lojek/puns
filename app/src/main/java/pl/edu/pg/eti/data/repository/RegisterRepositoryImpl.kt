@@ -3,10 +3,8 @@ package pl.edu.pg.eti.data.repository
 import pl.edu.pg.eti.data.network.ApiService
 import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.domain.model.User
-import pl.edu.pg.eti.domain.model.UserWithoutNick
 import pl.edu.pg.eti.domain.repository.RegisterRepository
 import retrofit2.HttpException
-import retrofit2.Response
 import javax.inject.Inject
 
 class RegisterRepositoryImpl @Inject constructor(private val apiService : ApiService) : RegisterRepository{

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -23,7 +22,6 @@ import pl.edu.pg.eti.domain.model.events.PlayerJoinedEvent
 import pl.edu.pg.eti.domain.model.events.PlayerLeftEvent
 import pl.edu.pg.eti.domain.model.events.StartGameEvent
 import pl.edu.pg.eti.domain.model.events.StartRoundEvent
-import pl.edu.pg.eti.domain.util.TIME_TOAST_MESSAGE_LEFT_JOIN_EVENT
 import pl.edu.pg.eti.presentation.viewmodel.GameViewModel
 import timber.log.Timber
 import javax.inject.Inject

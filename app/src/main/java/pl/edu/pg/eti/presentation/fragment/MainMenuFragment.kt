@@ -3,7 +3,6 @@ package pl.edu.pg.eti.presentation.fragment
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
-import android.provider.Settings.Global.putString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

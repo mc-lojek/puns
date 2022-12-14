@@ -7,15 +7,10 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_forgot_pass.*
 import pl.edu.pg.eti.R
-import pl.edu.pg.eti.databinding.FragmentEntryBinding
 import pl.edu.pg.eti.databinding.FragmentForgotPassBinding
-import pl.edu.pg.eti.databinding.FragmentLoginBinding
 import pl.edu.pg.eti.presentation.viewmodel.ForgotPassViewModel
-import pl.edu.pg.eti.presentation.viewmodel.LoginViewModel
 import timber.log.Timber
 
 @AndroidEntryPoint

@@ -11,19 +11,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.android.synthetic.main.fragment_login.email_input
-import kotlinx.android.synthetic.main.fragment_login.password_input
-import kotlinx.android.synthetic.main.fragment_register.*
 import pl.edu.pg.eti.R
 import pl.edu.pg.eti.data.network.Resource
-import pl.edu.pg.eti.databinding.FragmentEntryBinding
 import pl.edu.pg.eti.databinding.FragmentLoginBinding
 import pl.edu.pg.eti.domain.manager.TokenManager
-import pl.edu.pg.eti.domain.model.User
-import pl.edu.pg.eti.domain.model.UserWithoutNick
 import pl.edu.pg.eti.presentation.viewmodel.LoginViewModel
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint

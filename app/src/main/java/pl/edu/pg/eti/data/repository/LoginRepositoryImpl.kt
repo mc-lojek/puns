@@ -1,13 +1,12 @@
 package pl.edu.pg.eti.data.repository
 
-import pl.edu.pg.eti.data.dto.UserPayloadDto
-import pl.edu.pg.eti.data.mapper.toDomain
 import pl.edu.pg.eti.data.network.ApiService
 import pl.edu.pg.eti.data.network.Resource
-import pl.edu.pg.eti.domain.model.*
+import pl.edu.pg.eti.domain.model.Guest
+import pl.edu.pg.eti.domain.model.Tokens
+import pl.edu.pg.eti.domain.model.UserWithoutNick
 import pl.edu.pg.eti.domain.repository.LoginRepository
 import retrofit2.HttpException
-import retrofit2.Response
 import javax.inject.Inject
 
 class LoginRepositoryImpl @Inject constructor(private val apiService : ApiService) : LoginRepository {

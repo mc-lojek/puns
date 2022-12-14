@@ -1,6 +1,5 @@
 package pl.edu.pg.eti.presentation.adapter
 
-import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.player_list_element.view.*
 import pl.edu.pg.eti.R
-import pl.edu.pg.eti.databinding.PlayerListElementBinding
 import pl.edu.pg.eti.domain.model.PlayerListClass
-import timber.log.Timber
 
 
 class PlayerListAdapter(

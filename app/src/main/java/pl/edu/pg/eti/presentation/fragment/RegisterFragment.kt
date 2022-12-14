@@ -10,12 +10,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_register.*
 import pl.edu.pg.eti.R
+import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.databinding.FragmentRegisterBinding
 import pl.edu.pg.eti.presentation.viewmodel.RegisterViewModel
-import timber.log.Timber
-import kotlinx.android.synthetic.main.fragment_register.*;
-import pl.edu.pg.eti.data.network.Resource
 
 
 @AndroidEntryPoint

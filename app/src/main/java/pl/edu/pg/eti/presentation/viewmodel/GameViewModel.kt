@@ -10,12 +10,10 @@ import com.rabbitmq.client.DeliverCallback
 import com.rabbitmq.client.Delivery
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.domain.manager.SessionManager
-import pl.edu.pg.eti.domain.model.RoomJoin
 import pl.edu.pg.eti.domain.model.ScoreboardItemModel
 import pl.edu.pg.eti.domain.model.events.ClearCanvasEvent
 import pl.edu.pg.eti.domain.model.events.DrawLineEvent

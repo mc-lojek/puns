@@ -6,15 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pl.edu.pg.eti.data.network.Resource
 import pl.edu.pg.eti.domain.model.Tokens
-import pl.edu.pg.eti.domain.model.User
 import pl.edu.pg.eti.domain.repository.LoginRepository
-import pl.edu.pg.eti.domain.repository.RegisterRepository
-import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
