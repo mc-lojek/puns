@@ -45,7 +45,7 @@ class ForgotPassFragment : Fragment() {
 
     private fun setupListeners() {
         binding.ForgotPassFunctionBtn.setOnClickListener {
-            viewModel.loginUser(binding.ForgotPassFunctionBtn.text.toString())
+            viewModel.loginUser(binding.emailEt.text.toString())
         }
     }
 
